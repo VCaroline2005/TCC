@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro - Portal Enfermagem</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #51a7a7;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #007476;
+            color: white;
+            text-align: center;
+            padding: 1rem;
+        }
+
+        .container {
+            width: 40%;
+            margin: 2rem auto;
+            background-color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #000000;
+        }
+
+        .form-group input.error {
+            border-color: #007476;
+        }
+
+        button {
+            background-color: #007476;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            width: 100%;
+            cursor: pointer;
+            font-size: 1.1rem;
+            border-radius: 4px;
+            margin-top: 1rem;
+        }
+
+        button:hover {
+            background-color: #007476;
+        }
+
+        .error-message {
+            color: #007476;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        .success-message {
+            color: #007476;
+            font-size: 1rem;
+            margin-top: 1rem;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>Cadastro de Usuário</h1>
+    </header>
+
+    <div class="container">
+        <h2>Preencha os dados abaixo para se cadastrar</h2>
+
+        <form id="signup-form" method="post" action="/cadastro" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="name">Nome Completo</label>
+                <input type="text" id="name" name="nome" placeholder="Seu nome completo">
+                <div id="name-error" class="error-message"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="email">E-mail</label>
+                <input type="email" id="email" name="email" placeholder="Seu e-mail">
+                <div id="email-error" class="error-message"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="cpf">CPF</label>
+                <input type="text" name="cpf" id="cpf" placeholder="Seu cpf">
+                <div id="cpf-error" class="error-message"></div>
+            </div>
+            <div class="form-group">
+                <label for="telefone">Telefone</label>
+                <input type="text" name="telefone" id="telefone" placeholder="Seu telefone">
+                <div id="telefone-error" class="error-message"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="endereco">Endereço</label>
+                <input type="text" name="endereco" id="endereco" placeholder="Seu endereço">
+                <div id="endereço-error" class="error-message"></div>
+            </div>
+            <div class="form-group">
+                <label for="foto">Foto</label>
+                <input type="file" name="foto" id="foto" placeholder="Adione uma foto">
+                <div id="foto-error" class="error-message"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Senha</label>
+                <input type="password" id="password" name="senha" placeholder="Crie uma senha">
+                <div id="password-error" class="error-message"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="confirm-password">Confirmar Senha</label>
+                <input type="password" id="confirm-password" name="confirm-password" placeholder="Confirme sua senha">
+                <div id="confirm-password-error" class="error-message"></div>
+            </div>
+
+            <button type="submit">Cadastrar</button>
+
+            <div id="form-success" class="success-message"></div>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('signup-form').addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            // Limpar mensagens de erro e sucesso
+            clearMessages();
+
+            // Obter os valores dos campos
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+
+            let isValid = true;
+
+            // Validação do Nome
+            if (name === "") {
+                showError("name", "O nome é obrigatório.");
+                isValid = false;
+            }
+
+            // Validação do E-mail
+            if (email === "") {
+                showError("email", "O e-mail é obrigatório.");
+                isValid = false;
+            } else if (!validateEmail(email)) {
+                showError("email", "E-mail inválido.");
+                isValid = false;
+            }
+
+            // Validação da Senha
+            if (password === "") {
+                showError("password", "A senha é obrigatória.");
+                isValid = false;
+            } else if (password.length < 6) {
+                showError("password", "A senha deve ter pelo menos 6 caracteres.");
+                isValid = false;
+            }
+
+            // Validação da confirmação de senha
+            if (confirmPassword === "") {
+                showError("confirm-password", "Por favor, confirme sua senha.");
+                isValid = false;
+            } else if (confirmPassword !== password) {
+                showError("confirm-password", "As senhas não coincidem.");
+                isValid = false;
+            }
+
+            if (isValid) {
+                // envia o formulário para o servidor (multer espera multipart/form-data)
+                event.target.submit();
+            }
+        });
+
+        function showError(field, message) {
+            document.getElementById(field).classList.add('error');
+            document.getElementById(field + '-error').innerText = message;
+        }
+
+        function showSuccess(message) {
+            document.getElementById('form-success').innerText = message;
+        }
+
+        function clearMessages() {
+            const inputs = document.querySelectorAll('input');
+            inputs.forEach(input => {
+                input.classList.remove('error');
+            });
+
+            const errorMessages = document.querySelectorAll('.error-message');
+            errorMessages.forEach(error => {
+                error.innerText = '';
+            });
+
+            document.getElementById('form-success').innerText = '';
+        }
+
+        function clearForm() {
+            document.getElementById('signup-form').reset();
+        }
+
+        // Função de validação de e-mail
+        function validateEmail(email) {
+            const re = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+            return re.test(email);
+        }
+    </script>
+
+</body>
+
+</html>

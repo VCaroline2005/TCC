@@ -1,0 +1,10 @@
+<%- include('cabecalho') %>
+<h2>Resultado do Quiz</h2>
+<% if(pergunta){ %>
+  <p>Pergunta: <%=pergunta.pergunta%></p>
+  <p>Você respondeu: <%=pergunta.opcoes[pergunta.correta]%> (correta: <%= correto ? 'sim' : 'não' %>)</p>
+<% } else { %>
+  <p>Questão não encontrada.</p>
+<% } %>
+<a href="/quiz">Tentar outra</a>
+<%- include('rodape') %>

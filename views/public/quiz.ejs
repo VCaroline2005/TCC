@@ -1,0 +1,15 @@
+<%- include('cabecalho') %>
+<h2>Quiz rápido</h2>
+<% if(Pergunta){ %>
+  <p><%= Pergunta.pergunta %></p>
+  <form method="post" action="/quiz/answer">
+    <% Pergunta.opcoes.forEach(function(opt, idx){ %>
+      <div><label><input type="radio" name="escolha" value="<%=idx%>"> <%=opt%></label></div>
+    <% }) %>
+    <input type="hidden" name="id" value="<%=Pergunta._id%>">
+    <button type="submit">Enviar</button>
+  </form>
+<% } else { %>
+  <p>Não há questões cadastradas ainda.</p>
+<% } %>
+<%- include('rodape') %>

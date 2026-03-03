@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - Portal Enfermagem</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <div class="login-container">
+    <h2>Bem-vindo ao seu Manual</h2>
+    <p>Faça login em sua conta para ter acesso a conteúdos </p>
+
+    <% if (typeof error !== 'undefined' && error) { %>
+      <div style="color:#c0392b; margin-bottom:12px;"><%= error %></div>
+    <% } %>
+    
+    <form action="/login" method="POST">
+      
+      <!-- Campo para o nome de usuário -->
+      <div class="input-group">
+        <label for="email">E-mail</label>
+        <input type="email" id="email" name="email" placeholder="Digite seu e-mail" required>
+      </div>
+      
+      <!-- Campo para a senha -->
+      <div class="input-group">
+        <label for="password">Senha</label>
+        <input type="password" id="password" name="password" placeholder="Digite sua senha" required>
+      </div>
+      
+      <!-- Botão de login -->
+      <button type="submit" class="btn-submit">Entrar</button>
+      
+      <!-- Links de recuperação de senha e criação de conta -->
+      <div class="footer">
+        <a href="#">Esqueceu a senha?</a><br>
+        <a href="#">Ainda não tem uma conta? Cadastre-se aqui</a>
+      </div>
+    </form>
+</div>
+      <style>
+  /* Estilos globais */
+  body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+  }
+  
+  /* Contêiner do formulário de login */
+  .login-container {
+    background-color: #f4f4f4;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+  }
+  
+  /* Título do formulário */
+  h2 {
+    color: #000;
+    margin-bottom: 15px;
+  }
+  
+  /* Subtítulo do formulário */
+  p {
+    color: #000;
+    font-size: 14px;
+    margin-bottom: 25px;
+  }
+  
+  /* Estilo para os campos de entrada */
+  .input-group {
+    margin-bottom: 20px;
+    text-align: left;
+  }
+  
+  .input-group label {
+    display: block;
+    font-weight: bold;
+    color: #000;
+  }
+  
+  .input-group input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #000;
+    border-radius: 4px;
+    font-size: 14px;
+    color: #000;
+  }
+  
+  .input-group input:focus {
+    border-color: #007476; /* Cor laranja para destacar o foco */
+    outline: none;
+  }
+  
+  
+  .btn-submit {
+    width: 100%;
+    padding: 12px;
+    background-color: #007476; /* Laranja */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  .btn-submit:hover {
+    background-color: #007476;
+  }
+  
+  /* Links de recuperação de senha e cadastro */
+  .footer {
+    margin-top: 20px;
+  }
+  
+  .footer a {
+    color: #007476;
+    text-decoration: none;
+    font-size: 14px;
+  }
+  
+  .footer a:hover {
+    text-decoration: underline;
+  }
+  </style>
+
+</body>
+</html>

@@ -1,0 +1,12 @@
+<%- include('cabecalho') %>
+<h2>Notas</h2>
+<form method="post" action="/notas">
+  <textarea name="conteudo" rows="4" cols="50" placeholder="Escreva sua nota aqui..."></textarea><br>
+  <input type="submit" value="Salvar">
+</form>
+<ul>
+  <% Notas.forEach(function(n){ %>
+    <li><%=n.conteudo%> (<%=n.data.toLocaleString()%>)</li>
+  <% }) %>
+</ul>
+<%- include('rodape') %>

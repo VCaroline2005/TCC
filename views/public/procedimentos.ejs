@@ -1,0 +1,9 @@
+<%- include('cabecalho') %>
+<h2>Procedimentos</h2>
+<ul>
+  <% Procedimentos.forEach(function(p){ %>
+    <li><strong><%= p.nome %></strong> (<%= p.categoria %>)<br>
+        <%= p.descricao %></li>
+  <% }) %>
+</ul>
+<%- include('rodape') %>

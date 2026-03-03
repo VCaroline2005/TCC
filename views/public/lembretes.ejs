@@ -1,0 +1,13 @@
+<%- include('cabecalho') %>
+<h2>Lembretes</h2>
+<form method="post" action="/lembretes">
+  <textarea name="conteudo" rows="2" cols="50" placeholder="O que lembrar?"></textarea><br>
+  <label>Data de vencimento: <input type="date" name="vencimento"></label><br>
+  <input type="submit" value="Adicionar">
+</form>
+<ul>
+  <% Lembretes.forEach(function(l){ %>
+    <li><strong><%=l.conteudo%></strong> até <%= l.vencimento ? l.vencimento.toISOString().substr(0,10) : 'sem data' %></li>
+  <% }) %>
+</ul>
+<%- include('rodape') %>

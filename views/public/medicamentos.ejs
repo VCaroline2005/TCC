@@ -1,0 +1,8 @@
+<%- include('cabecalho') %>
+<h2>Medicamentos</h2>
+<ul>
+  <% Medicamentos.forEach(function(m){ %>
+    <li><strong><%= m.nome %></strong> - <%= m.descricao %> - Dosagem: <%= m.dosagem %> (<%= m.via %>)</li>
+  <% }) %>
+</ul>
+<%- include('rodape') %>

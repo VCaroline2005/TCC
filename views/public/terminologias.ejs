@@ -1,0 +1,8 @@
+<%- include('cabecalho') %>
+<h2>Terminologias</h2>
+<ul>
+  <% Termos.forEach(function(t){ %>
+    <li><strong><%= t.termo %></strong>: <%= t.definicao %></li>
+  <% }) %>
+</ul>
+<%- include('rodape') %>

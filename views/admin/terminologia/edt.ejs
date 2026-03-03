@@ -1,0 +1,30 @@
+<%-include('../cabecalho.ejs')%>
+<section class="col-12 col-md-10">
+    <div class="card my-4">
+        <h5 class="card-header">Editar Terminologia</h5>
+        <div class="card-body">
+            <form method="post">
+                <div class="mb-3">
+                    <label for="id" class="form-label">ID</label>
+                    <input type="text" name="id" readonly id="id" class="form-control" value="<%=Termo._id%>">
+                </div>
+                <div class="mb-3">
+                    <label for="termo" class="form-label">Termo</label>
+                    <input type="text" name="termo" required id="termo" class="form-control" value="<%=Termo.termo%>">
+                </div>
+                <div class="mb-3">
+                    <label for="definicao" class="form-label">Definição</label>
+                    <textarea name="definicao" required id="definicao" class="form-control"><%=Termo.definicao%></textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="categoria" class="form-label">Categoria/Área (opcional)</label>
+                    <input type="text" name="categoria" id="categoria" class="form-control" value="<%=Termo.categoria%>">
+                </div>
+                <div class="mb-3">
+                    <input type="submit" value="Salvar" class="form-control">
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+<%-include('../rodape.ejs')%>

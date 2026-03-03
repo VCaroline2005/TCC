@@ -1,0 +1,29 @@
+<%-include('../cabecalho.ejs')%>
+<section class="col-12 col-md-10">
+    <div class="card my-4">
+        <h5 class="card-header">Questões de Quiz</h5>
+        <div class="card-body">
+            <table class="table table-striped table-dark">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Pergunta</th>
+                        <th>Categoria</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <%Quizzes.forEach(function(q){%>
+                    <tr>
+                        <td><%=q._id%></td>
+                        <td><%=q.pergunta%></td>
+                        <td><%=q.categoria%></td>
+                        <td><a href="/admin/quiz/del/<%=q._id%>">Excluir</a></td>
+                    </tr>
+                    <%})%>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+<%-include('../rodape.ejs')%>

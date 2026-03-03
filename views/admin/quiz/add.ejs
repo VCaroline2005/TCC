@@ -1,0 +1,30 @@
+<%-include('../cabecalho.ejs')%>
+<section class="col-12 col-md-10">
+    <div class="card my-4">
+        <h5 class="card-header">Adicionar Questão de Quiz</h5>
+        <div class="card-body">
+            <form method="post">
+                <div class="mb-3">
+                    <label for="pergunta" class="form-label">Pergunta</label>
+                    <textarea name="pergunta" id="pergunta" required class="form-control"></textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="opcoes" class="form-label">Opções (cada linha é uma alternativa)</label>
+                    <textarea name="opcoes" id="opcoes" class="form-control"></textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="correta" class="form-label">Índice da opção correta (0,1,...)</label>
+                    <input type="number" name="correta" id="correta" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label for="categoria" class="form-label">Categoria/Assunto (opcional)</label>
+                    <input type="text" name="categoria" id="categoria" class="form-control">
+                </div>
+                <div class="mb-3">
+                    <input type="submit" value="Adicionar" class="form-control">
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+<%-include('../rodape.ejs')%>

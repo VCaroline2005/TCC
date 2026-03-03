@@ -1,0 +1,38 @@
+<%-include('../cabecalho.ejs')%>
+<section class="col-12 col-md-10">
+    <div class="card my-4">
+        <h5 class="card-header">Adicionar Medicamento</h5>
+        <div class="card-body">
+            <form method="post" enctype="multipart/form-data">
+                <div class="mb-3">
+                    <label for="nome" class="form-label">Nome</label>
+                    <input type="text" name="nome" id="nome" required class="form-control">
+                </div>
+                <div class="mb-3">
+                    <label for="descricao" class="form-label">Descrição</label>
+                    <textarea name="descricao" id="descricao" class="form-control"></textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="dosagem" class="form-label">Dosagem</label>
+                    <input type="text" name="dosagem" id="dosagem" class="form-control">
+                </div>
+                <div class="mb-3">
+                    <label for="via" class="form-label">Via de Administração</label>
+                    <input type="text" name="via" id="via" class="form-control">
+                </div>
+                <div class="mb-3">
+                    <label for="fabricante" class="form-label">Fabricante</label>
+                    <input type="text" name="fabricante" id="fabricante" class="form-control">
+                </div>
+                <div class="mb-3">
+                    <label for="fotos" class="form-label">Fotos</label>
+                    <input type="file" accept="image/*" multiple name="fotos" id="fotos" class="form-control">
+                </div>
+                <div class="mb-3">
+                    <input type="submit" value="Adicionar" class="form-control">
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+<%-include('../rodape.ejs')%>
