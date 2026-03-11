@@ -9,24 +9,24 @@
                     <input type="text" name="id" readonly id="id" class="form-control" value="<%=Medicamento._id%>">
                 </div>
                 <div class="mb-3">
-                    <label for="nome" class="form-label">Nome</label>
-                    <input type="text" name="nome" id="nome" required class="form-control" value="<%=Medicamento.nome%>">
+                    <label for="principioAtivo" class="form-label">Princípio Ativo</label>
+                    <input type="text" name="principioAtivo" id="principioAtivo" required class="form-control" value="<%=Medicamento.principioAtivo || Medicamento.descricao || ''%>">
                 </div>
                 <div class="mb-3">
-                    <label for="descricao" class="form-label">Descrição</label>
-                    <textarea name="descricao" id="descricao" class="form-control"><%=Medicamento.descricao%></textarea>
+                    <label for="nomeComercial" class="form-label">Nome Comercial</label>
+                    <input type="text" name="nomeComercial" id="nomeComercial" required class="form-control" value="<%=Medicamento.nomeComercial || Medicamento.nome || ''%>">
                 </div>
                 <div class="mb-3">
-                    <label for="dosagem" class="form-label">Dosagem</label>
-                    <input type="text" name="dosagem" id="dosagem" class="form-control" value="<%=Medicamento.dosagem%>">
+                    <label for="classe" class="form-label">Classe</label>
+                    <input type="text" name="classe" id="classe" class="form-control" value="<%=Medicamento.classe || Medicamento.fabricante || ''%>">
                 </div>
                 <div class="mb-3">
                     <label for="via" class="form-label">Via</label>
                     <input type="text" name="via" id="via" class="form-control" value="<%=Medicamento.via%>">
                 </div>
                 <div class="mb-3">
-                    <label for="fabricante" class="form-label">Fabricante</label>
-                    <input type="text" name="fabricante" id="fabricante" class="form-control" value="<%=Medicamento.fabricante%>">
+                    <label for="diluicao" class="form-label">Diluição</label>
+                    <input type="text" name="diluicao" id="diluicao" class="form-control" value="<%=Medicamento.diluicao || Medicamento.dosagem || ''%>">
                 </div>
                 <div class="mb-3">
                     <input type="submit" value="Salvar" class="form-control">

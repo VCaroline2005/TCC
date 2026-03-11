@@ -1,5 +1,18 @@
 <%- include('cabecalho') %>
+<% const pesquisaAtual = (typeof pesquisar !== 'undefined' && pesquisar) ? pesquisar : ''; %>
 <h2>Terminologias</h2>
+<form method="get" action="/terminologias" style="margin-bottom:14px;">
+  <input
+    type="text"
+    name="pesquisar"
+    placeholder="Pesquisar termo, definição ou categoria"
+    value="<%= pesquisaAtual %>"
+    style="padding:8px; width:100%; max-width:420px; border:1px solid #000; border-radius:4px;"
+  >
+  <button type="submit" style="padding:8px 12px; margin-left:6px; background:#a51b0b; color:#fff; border:1px solid #000; border-radius:4px; cursor:pointer;">
+    Pesquisar
+  </button>
+</form>
 <ul>
   <% Termos.forEach(function(t){ %>
     <li><strong><%= t.termo %></strong>: <%= t.definicao %></li>

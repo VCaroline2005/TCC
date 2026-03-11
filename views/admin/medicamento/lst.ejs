@@ -14,10 +14,13 @@
                 <thead>
                     <tr>
                         <th>Id</th>
-                        <th>Nome</th>
-                        <th>Descrição</th>
-                        <th>Dosagem</th>
+                        <th>Princípio Ativo</th>
+                        <th>Nome Comercial</th>
+                        <th>Classe</th>
                         <th>Via</th>
+                        <th>Diluição</th>
+                        <th>Publicado</th>
+                        <th>Publicação</th>
                         <th>Edit</th>
                         <th>Del</th>
                     </tr>
@@ -26,10 +29,19 @@
                     <%Medicamentos.forEach(function(m){%>
                     <tr>
                         <td><%=m._id%></td>
-                        <td><%=m.nome%></td>
-                        <td><%=m.descricao%></td>
-                        <td><%=m.dosagem%></td>
+                        <td><%=m.principioAtivo || m.descricao || '-'%></td>
+                        <td><%=m.nomeComercial || m.nome || '-'%></td>
+                        <td><%=m.classe || m.fabricante || '-'%></td>
                         <td><%=m.via%></td>
+                        <td><%=m.diluicao || m.dosagem || '-'%></td>
+                        <td><%=m.publicado ? 'Sim' : 'Não'%></td>
+                        <td>
+                            <% if(m.publicado){ %>
+                                <a href="/admin/medicamento/unpub/<%=m._id%>">Despublicar</a>
+                            <% } else { %>
+                                <a href="/admin/medicamento/pub/<%=m._id%>">Publicar</a>
+                            <% } %>
+                        </td>
                         <td><a href="/admin/medicamento/edt/<%=m._id%>">Editar</a></td>
                         <td><a href="/admin/medicamento/del/<%=m._id%>">Deletar</a></td>
                     </tr>

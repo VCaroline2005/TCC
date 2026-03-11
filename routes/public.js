@@ -5,7 +5,8 @@ const upload = multer({ dest: 'public/usuarios/' })
 
 import { abrecadastro, cadastro, abrelogin, login, abreindex,
          listarProcedimentos, listarMedicamentos, listarTerminologias,
-         fazerQuiz, responderQuiz, salvarNota, listarNotas, adicionarLembrete, listarLembretes
+         fazerQuiz, responderQuiz, salvarNota, listarNotas, adicionarLembrete, listarLembretes,
+         abreusuario
  } from '../controllers/public.js';
 
 router.get('/cadastro', abrecadastro)
@@ -21,6 +22,7 @@ router.get('/site/login', abrelogin)
 router.post('/site/login', login)
 
 router.get('/', abreindex)
+router.get('/usuario', abreusuario)
 
 // nursing-specific pages
 router.get('/procedimentos', listarProcedimentos)

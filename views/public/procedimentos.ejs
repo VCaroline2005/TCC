@@ -1,9 +1,61 @@
 <%- include('cabecalho') %>
+<% const pesquisaAtual = (typeof pesquisar !== 'undefined' && pesquisar) ? pesquisar : ''; %>
 <h2>Procedimentos</h2>
-<ul>
-  <% Procedimentos.forEach(function(p){ %>
-    <li><strong><%= p.nome %></strong> (<%= p.categoria %>)<br>
-        <%= p.descricao %></li>
+<form method="get" action="/procedimentos" style="margin-bottom:14px;">
+  <input
+    type="text"
+    name="pesquisar"
+    placeholder="Pesquisar por nome, descrição ou categoria"
+    value="<%= pesquisaAtual %>"
+    style="padding:8px; width:100%; max-width:420px; border:1px solid #000; border-radius:4px;"
+  >
+  <button type="submit" style="padding:8px 12px; margin-left:6px; background:#a51b0b; color:#fff; border:1px solid #000; border-radius:4px; cursor:pointer;">
+    Pesquisar
+  </button>
+</form>
+<style>
+  .proc-item { border:1px solid #000; border-radius:6px; padding:10px; margin-bottom:10px; }
+  .proc-toggle { width:100%; text-align:left; background:#f3f3f3; border:1px solid #000; border-radius:4px; padding:8px; cursor:pointer; }
+  .proc-details { display:none; margin-top:8px; }
+  .proc-details.is-open { display:block; }
+</style>
+<ul style="list-style:none; padding-left:0;">
+  <% Procedimentos.forEach(function(p, idx){ %>
+    <li class="proc-item">
+      <button type="button" class="proc-toggle" data-target="proc-<%= idx %>">
+        <strong><%= p.nome %></strong> (<%= p.categoria %>)
+      </button>
+      <div id="proc-<%= idx %>" class="proc-details">
+        <div style="margin-top:6px;"><%= p.descricao %></div>
+        <% if (p.passos && p.passos.length) { %>
+          <div style="margin-top:8px;">
+            <strong>Passo a passo:</strong>
+            <ol style="margin:6px 0 0 18px;">
+              <% p.passos.forEach(function(passo){ %>
+                <li><%= passo %></li>
+              <% }) %>
+            </ol>
+          </div>
+        <% } %>
+        <% if (p.fotos && p.fotos.length) { %>
+          <div style="margin-top:8px; display:flex; flex-wrap:wrap; gap:8px;">
+            <% p.fotos.forEach(function(foto){ %>
+              <img src="/fotos/<%= foto %>" alt="Foto do procedimento" style="max-width:220px; height:auto; border:1px solid #000; border-radius:4px;">
+            <% }) %>
+          </div>
+        <% } %>
+      </div>
+    </li>
   <% }) %>
 </ul>
+<script>
+  document.querySelectorAll('.proc-toggle').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      const id = btn.getAttribute('data-target');
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.classList.toggle('is-open');
+    });
+  });
+</script>
 <%- include('rodape') %>

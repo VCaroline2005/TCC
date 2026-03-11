@@ -6,6 +6,8 @@ const ProcedimentoSchema = conexao.Schema({
     categoria: {type:String},
     passos: [{type:String}],
     fotos: [{type:String}],
+    publicado: {type:Boolean, default:false},
+    publicadoEm: {type:Date},
 })
 
 export default conexao.model('Procedimento',ProcedimentoSchema)

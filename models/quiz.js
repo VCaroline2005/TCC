@@ -5,6 +5,8 @@ const Quiz = conexao.Schema({
     opcoes: [{ type: String }],
     correta: { type: Number, required: true }, // índice da opção correta
     categoria: { type: String },
+    publicado: { type: Boolean, default: false },
+    publicadoEm: { type: Date },
 })
 
 export default conexao.model('Quiz', Quiz)

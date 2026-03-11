@@ -88,6 +88,16 @@ export async function deletaprocedimento(req, res) {
     res.redirect('/admin/procedimento/lst')
 }
 
+export async function publicarprocedimento(req, res) {
+    await Procedimento.findByIdAndUpdate(req.params.id, { publicado: true, publicadoEm: new Date() })
+    res.redirect('/admin/procedimento/lst')
+}
+
+export async function despublicarprocedimento(req, res) {
+    await Procedimento.findByIdAndUpdate(req.params.id, { publicado: false, publicadoEm: null })
+    res.redirect('/admin/procedimento/lst')
+}
+
 export async function abreedtprocedimento(req, res){
     const procedimento = await Procedimento.findById(req.params.id)
     res.render('admin/procedimento/edt.ejs',{Procedimento: procedimento})
@@ -127,6 +137,16 @@ export async function deletarterminologia(req, res) {
     res.redirect('/admin/terminologia/lst')
 }
 
+export async function publicarterminologia(req, res) {
+    await Terminologia.findByIdAndUpdate(req.params.id, { publicado: true, publicadoEm: new Date() })
+    res.redirect('/admin/terminologia/lst')
+}
+
+export async function despublicarterminologia(req, res) {
+    await Terminologia.findByIdAndUpdate(req.params.id, { publicado: false, publicadoEm: null })
+    res.redirect('/admin/terminologia/lst')
+}
+
 export async function abreedtterminologia(req, res){
     const termo = await Terminologia.findById(req.params.id)
     res.render('admin/terminologia/edt.ejs',{Termo: termo})
@@ -142,12 +162,18 @@ export async function abreaddmedicamento(req,res){
     res.render('admin/medicamento/add')
 }
 export async function addmedicamento(req,res){
+    const nomeComercial = req.body.nomeComercial || req.body.nome
     await Medicamento.create({
-        nome:req.body.nome,
-        descricao:req.body.descricao,
-        dosagem:req.body.dosagem,
+        principioAtivo:req.body.principioAtivo,
+        nomeComercial:nomeComercial,
+        classe:req.body.classe,
         via:req.body.via,
-        fabricante:req.body.fabricante,
+        diluicao:req.body.diluicao,
+        // compatibilidade com telas antigas
+        nome:nomeComercial,
+        descricao:req.body.principioAtivo,
+        dosagem:req.body.diluicao,
+        fabricante:req.body.classe,
         fotos: req.files ? req.files.map(f=>f.filename) : []
     })
     res.redirect('/admin/medicamento/add')
@@ -157,11 +183,29 @@ export async function listarmedicamento(req,res){
     res.render('admin/medicamento/lst',{Medicamentos:meds});
 }
 export async function filtrarmedicamento(req,res){
-    const meds = await Medicamento.find({nome: new RegExp(req.body.pesquisar,'i')})
+    const busca = new RegExp(req.body.pesquisar,'i')
+    const meds = await Medicamento.find({
+        $or: [
+            {principioAtivo: busca},
+            {nomeComercial: busca},
+            {classe: busca},
+            {via: busca},
+            {diluicao: busca},
+            {nome: busca}
+        ]
+    })
     res.render('admin/medicamento/lst',{Medicamentos:meds});
 }
 export async function deletarmedicamento(req,res){
     await Medicamento.findByIdAndDelete(req.params.id)
+    res.redirect('/admin/medicamento/lst')
+}
+export async function publicarmedicamento(req,res){
+    await Medicamento.findByIdAndUpdate(req.params.id, { publicado: true, publicadoEm: new Date() })
+    res.redirect('/admin/medicamento/lst')
+}
+export async function despublicarmedicamento(req,res){
+    await Medicamento.findByIdAndUpdate(req.params.id, { publicado: false, publicadoEm: null })
     res.redirect('/admin/medicamento/lst')
 }
 export async function abreedtmedicamento(req,res){
@@ -169,7 +213,19 @@ export async function abreedtmedicamento(req,res){
     res.render('admin/medicamento/edt',{Medicamento:med})
 }
 export async function edtmedicamento(req,res){
-    await Medicamento.findByIdAndUpdate(req.params.id, req.body)
+    const nomeComercial = req.body.nomeComercial || req.body.nome
+    await Medicamento.findByIdAndUpdate(req.params.id, {
+        principioAtivo:req.body.principioAtivo,
+        nomeComercial:nomeComercial,
+        classe:req.body.classe,
+        via:req.body.via,
+        diluicao:req.body.diluicao,
+        // compatibilidade com estrutura antiga
+        nome:nomeComercial,
+        descricao:req.body.principioAtivo,
+        dosagem:req.body.diluicao,
+        fabricante:req.body.classe
+    })
     res.redirect('/admin/medicamento/lst')
 }
 
@@ -198,6 +254,15 @@ export async function deletarquiz(req, res) {
     res.redirect('/admin/quiz/lst')
 }
 
+export async function publicarquiz(req, res) {
+    await Quiz.findByIdAndUpdate(req.params.id, { publicado: true, publicadoEm: new Date() })
+    res.redirect('/admin/quiz/lst')
+}
+
+export async function despublicarquiz(req, res) {
+    await Quiz.findByIdAndUpdate(req.params.id, { publicado: false, publicadoEm: null })
+    res.redirect('/admin/quiz/lst')
+}
+
 // notes/reminders for administrators
 // (none implemented yet)
-

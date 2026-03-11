@@ -8,7 +8,7 @@ const Usuario = conexao.Schema({
     endereco: 'String',
     telefone: 'String',
     cpf: 'String',
-    admin: 'Boolean',
+    admin: {type:Boolean, default:false},
     datanasc: { type: Date, default: Date.now },
 })
 

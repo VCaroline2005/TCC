@@ -6,7 +6,9 @@
   <title>Portal Enfermagem</title>
   <style>
     body { font-family: Arial, sans-serif; margin: 0; background: #f7f9fb; color: #1f2937; }
-    header { background: #007476; color: #fff; padding: 16px; }
+    header { background: #a51b0b; color: #fff; padding: 16px; }
+    .brand { display: flex; align-items: center; gap: 12px; }
+    .brand img { height: 46px; width: auto; display: block; filter: drop-shadow(0 2px 6px rgba(0,0,0,0.35)); }
     nav { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 8px; }
     nav a { color: #fff; text-decoration: none; font-weight: 600; }
     nav a:hover { text-decoration: underline; }
@@ -20,7 +22,10 @@
 </head>
 <body>
   <header>
-    <h1 style="margin:0; font-size:22px;">Portal Enfermagem</h1>
+    <div class="brand">
+      <img src="/site/img/logo.png" alt="Portal Enfermagem">
+      <h1 style="margin:0; font-size:22px;">Portal Enfermagem</h1>
+    </div>
     <nav>
       <a href="/">Início</a>
       <a href="/procedimentos">Procedimentos</a>
@@ -29,6 +34,8 @@
       <a href="/quiz">Quiz</a>
       <a href="/notas">Notas</a>
       <a href="/lembretes">Lembretes</a>
+      <a href="/login">Minha Conta</a>
+      <a href="/cadastro">Cadastre-se</a>
     </nav>
   </header>
   <main>

@@ -2,82 +2,176 @@
 <html lang="pt-br">
 
 <head>
-    <!-- Meta tags Obrigatórias -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
         integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 
     <title>Portal Enfermagem - Administração</title>
+    <style>
+        :root {
+            --admin-red: #a51b0b;
+            --admin-black: #111111;
+            --admin-white: #ffffff;
+            --admin-soft: #f7f7f7;
+            --admin-line: #d8d8d8;
+        }
+
+        body {
+            background: var(--admin-soft);
+            color: var(--admin-black);
+        }
+
+        .admin-topbar {
+            background: linear-gradient(90deg, var(--admin-red), #7a1408);
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.18);
+        }
+
+        .admin-topbar .navbar-brand {
+            font-weight: 700;
+            letter-spacing: 0.3px;
+        }
+
+        .admin-topbar .navbar-brand img {
+            height: 46px;
+            width: auto;
+            filter: drop-shadow(0 2px 6px rgba(0,0,0,0.35));
+        }
+
+        .admin-topbar .nav-link {
+            color: #ffe9e6 !important;
+            font-weight: 600;
+        }
+
+        .admin-topbar .nav-link:hover {
+            color: #ffffff !important;
+        }
+
+        .admin-layout {
+            margin: 0;
+            min-height: calc(100vh - 76px);
+        }
+
+        .admin-sidebar {
+            background: var(--admin-white);
+            border-right: 1px solid var(--admin-line);
+            padding: 20px 0;
+        }
+
+        .admin-sidebar .nav-link {
+            color: var(--admin-black);
+            border-left: 4px solid transparent;
+            padding: 10px 16px;
+            font-weight: 600;
+        }
+
+        .admin-sidebar .nav-link:hover {
+            background: #fff1ef;
+            color: var(--admin-red);
+            border-left-color: var(--admin-red);
+        }
+
+        section.col-12.col-md-10 {
+            padding: 24px;
+        }
+
+        .card {
+            border: 1px solid var(--admin-line);
+            border-radius: 10px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+        }
+
+        .card-header {
+            background: var(--admin-red);
+            color: var(--admin-white);
+            font-weight: 700;
+            border-bottom: 0;
+        }
+
+        .table-dark {
+            background: var(--admin-white) !important;
+            color: var(--admin-black) !important;
+        }
+
+        .table-dark th,
+        .table-dark td,
+        .table-dark thead th {
+            border-color: var(--admin-line) !important;
+            color: var(--admin-black) !important;
+        }
+
+        .table-hover tbody tr:hover {
+            background-color: #fff1ef !important;
+            color: var(--admin-black) !important;
+        }
+
+        .btn-primary {
+            background-color: var(--admin-red);
+            border-color: var(--admin-red);
+        }
+
+        .btn-primary:hover {
+            background-color: #8a1609;
+            border-color: #8a1609;
+        }
+
+        a {
+            color: var(--admin-red);
+            font-weight: 600;
+        }
+
+        a:hover {
+            color: #7a1408;
+            text-decoration: none;
+        }
+
+        @media (max-width: 767px) {
+            .admin-sidebar {
+                border-right: 0;
+                border-bottom: 1px solid var(--admin-line);
+            }
+
+            section.col-12.col-md-10 {
+                padding: 12px;
+            }
+        }
+    </style>
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+    <nav class="navbar navbar-expand-lg navbar-dark admin-topbar">
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01"
             aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Alterna navegação">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
-            <a class="navbar-brand" href="#">
-                <img src="/site/img/logo.png" height="50px" alt="Portal Enfermagem">
+            <a class="navbar-brand" href="/admin/usuarios/lst">
+                <img src="/site/img/logo.png" height="46" alt="Portal Enfermagem">
             </a>
             <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-                <li class="nav-item active">
-                    <a class="nav-link" href="/admin/usuarios/lst">Listar Usuários</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/admin/terminologia/lst">Listar Terminologias</a>
-                </li>
-                <li class="nav-item"></li>
-                    <a class="nav-link" href="/admin/terminologia/add">Adicionar Terminologia</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/admin/procedimento/lst">Listar Procedimentos</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/admin/medicamento/lst">Listar Medicamentos</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/admin/quiz/lst">Gerenciar Quiz</a>
-                </li>
-                <li class="nav-item"></li>
-                    <a class="nav-link" href="/admin/procedimento/add">Adicionar Procedimento</a>
-                </li>
+                <li class="nav-item"><a class="nav-link" href="/admin/usuarios/lst">Usuários</a></li>
+                <li class="nav-item"><a class="nav-link" href="/admin/terminologia/lst">Terminologias</a></li>
+                <li class="nav-item"><a class="nav-link" href="/admin/procedimento/lst">Procedimentos</a></li>
+                <li class="nav-item"><a class="nav-link" href="/admin/medicamento/lst">Medicamentos</a></li>
+                <li class="nav-item"><a class="nav-link" href="/admin/quiz/lst">Quiz</a></li>
             </ul>
-            <form class="form-inline my-2 my-lg-0">
-                <input class="form-control mr-sm-2" type="search" placeholder="Pesquisar" aria-label="Pesquisar">
-                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Pesquisar</button>
-            </form>
         </div>
     </nav>
-    <div class="row">
-        <aside class="col-12 col-md-2 my-4">
+
+    <div class="row admin-layout">
+        <aside class="col-12 col-md-2 admin-sidebar">
             <ul class="nav flex-column">
-                <li class="nav-item">
-                    <a class="nav-link" href="/admin/usuarios/lst">Listar usuários</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/admin/terminologia/lst">Listar terminologias</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/admin/terminologia/add">Adicionar terminologia</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/admin/procedimento/lst">Listar procedimentos</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/admin/medicamento/lst">Listar medicamentos</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/admin/procedimento/add">Adicionar procedimento</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/admin/medicamento/add">Adicionar medicamento</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/admin/quiz/lst">Questões do quiz</a>
-                </li>
+                <li class="nav-item"><a class="nav-link" href="/admin/usuarios/lst">Listar usuários</a></li>
+                <li class="nav-item"><a class="nav-link" href="/admin/categoria/lst">Categorias</a></li>
+                <li class="nav-item"><a class="nav-link" href="/admin/categoria/add">Adicionar categoria</a></li>
+                <li class="nav-item"><a class="nav-link" href="/admin/terminologia/lst">Listar terminologias</a></li>
+                <li class="nav-item"><a class="nav-link" href="/admin/terminologia/add">Adicionar terminologia</a></li>
+                <li class="nav-item"><a class="nav-link" href="/admin/procedimento/lst">Listar procedimentos</a></li>
+                <li class="nav-item"><a class="nav-link" href="/admin/procedimento/add">Adicionar procedimento</a></li>
+                <li class="nav-item"><a class="nav-link" href="/admin/medicamento/lst">Listar medicamentos</a></li>
+                <li class="nav-item"><a class="nav-link" href="/admin/medicamento/add">Adicionar medicamento</a></li>
+                <li class="nav-item"><a class="nav-link" href="/admin/quiz/lst">Questões do quiz</a></li>
+                <li class="nav-item"><a class="nav-link" href="/admin/quiz/add">Adicionar questão do quiz</a></li>
             </ul>
         </aside>

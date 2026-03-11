@@ -19,6 +19,8 @@
                         <th scope="col">Nome</th>
                         <th scope="col">Categoria</th>
                         <th scope="col">Fotos</th>
+                        <th scope="col">Publicado</th>
+                        <th scope="col">Publicação</th>
                         <th scope="col">Editar</th>
                         <th scope="col">Deletar</th>
                     </tr>
@@ -34,7 +36,15 @@
                             <%procedimento.fotos.forEach(function(foto){%>
                                 <img src="/fotos/<%=foto%>" height="40px" alt="Fotos">  
                             <%})%>
-                        </td>                        
+                        </td>
+                        <td><%=procedimento.publicado ? 'Sim' : 'Não'%></td>
+                        <td>
+                            <% if(procedimento.publicado){ %>
+                                <a href="/admin/procedimento/unpub/<%=procedimento._id%>">Despublicar</a>
+                            <% } else { %>
+                                <a href="/admin/procedimento/pub/<%=procedimento._id%>">Publicar</a>
+                            <% } %>
+                        </td>
                         <td>
                             <a href="/admin/procedimento/edt/<%=procedimento._id%>">Editar</a>
                         </td>

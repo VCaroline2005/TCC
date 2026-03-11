@@ -23,6 +23,8 @@ import {
         listarprocedimento,
         filtrarprocedimento,
         deletaprocedimento,
+        publicarprocedimento,
+        despublicarprocedimento,
         abreedtprocedimento,
         edtprocedimento,
         abreaddmedicamento,
@@ -30,6 +32,8 @@ import {
         listarmedicamento,
         filtrarmedicamento,
         deletarmedicamento,
+        publicarmedicamento,
+        despublicarmedicamento,
         abreedtmedicamento,
         edtmedicamento,
         abreaddterminologia,
@@ -37,14 +41,17 @@ import {
         listarterminologia,
         filtrarterminologia,
         deletarterminologia,
+        publicarterminologia,
+        despublicarterminologia,
         abreedtterminologia,
         edtterminologia,
         abreaddquiz,
         addquiz,
         listarquiz,
-        deletarquiz
+        deletarquiz,
+        publicarquiz,
+        despublicarquiz
     } from '../controllers/admin.js';
-
 
 //configuração de rotas que apontam para controllers que serão executados
 router.get("/admin/usuarios/lst", listarusuarios)
@@ -75,6 +82,8 @@ router.post('/admin/procedimento/lst', filtrarprocedimento)
 
 //rota do modelo procedimento (delete)
 router.get('/admin/procedimento/del/:id', deletaprocedimento)
+router.get('/admin/procedimento/pub/:id', publicarprocedimento)
+router.get('/admin/procedimento/unpub/:id', despublicarprocedimento)
 
 //rota do modelo procedimento (editar)
 router.get('/admin/procedimento/edt/:id', abreedtprocedimento)
@@ -88,6 +97,8 @@ router.get('/admin/medicamento/lst', listarmedicamento)
 router.post('/admin/medicamento/lst', filtrarmedicamento)
 
 router.get('/admin/medicamento/del/:id', deletarmedicamento)
+router.get('/admin/medicamento/pub/:id', publicarmedicamento)
+router.get('/admin/medicamento/unpub/:id', despublicarmedicamento)
 router.get('/admin/medicamento/edt/:id', abreedtmedicamento)
 router.post('/admin/medicamento/edt/:id', edtmedicamento)
 
@@ -99,6 +110,8 @@ router.get('/admin/terminologia/lst', listarterminologia)
 router.post('/admin/terminologia/lst', filtrarterminologia)
 
 router.get('/admin/terminologia/del/:id', deletarterminologia)
+router.get('/admin/terminologia/pub/:id', publicarterminologia)
+router.get('/admin/terminologia/unpub/:id', despublicarterminologia)
 router.get('/admin/terminologia/edt/:id', abreedtterminologia)
 router.post('/admin/terminologia/edt/:id', edtterminologia)
 
@@ -108,6 +121,8 @@ router.post('/admin/quiz/add', addquiz)
 
 router.get('/admin/quiz/lst', listarquiz)
 router.get('/admin/quiz/del/:id', deletarquiz)
+router.get('/admin/quiz/pub/:id', publicarquiz)
+router.get('/admin/quiz/unpub/:id', despublicarquiz)
 
 
 export default router

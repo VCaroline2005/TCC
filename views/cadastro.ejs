@@ -8,25 +8,35 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #51a7a7;
+            background-color: #ffffff;
             margin: 0;
             padding: 0;
+            color: #000000;
         }
 
         header {
-            background-color: #007476;
+            background-color: #a51b0b;
             color: white;
             text-align: center;
             padding: 1rem;
         }
 
+        .logo {
+            display: block;
+            height: 60px;
+            width: auto;
+            margin: 0 auto 8px;
+            filter: drop-shadow(0 2px 6px rgba(0,0,0,0.35));
+        }
+
         .container {
             width: 40%;
             margin: 2rem auto;
-            background-color: white;
+            background-color: #ffffff;
             padding: 2rem;
             border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border: 1px solid #000000;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
         }
 
         h2 {
@@ -46,8 +56,26 @@
         .form-group input {
             width: 100%;
             padding: 0.75rem;
-            border: 1px solid #ddd;
+            border: 1px solid #000;
             border-radius: 4px;
+        }
+
+        .espaco-options {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .espaco-options label {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            margin: 0;
+        }
+
+        .espaco-options input[type="radio"] {
+            width: auto;
+            padding: 0;
         }
 
         .form-group input:focus {
@@ -56,11 +84,11 @@
         }
 
         .form-group input.error {
-            border-color: #007476;
+            border-color: #a51b0b;
         }
 
         button {
-            background-color: #007476;
+            background-color: #a51b0b;
             color: white;
             padding: 0.75rem 1.5rem;
             border: none;
@@ -72,17 +100,17 @@
         }
 
         button:hover {
-            background-color: #007476;
+            background-color: #a51b0b;
         }
 
         .error-message {
-            color: #007476;
+            color: #a51b0b;
             font-size: 0.9rem;
             margin-top: 0.5rem;
         }
 
         .success-message {
-            color: #007476;
+            color: #a51b0b;
             font-size: 1rem;
             margin-top: 1rem;
             text-align: center;
@@ -93,11 +121,15 @@
 <body>
 
     <header>
+        <img class="logo" src="/site/img/logo.png" alt="Portal Enfermagem">
         <h1>Cadastro de Usuário</h1>
     </header>
 
     <div class="container">
         <h2>Preencha os dados abaixo para se cadastrar</h2>
+        <% if (typeof error !== 'undefined' && error) { %>
+            <div class="error-message" style="margin-bottom:12px;"><%= error %></div>
+        <% } %>
 
         <form id="signup-form" method="post" action="/cadastro" enctype="multipart/form-data">
             <div class="form-group">
@@ -147,6 +179,9 @@
             </div>
 
             <button type="submit">Cadastrar</button>
+            <p style="text-align:center; margin-top:12px;">
+                Já tem conta? <a href="/login">Entrar</a>
+            </p>
 
             <div id="form-success" class="success-message"></div>
         </form>
@@ -164,6 +199,7 @@
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
             const confirmPassword = document.getElementById('confirm-password').value;
+            const espacoSelecionado = document.querySelector('input[name="espaco"]:checked');
 
             let isValid = true;
 
@@ -197,6 +233,11 @@
                 isValid = false;
             } else if (confirmPassword !== password) {
                 showError("confirm-password", "As senhas não coincidem.");
+                isValid = false;
+            }
+
+            if (!espacoSelecionado) {
+                document.getElementById('espaco-error').innerText = 'Escolha o tipo de espaço.';
                 isValid = false;
             }
 

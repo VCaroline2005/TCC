@@ -19,6 +19,8 @@
                         <th scope="col">Termo</th>
                         <th scope="col">Definição</th>
                         <th scope="col">Categoria</th>
+                        <th scope="col">Publicado</th>
+                        <th scope="col">Publicação</th>
                         <th scope="col">Editar</th>
                         <th scope="col">Deletar</th>
                     </tr>
@@ -30,6 +32,14 @@
                         <td> <%=termo.termo%> </td>
                         <td> <%=termo.definicao%> </td>
                         <td> <%=termo.categoria%> </td>
+                        <td> <%=termo.publicado ? 'Sim' : 'Não'%> </td>
+                        <td>
+                            <% if(termo.publicado){ %>
+                                <a href="/admin/terminologia/unpub/<%=termo._id%>">Despublicar</a>
+                            <% } else { %>
+                                <a href="/admin/terminologia/pub/<%=termo._id%>">Publicar</a>
+                            <% } %>
+                        </td>
                         <td><a href="/admin/terminologia/edt/<%=termo._id%>">Editar</a></td>
                         <td><a href="/admin/terminologia/del/<%=termo._id%>">Deletar</a></td>
                     </tr>

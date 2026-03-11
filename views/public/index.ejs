@@ -1,905 +1,201 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="pt-br">
 <head>
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-
-	<title>Portal Enfermagem - Consultas e Recursos</title>
-
-	<!-- Google font -->
-	<link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700" rel="stylesheet">
-	<base href="/site/" />
-	<!-- Bootstrap -->
-	<link type="text/css" rel="stylesheet" href="css/bootstrap.min.css" />
-
-	<!-- Slick -->
-	<link type="text/css" rel="stylesheet" href="css/slick.css" />
-	<link type="text/css" rel="stylesheet" href="css/slick-theme.css" />
-
-	<!-- nouislider -->
-	<link type="text/css" rel="stylesheet" href="css/nouislider.min.css" />
-
-	<!-- Font Awesome Icon -->
-	<link rel="stylesheet" href="css/font-awesome.min.css">
-
-	<!-- Custom stlylesheet -->
-	<link type="text/css" rel="stylesheet" href="css/style.css" />
-
-	<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-	<!--[if lt IE 9]>
-		  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-		  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-		<![endif]-->
-
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Portal Enfermagem</title>
+  <style>
+    :root {
+      --bg: #ffffff;
+      --card: #ffffff;
+      --primary: #a51b0b;
+      --primary-2: #000000;
+      --text: #000000;
+      --muted: #222222;
+      --line: #000000;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+    .topbar {
+      background: var(--primary);
+      color: #fff;
+      padding: 14px 18px;
+    }
+    .topbar-inner {
+      max-width: 1080px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .brand {
+      font-size: 22px;
+      font-weight: 700;
+      margin: 0;
+    }
+    .auth a {
+      color: #fff;
+      text-decoration: none;
+      margin-left: 14px;
+      font-weight: 600;
+    }
+    .auth a:hover { text-decoration: underline; }
+    .nav {
+      background: var(--primary-2);
+    }
+    .nav-inner {
+      max-width: 1080px;
+      margin: 0 auto;
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      padding: 10px 18px;
+    }
+    .nav a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .nav a:hover { text-decoration: underline; }
+    .container {
+      max-width: 1080px;
+      margin: 22px auto;
+      padding: 0 18px;
+    }
+    .hero {
+      background: linear-gradient(120deg, #a51b0b, #000000);
+      color: #fff;
+      border-radius: 12px;
+      padding: 28px;
+      box-shadow: 0 10px 24px rgba(0,0,0,0.12);
+    }
+    .hero h2 { margin: 0 0 10px; font-size: 30px; }
+    .hero p { margin: 0; line-height: 1.5; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+      margin-top: 16px;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 16px;
+    }
+    .card h3 {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }
+    .card .value {
+      margin-top: 10px;
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--primary);
+    }
+    .section {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 18px;
+      margin-top: 16px;
+    }
+    .section h3 { margin-top: 0; }
+    .links {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .links a {
+      display: block;
+      background: #ffffff;
+      border: 1px solid #000000;
+      border-radius: 8px;
+      padding: 12px;
+      color: #000000;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .links a:hover { background: #f5f5f5; }
+    .muted { color: var(--muted); }
+    .footer {
+      text-align: center;
+      color: var(--muted);
+      font-size: 14px;
+      padding: 24px 0 30px;
+    }
+  </style>
 </head>
-
 <body>
-	<!-- HEADER -->
-	<header>
-		<!-- TOP HEADER -->
-		<div id="top-header">
-			<div class="container">
-				<ul class="header-links pull-left">
-					<li><a href="#"><i class="fa fa-phone"></i> +55 21 9XXXX-XXXX</a></li>
-					<li><a href="#"><i class="fa fa-envelope-o"></i> contato@portal-enfermagem.com</a></li>
-					<li><a href="#"><i class="fa fa-map-marker"></i> Av. Saúde 123, Centro</a></li>
-				</ul>
-				<ul class="header-links pull-right">
-					
-					<li><a href="#"><i class="fa fa-user-o"></i> Minha Conta</a></li>
-				</ul>
-			</div>
-		</div>
-		<!-- /TOP HEADER -->
-
-		<!-- MAIN HEADER -->
-		<div id="header">
-			<!-- container -->
-			<div class="container">
-				<!-- row -->
-				<div class="row">
-					<!-- LOGO -->
-					<div class="col-md-4">
-						<div class="header-logo9">
-							<a href="#" class="logo9">
-								<img src="./img/logo.png" alt="Portal Enfermagem - Logo">
-							</a>
-						</div>
-					</div>
-					<!-- /LOGO -->
-
-					<!-- SEARCH BAR -->
-					<div class="col-md-5">
-						<div class="header-search">
-							<form>
-								<select class="input-select">
-									<option value="0">Todas as Categorias</option>
-									<option value="1">Categoria 01</option>
-									<option value="1">Categoria 02</option>
-								</select>
-								<input class="input" placeholder="Pesquisar Aqui">
-								<button class="search-btn">Pesquisar</button>
-							</form>
-						</div>
-					</div>
-					<!-- /SEARCH BAR -->
-
-					<!-- ACCOUNT -->
-					<div class="col-md-3 clearfix">
-						<div class="header-ctn">
-							<!-- Wishlist -->
-							<div>
-								<a href="#">
-									<i class="fa fa-heart-o"></i>
-									<span>Sua Lista de Desejos</span>
-									<div class="qty">3</div>
-								</a>
-							</div>
-							<!-- /Wishlist -->
-
-							<!-- Cart -->
-							<div class="dropdown">
-								<a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
-									<i class="fa fa-shopping-cart"></i>
-									<span>Ver Carrinho</span>
-									<div class="qty">2</div>
-								</a>
-								<div class="cart-dropdown">
-									<div class="cart-list">
-										<div class="product-widget">
-											<div class="product-img">
-												<img src="./img/cesta05.png" alt="">
-											</div>
-											<div class="product-body">
-												<h3 class="product-name"><a href="#">Kit Enfermagem Básico</a></h3>
-												<h4 class="product-price"><span class="qty">1x</span>R$150.00</h4>
-											</div>
-											<button class="delete"><i class="fa fa-close"></i></button>
-										</div>
-
-										<div class="product-widget">
-											<div class="product-img">
-												<img src="./img/buque09.png" alt="">
-											</div>
-											<div class="product-body">
-												<h3 class="product-name"><a href="#">Manual de Protocolos - Edição 2026</a></h3>
-												<h4 class="product-price"><span class="qty">1x</span>R$180.00</h4>
-											</div>
-											<button class="delete"><i class="fa fa-close"></i></button>
-										</div>
-									</div>
-									<div class="cart-summary">
-										<small>2 Item(s) selecionados</small>
-										<h5>SUBTOTAL: R$330.00</h5>
-									</div>
-									<div class="cart-btns">
-										<a href="#"> Ver Carrinho </a>
-										<a href="#"> Confira <i class="fa fa-arrow-circle-right"></i></a>
-									</div>
-								</div>
-							</div>
-							<!-- /Cart -->
-
-							<!-- Menu Toogle -->
-							<div class="menu-toggle">
-								<a href="#">
-									<i class="fa fa-bars"></i>
-									<span>Menu</span>
-								</a>
-							</div>
-							<!-- /Menu Toogle -->
-						</div>
-					</div>
-					<!-- /ACCOUNT -->
-				</div>
-				<!-- row -->
-			</div>
-			<!-- container -->
-		</div>
-		<!-- /MAIN HEADER -->
-	</header>
-	<!-- /HEADER -->
-
-	<!-- NAVIGATION -->
-	<nav id="navigation">
-		<!-- container -->
-		<div class="container">
-			<!-- responsive-nav -->
-			<div id="responsive-nav">
-				<!-- NAV -->
-                                  <ul class="main-nav nav navbar-nav">
-                                          <li class="active"><a href="/">Início</a></li>
-                                          <li><a href="/procedimentos">Procedimentos</a></li>
-                                          <li><a href="/medicamentos">Medicamentos</a></li>
-                                          <li><a href="/terminologias">Terminologias</a></li>
-                                          <li><a href="/quiz">Quiz</a></li>
-                                          <li><a href="/notas">Notas</a></li>
-                                          <li><a href="/lembretes">Lembretes</a></li>
-                                  </ul>
-				</ul>
-				<style>
-					/* Fundo da barra de navegação */
-					#navigation {
-						background-color: #007476;
-						/* Verde turquesa */
-					}
-
-					/* Cor dos links no menu */
-					#navigation .main-nav li a {
-						color: #ffffff;
-						/* Texto branco por padrão */
-					}
-				</style>
-
-				<!-- /NAV -->
-			</div>
-			<!-- /responsive-nav -->
-		</div>
-		<!-- /container -->
-	</nav>
-	<!-- /NAVIGATION -->
-
-    <!-- SECTION -->
-    <div class="section">
-        <div class="container">
-            <h2>Bem‑vindo ao Portal de Enfermagem</h2>
-            <p>Consulte procedimentos, medicamentos e terminologias. Faça quizzes rápidos e gerencie suas notas e lembretes.</p>
-            <ul>
-                <li><a href="/procedimentos">Procedimentos (<%=procedimentoCount%>)</a></li>
-                <li><a href="/medicamentos">Medicamentos (<%=medicamentoCount%>)</a></li>
-                <li><a href="/terminologias">Terminologias (<%=termoCount%>)</a></li>
-                <li><a href="/quiz">Responder Quiz</a></li>
-                <li><a href="/notas">Minhas notas</a></li>
-                <li><a href="/lembretes">Meus lembretes</a></li>
-            </ul>
-        </div>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <h1 class="brand">Portal Enfermagem</h1>
+      <nav class="auth">
+        <a href="/login">Minha Conta</a>
+        <a href="/cadastro">Cadastre-se</a>
+      </nav>
     </div>
-    <!-- /SECTION -->
-					</div>
-				</div>
-				<!-- Products tab & slick -->
-			</div>
-			<!-- /row -->
-		</div>
-		<!-- /container -->
-	</div>
-	<!-- /SECTION -->
+  </header>
 
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="/">Início</a>
+      <a href="/procedimentos">Procedimentos</a>
+      <a href="/medicamentos">Medicamentos</a>
+      <a href="/terminologias">Terminologias</a>
+      <a href="/quiz">Quiz</a>
+      <a href="/notas">Notas</a>
+      <a href="/lembretes">Lembretes</a>
+    </div>
+  </nav>
 
-	<!-- SECTION -->
-	<div class="section">
-		<!-- container -->
-		<div class="container">
-			<!-- row -->
-			<div class="row">
+  <main class="container">
+    <section class="hero">
+      <h2>Seu apoio rápido na prática de enfermagem</h2>
+      <p>Consulte conteúdos essenciais, revise protocolos, teste conhecimentos e organize sua rotina em um só lugar.</p>
+    </section>
 
-				<!-- section title -->
-				<div class="col-md-12">
-					<div class="section-title">
-						<h3 class="title">Mais Vendidos</h3>
-						<div class="section-nav">
-							<ul class="section-tab-nav tab-nav">
-								<li class="active"><a data-toggle="tab" href="#tab2">Arranjos</a></li>
-								<li><a data-toggle="tab" href="#tab2">Buquês</a></li>
-								<li><a data-toggle="tab" href="#tab2">Cestas</a></li>
-								<li><a data-toggle="tab" href="#tab2">Complementos</a></li>
-							</ul>
-						</div>
-					</div>
-				</div>
-				<!-- /section title -->
+    <section class="grid" aria-label="Resumo">
+      <article class="card">
+        <h3>Procedimentos</h3>
+        <div class="value"><%= procedimentoCount %></div>
+      </article>
+      <article class="card">
+        <h3>Medicamentos</h3>
+        <div class="value"><%= medicamentoCount %></div>
+      </article>
+      <article class="card">
+        <h3>Terminologias</h3>
+        <div class="value"><%= termoCount %></div>
+      </article>
+    </section>
 
-				<!-- Products tab & slick -->
-				<div class="col-md-12">
-					<div class="row">
-						<div class="products-tabs">
-							<!-- tab -->
-							<div id="tab2" class="tab-pane fade in active">
-								<div class="products-slick" data-nav="#slick-nav-2">
-									<!-- product -->
-									<div class="product">
-										<div class="product-img">
-											<img src="./img/buque05.png" alt="">
-											<div class="product-label">
-												<span class="sale">-30%</span>
-												<span class="new">NEW</span>
-											</div>
-										</div>
-										<div class="product-body">
-											<p class="product-category">Category</p>
-											<h3 class="product-name"><a href="#">Buquê de Girassóis</a></h3>
-											<h4 class="product-price">R$139.30 <del
-													class="product-old-price">R$199.00</del></h4>
-											<div class="product-rating">
-												<i class="fa fa-star"></i>
-												<i class="fa fa-star"></i>
-												<i class="fa fa-star"></i>
-												<i class="fa fa-star"></i>
-												<i class="fa fa-star"></i>
-											</div>
-											<div class="product-btns">
-												<button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span
-														class="tooltipp">Adicionar à lista de desejos</span></button>
-												<button class="add-to-compare"><i class="fa fa-exchange"></i><span
-														class="tooltipp">Adicionar para comprar</span></button>
-												<button class="quick-view"><i class="fa fa-eye"></i><span
-														class="tooltipp">Visualização Rápida</span></button>
-											</div>
-										</div>
-										<div class="add-to-cart">
-											<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i>Adicionar
-												ao carrinho
-											</button>
-										</div>
-									</div>
-									<!-- /product -->
+    <section class="section">
+      <h3>Acessos rápidos</h3>
+      <p class="muted">Abra direto o recurso que você precisa no momento.</p>
+      <div class="links">
+        <a href="/procedimentos">Consultar procedimentos</a>
+        <a href="/medicamentos">Consultar medicamentos</a>
+        <a href="/terminologias">Ver terminologias</a>
+        <a href="/quiz">Responder quiz</a>
+        <a href="/notas">Gerenciar notas</a>
+        <a href="/lembretes">Gerenciar lembretes</a>
+      </div>
+    </section>
 
-									<!-- product -->
-									<div class="product">
-										<div class="product-img">
-											<img src="./img/arranjo02.png" alt="">
-											<div class="product-label">
-												<span class="new">NEW</span>
-											</div>
-										</div>
-										<div class="product-body">
-											<p class="product-category">Category</p>
-											<h3 class="product-name"><a href="#">Arranjo de Margaridas</a></h3>
-											<h4 class="product-price">R$74.99 <del
-													class="product-old-price">R$80.00</del></h4>
-											<div class="product-rating">
-												<i class="fa fa-star"></i>
-												<i class="fa fa-star"></i>
-												<i class="fa fa-star"></i>
-												<i class="fa fa-star"></i>
-												<i class="fa fa-star-o"></i>
-											</div>
-											<div class="product-btns">
-												<button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span
-														class="tooltipp">Adicionar à lista de desejos</span></button>
-												<button class="add-to-compare"><i class="fa fa-exchange"></i><span
-														class="tooltipp">Adicionar para comprar</span></button>
-												<button class="quick-view"><i class="fa fa-eye"></i><span
-														class="tooltipp">Visualização Rápida</span></button>
-											</div>
-										</div>
-										<div class="add-to-cart">
-											<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i>
-												Adicionar ao Carrinho</button>
-											</button>Carrinho</button>
-										</div>
-									</div>
-									<!-- /product -->
-
-									<!-- product -->
-									<div class="product">
-										<div class="product-img">
-											<img src="./img/buque03.png" alt="">
-											<div class="product-label">
-												<span class="sale">-30%</span>
-											</div>
-										</div>
-										<div class="product-body">
-											<p class="product-category">Category</p>
-											<h3 class="product-name"><a href="#">Buquê Itália de 6 Rosas</a></h3>
-											<h4 class="product-price">R$105.00 <del
-													class="product-old-price">R$150.00</del></h4>
-											<div class="product-rating">
-											</div>
-											<div class="product-btns">
-												<button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span
-														class="tooltipp">Adicionar à lista de desejos</span></button>
-												<button class="add-to-compare"><i class="fa fa-exchange"></i><span
-														class="tooltipp">Adicionar para comprar</span></button>
-												<button class="quick-view"><i class="fa fa-eye"></i><span
-														class="tooltipp">Visualização Rápida</span></button>
-											</div>
-										</div>
-										<div class="add-to-cart">
-											<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i>Adicionar
-												ao Carrinho
-											</button>
-										</div>
-									</div>
-									<!-- /product -->
-
-									<!-- product -->
-									<div class="product">
-										<div class="product-img">
-											<img src="./img/buque04.png" alt="">
-										</div>
-										<div class="product-body">
-											<p class="product-category">Category</p>
-											<h3 class="product-name"><a href="#">Buquê de 6 Rosas e Ferrero Rocher</a>
-											</h3>
-											<h4 class="product-price">R$130.00 <del
-													class="product-old-price">R$170.00</del></h4>
-											<div class="product-rating">
-												<i class="fa fa-star"></i>
-												<i class="fa fa-star"></i>
-												<i class="fa fa-star"></i>
-												<i class="fa fa-star"></i>
-												<i class="fa fa-star"></i>
-											</div>
-											<div class="product-btns">
-												<button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span
-														class="tooltipp">Adicionar à lista de desejos</span></button>
-												<button class="add-to-compare"><i class="fa fa-exchange"></i><span
-														class="tooltipp">Adicionar para Comprar</span></button>
-												<button class="quick-view"><i class="fa fa-eye"></i><span
-														class="tooltipp">Visualização Rápida</span></button>
-											</div>
-										</div>
-										<div class="add-to-cart">
-											<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i>
-												Adicionar ao carrinho</button>
-										</div>
-									</div>
-									<!-- /product -->
-
-									<!-- product -->
-									<div class="product">
-										<div class="product-img">
-											<img src="./img/cestas01.png" alt="">
-										</div>
-										<div class="product-body">
-											<p class="product-category">Category</p>
-											<h3 class="product-name"><a href="#">Cesta de Rosas + Ferrero Rocher</a>
-											</h3>
-											<h4 class="product-price">R$189.99 <del
-													class="product-old-price">R$200.00</del></h4>
-											<div class="product-rating">
-												<i class="fa fa-star"></i>
-												<i class="fa fa-star"></i>
-												<i class="fa fa-star"></i>
-												<i class="fa fa-star"></i>
-												<i class="fa fa-star"></i>
-											</div>
-											<div class="product-btns">
-												<button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span
-														class="tooltipp">Adicionar à lista de desejos</span></button>
-												<button class="add-to-compare"><i class="fa fa-exchange"></i><span
-														class="tooltipp">Adicionar para Comprar</span></button>
-												<button class="quick-view"><i class="fa fa-eye"></i><span
-														class="tooltipp">Visualização Rápida</span></button>
-											</div>
-										</div>
-										<div class="add-to-cart">
-											<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i>
-												Adicionar ao Carrinho
-											</button>Carrinho</button>
-										</div>
-									</div>
-									<!-- /product -->
-								</div>
-								<div id="slick-nav-2" class="products-slick-nav"></div>
-							</div>
-							<!-- /tab -->
-						</div>
-					</div>
-				</div>
-				<!-- /Products tab & slick -->
-			</div>
-			<!-- /row -->
-		</div>
-		<!-- /container -->
-	</div>
-	<!-- /SECTION -->
-
-	<!-- SECTION -->
-	<div class="section">
-		<!-- container -->
-		<div class="container">
-			<!-- row -->
-			<div class="row">
-				<div class="col-md-4 col-xs-6">
-					<div class="section-title">
-						<h4 class="title">Mais Vendidos</h4>
-						<div class="section-nav">
-							<div id="slick-nav-3" class="products-slick-nav"></div>
-						</div>
-					</div>
-
-					<div class="products-widget-slick" data-nav="#slick-nav-3">
-						<div>
-							<!-- product widget -->
-							<div class="product-widget">
-								<div class="product-img">
-									<img src="./img/buque06.png" alt="">
-								</div>
-								<div class="product-body">
-									<p class="product-category">Category</p>
-									<h3 class="product-name"><a href="#">Buquê de 6 Rosas Vermelhas + 6 Rosas
-											Brancas</a></h3>
-									<h4 class="product-price">R$135.00 <del class="product-old-price">R$150.00</del>
-									</h4>
-								</div>
-							</div>
-							<!-- /product widget -->
-
-							<!-- product widget -->
-							<div class="product-widget">
-								<div class="product-img">
-									<img src="./img/buque07.png" alt="">
-								</div>
-								<div class="product-body">
-									<p class="product-category">Category</p>
-									<h3 class="product-name"><a href="#">Buquê de Rosas Amarelas</a></h3>
-									<h4 class="product-price">R$85.00 <del class="product-old-price">R$100.00</del></h4>
-								</div>
-							</div>
-							<!-- /product widget -->
-
-							<!-- product widget -->
-							<div class="product-widget">
-								<div class="product-img">
-									<img src="./img/buque08.png" alt="">
-								</div>
-								<div class="product-body">
-									<p class="product-category">Category</p>
-									<h3 class="product-name"><a href="#">Buquê de Rosas Azuis </a></h3>
-									<h4 class="product-price">R$139.99 <del class="product-old-price">R$170.00</del>
-									</h4>
-								</div>
-							</div>
-							<!-- product widget -->
-						</div>
-
-						<div>
-							<!-- product widget -->
-							<div class="product-widget">
-								<div class="product-img">
-									<img src="./img/arranjo07.png" alt="">
-								</div>
-								<div class="product-body">
-									<p class="product-category">Category</p>
-									<h3 class="product-name"><a href="#">Arranjo de Minis Rosas Laranjas no Vaso</a>
-									</h3>
-									<h4 class="product-price">R$134.90 <del class="product-old-price">R$149.00</del>
-									</h4>
-								</div>
-							</div>
-							<!-- /product widget -->
-
-							<!-- product widget -->
-							<div class="product-widget">
-								<div class="product-img">
-									<img src="./img/presente01.png" alt="">
-								</div>
-								<div class="product-body">
-									<p class="product-category">Category</p>
-									<h3 class="product-name"><a href="#">Urso Pelucia + Ferrero Rocher</a></h3>
-									<h4 class="product-price">R$67.90 <del class="product-old-price">R$80.00</del></h4>
-								</div>
-							</div>
-							<!-- /product widget -->
-
-							<!-- product widget -->
-							<div class="product-widget">
-								<div class="product-img">
-									<img src="./img/arranjo.png" alt="">
-								</div>
-								<div class="product-body">
-									<p class="product-category">Category</p>
-									<h3 class="product-name"><a href="#">Lírio Cor de Rosa</a></h3>
-									<h4 class="product-price">R$60.00 <del class="product-old-price">R$75.00</del></h4>
-								</div>
-							</div>
-							<!-- product widget -->
-						</div>
-					</div>
-				</div>
-
-				<div class="col-md-4 col-xs-6">
-					<div class="section-title">
-						<h4 class="title">Mais Vendidos</h4>
-						<div class="section-nav">
-							<div id="slick-nav-4" class="products-slick-nav"></div>
-						</div>
-					</div>
-
-					<div class="products-widget-slick" data-nav="#slick-nav-4">
-						<div>
-							<!-- product widget -->
-							<div class="product-widget">
-								<div class="product-img">
-									<img src="./img/arranjo04.png" alt="">
-								</div>
-								<div class="product-body">
-									<p class="product-category">Category</p>
-									<h3 class="product-name"><a href="#">Vaso de 12 Girassóis</a></h3>
-									<h4 class="product-price">R$89.90 </h4>
-								</div>
-							</div>
-							<!-- /product widget -->
-
-							<!-- product widget -->
-							<div class="product-widget">
-								<div class="product-img">
-									<img src="./img/cesta03.png" alt="">
-								</div>
-								<div class="product-body">
-									<p class="product-category">Category</p>
-									<h3 class="product-name"><a href="#">Cesta Você é Especial</a></h3>
-									<h4 class="product-price">R$200.00 <del class="product-old-price">R$239.90</del>
-									</h4>
-								</div>
-							</div>
-							<!-- /product widget -->
-
-							<!-- product widget -->
-							<div class="product-widget">
-								<div class="product-img">
-									<img src="./img/arranjo05.png" alt="">
-								</div>
-								<div class="product-body">
-									<p class="product-category">Category</p>
-									<h3 class="product-name"><a href="#">Mini Margaridas + Ferrero Rocher 50g</a></h3>
-									<h4 class="product-price">R$129.90</h4>
-								</div>
-							</div>
-							<!-- product widget -->
-						</div>
-
-						<div>
-							<!-- product widget -->
-							<div class="product-widget">
-								<div class="product-img">
-									<img src="./img/arranjo06.png" alt="">
-								</div>
-								<div class="product-body">
-									<p class="product-category">Category</p>
-									<h3 class="product-name"><a href="#">Orquídea Phalaenópsis Lilás 3 Hastes</a></h3>
-									<h4 class="product-price">R$320.00 </h4>
-								</div>
-							</div>
-							<!-- /product widget -->
-
-							<!-- product widget -->
-							<div class="product-widget">
-								<div class="product-img">
-									<img src="./img/cesta04.png" alt="">
-								</div>
-								<div class="product-body">
-									<p class="product-category">Category</p>
-									<h3 class="product-name"><a href="#">Cesta de Rosas + Ferrero Rocher +
-											Espulmante</a></h3>
-									<h4 class="product-price">R$365.00 <del class="product-old-price">R$374.00</del>
-									</h4>
-								</div>
-							</div>
-							<!-- /product widget -->
-
-							<!-- product widget -->
-							<div class="product-widget">
-								<div class="product-img">
-									<img src="./img/complemento01.png" alt="">
-								</div>
-								<div class="product-body">
-									<p class="product-category">Category</p>
-									<h3 class="product-name"><a href="#">Chaveiro Panda</a></h3>
-									<h4 class="product-price">R$35.00</h4>
-								</div>
-							</div>
-							<!-- product widget -->
-						</div>
-					</div>
-				</div>
-
-				<div class="clearfix visible-sm visible-xs"></div>
-
-				<div class="col-md-4 col-xs-6">
-					<div class="section-title">
-						<h4 class="title">Mais Vendidos</h4>
-						<div class="section-nav">
-							<div id="slick-nav-5" class="products-slick-nav"></div>
-						</div>
-					</div>
-
-					<div class="products-widget-slick" data-nav="#slick-nav-5">
-						<div>
-							<!-- product widget -->
-							<div class="product-widget">
-								<div class="product-img">
-									<img src="./img/arranjo08.png" alt="">
-								</div>
-								<div class="product-body">
-									<p class="product-category">Category</p>
-									<h3 class="product-name"><a href="#">Arranjo de flores nobres + chocolates</a></h3>
-									<h4 class="product-price">R$150.00 <del class="product-old-price">R$200.00</del>
-									</h4>
-								</div>
-							</div>
-							<!-- /product widget -->
-
-							<!-- product widget -->
-							<div class="product-widget">
-								<div class="product-img">
-									<img src="./img/buque09.png" alt="">
-								</div>
-								<div class="product-body">
-									<p class="product-category">Category</p>
-									<h3 class="product-name"><a href="#">Buquê de Rosas + Chocolates + Urso</a></h3>
-									<h4 class="product-price">R$180.00 <del class="product-old-price">R$200.00</del>
-									</h4>
-								</div>
-							</div>
-							<!-- /product widget -->
-
-							<!-- product widget -->
-							<div class="product-widget">
-								<div class="product-img">
-									<img src="./img/buque10.png" alt="">
-								</div>
-								<div class="product-body">
-									<p class="product-category">Category</p>
-									<h3 class="product-name"><a href="#">Cesta Alstromérias Coloridas No Celofane Com
-											Pelúcia Charmosa Creme</a></h3>
-									<h4 class="product-price">R$190.00 <del class="product-old-price">R$200.00</del>
-									</h4>
-								</div>
-							</div>
-							<!-- product widget -->
-						</div>
-
-						<div>
-							<!-- product widget -->
-							<div class="product-widget">
-								<div class="product-img">
-									<img src="./img/cesta05.png" alt="">
-								</div>
-								<div class="product-body">
-									<p class="product-category">Category</p>
-									<h3 class="product-name"><a href="#">Cesta café da manhã</a></h3>
-									<h4 class="product-price">R$150.00 </h4>
-								</div>
-							</div>
-							<!-- /product widget -->
-
-							<!-- product widget -->
-							<div class="product-widget">
-								<div class="product-img">
-									<img src="./img/complemento02.png" alt="">
-								</div>
-								<div class="product-body">
-									<p class="product-category">Category</p>
-									<h3 class="product-name"><a href="#">Almofada</a></h3>
-									<h4 class="product-price">R$59.90 <del class="product-old-price">R$80.00</del></h4>
-								</div>
-							</div>
-							<!-- /product widget -->
-
-							<!-- product widget -->
-							<div class="product-widget">
-								<div class="product-img">
-									<img src="./img/arranjo09.png" alt="">
-								</div>
-								<div class="product-body">
-									<p class="product-category">Category</p>
-									<h3 class="product-name"><a href="#">Rosa + Ferrero Rocher</a></h3>
-									<h4 class="product-price">R$69.00 <del class="product-old-price">R$80.00</del></h4>
-								</div>
-							</div>
-							<!-- product widget -->
-						</div>
-					</div>
-				</div>
-
-			</div>
-			<!-- /row -->
-		</div>
-		<!-- /container -->
-	</div>
-	<!-- /SECTION -->
-
-	<!-- NEWSLETTER -->
-	<div id="newsletter" class="section">
-		<!-- container -->
-		<div class="container">
-			<!-- row -->
-			<div class="row">
-				<div class="col-md-12">
-					<div class="newsletter">
-						<p>Inscreva-se na <strong>NEWSLETTER</strong></p>
-						<form>
-							<input class="input" type="email" placeholder=" Digite seu e-mail">
-							<button class="newsletter-btn"><i class="fa fa-envelope"></i> Inscrever-se</button>
-						</form>
-						<ul class="newsletter-follow">
-							<li>
-								<a href="#"><i class="fa fa-facebook"></i></a>
-							</li>
-							<li>
-								<a href="#"><i class="fa fa-twitter"></i></a>
-							</li>
-							<li>
-								<a href="#"><i class="fa fa-instagram"></i></a>
-							</li>
-							<li>
-								<a href="#"><i class="fa fa-pinterest"></i></a>
-							</li>
-						</ul>
-					</div>
-				</div>
-			</div>
-			<!-- /row -->
-		</div>
-		<!-- /container -->
-	</div>
-	<!-- /NEWSLETTER -->
-
-	<!-- FOOTER -->
-	<footer id="footer">
-		<!-- top footer -->
-		<div class="section">
-			<!-- container -->
-			<div class="container">
-				<!-- row -->
-				<div class="row">
-					<div class="col-md-3 col-xs-6">
-						<div class="footer">
-							<h3 class="footer-title">Sobre Nós</h3>
-							<p>Portal Enfermagem oferece materiais, protocolos e cursos para profissionais
-							de saúde, com foco na prática segura e atualizada.</p>
-							<ul class="footer-links">
-								<li><a href="#"><i class="fa fa-map-marker"></i>Av. Saúde 123, Centro</a></li>
-								<li><a href="#"><i class="fa fa-phone"></i>+55 21 9XXXX-XXXX</a></li>
-								<li><a href="#"><i class="fa fa-envelope-o"></i>contato@portal-enfermagem.com</a></li>
-							</ul>
-						</div>
-					</div>
-
-					<div class="col-md-3 col-xs-6">
-						<div class="footer">
-							<h3 class="footer-title">Categorias</h3>
-							<ul class="footer-links">
-								<li><a href="#">Cursos</a></li>
-								<li><a href="#">Protocolos</a></li>
-								<li><a href="#">Kits</a></li>
-								<li><a href="#">Recursos</a></li>
-								<li><a href="#">Eventos</a></li>
-							</ul>
-						</div>
-					</div>
-
-					<div class="clearfix visible-xs"></div>
-
-					<div class="col-md-3 col-xs-6">
-						<div class="footer">
-							<h3 class="footer-title">Informações</h3>
-							<ul class="footer-links">
-								<li><a href="#">Sobre Nós</a></li>
-								<li><a href="#"></a>Entre em Contato</li>
-								<li><a href="#">Política de Privacidade</a></li>
-								<li><a href="#">Pedidos e Devoluções </a></li>
-								<li><a href="#">Termos & Condições</a></li>
-							</ul>
-						</div>
-					</div>
-
-					<div class="col-md-3 col-xs-6">
-						<div class="footer">
-							<h3 class="footer-title">Serviço</h3>
-							<ul class="footer-links">
-								<li><a href="#">Minha Conta</a></li>
-								<li><a href="#">Ver Carrinho</a></li>
-								<li><a href="#">Lista de Desejos</a></li>
-								<li><a href="#">Rastrear Meu Pedido</a></li>
-								<li><a href="#">Ajuda</a></li>
-							</ul>
-						</div>
-					</div>
-				</div>
-				<!-- /row -->
-			</div>
-			<!-- /container -->
-		</div>
-		<!-- /top footer -->
-
-		<!-- bottom footer -->
-		<div id="bottom-footer" class="section">
-			<div class="container">
-				<!-- row -->
-				<div class="row">
-					<div class="col-md-12 text-center">
-						<ul class="footer-payments">
-							<li><a href="#"><i class="fa fa-cc-visa"></i></a></li>
-							<li><a href="#"><i class="fa fa-credit-card"></i></a></li>
-							<li><a href="#"><i class="fa fa-cc-paypal"></i></a></li>
-							<li><a href="#"><i class="fa fa-cc-mastercard"></i></a></li>
-							<li><a href="#"><i class="fa fa-cc-discover"></i></a></li>
-							<li><a href="#"><i class="fa fa-cc-amex"></i></a></li>
-						</ul>
-						<span class="copyright">
-							<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-							Copyright &copy;
-							<script>document.write(new Date().getFullYear());</script> All rights reserved | This
-							template is made with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a
-								href="https://colorlib.com" target="_blank">Colorlib</a>
-							<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-						</span>
-					</div>
-				</div>
-				<!-- /row -->
-			</div>
-			<!-- /container -->
-		</div>
-		<!-- /bottom footer -->
-	</footer>
-	<!-- /FOOTER -->
-
-	<!-- jQuery Plugins -->
-	<script src="js/jquery.min.js"></script>
-	<script src="js/bootstrap.min.js"></script>
-	<script src="js/slick.min.js"></script>
-	<script src="js/nouislider.min.js"></script>
-	<script src="js/jquery.zoom.min.js"></script>
-	<script src="js/main.js"></script>
-
+    <div class="footer">Portal Enfermagem</div>
+  </main>
 </body>
-
 </html>

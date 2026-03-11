@@ -1,0 +1,18 @@
+<%- include('cabecalho') %>
+<h2>Área do Usuário</h2>
+<p>Bem-vindo. Aqui você acessa apenas conteúdos publicados pelo administrador.</p>
+
+<ul>
+  <li>Procedimentos publicados: <strong><%= procedimentoCount %></strong></li>
+  <li>Medicamentos publicados: <strong><%= medicamentoCount %></strong></li>
+  <li>Terminologias publicadas: <strong><%= termoCount %></strong></li>
+  <li>Perguntas de quiz publicadas: <strong><%= quizCount %></strong></li>
+</ul>
+
+<p>
+  <a href="/procedimentos">Ver procedimentos</a> |
+  <a href="/medicamentos">Ver medicamentos</a> |
+  <a href="/terminologias">Ver terminologias</a> |
+  <a href="/quiz">Fazer quiz</a>
+</p>
+<%- include('rodape') %>

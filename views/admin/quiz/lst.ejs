@@ -9,6 +9,7 @@
                         <th>Id</th>
                         <th>Pergunta</th>
                         <th>Categoria</th>
+                        <th>Publicado</th>
                         <th>Ações</th>
                     </tr>
                 </thead>
@@ -18,7 +19,15 @@
                         <td><%=q._id%></td>
                         <td><%=q.pergunta%></td>
                         <td><%=q.categoria%></td>
-                        <td><a href="/admin/quiz/del/<%=q._id%>">Excluir</a></td>
+                        <td><%=q.publicado ? 'Sim' : 'Não'%></td>
+                        <td>
+                            <% if(q.publicado){ %>
+                                <a href="/admin/quiz/unpub/<%=q._id%>">Despublicar</a> |
+                            <% } else { %>
+                                <a href="/admin/quiz/pub/<%=q._id%>">Publicar</a> |
+                            <% } %>
+                            <a href="/admin/quiz/del/<%=q._id%>">Excluir</a>
+                        </td>
                     </tr>
                     <%})%>
                 </tbody>

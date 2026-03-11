@@ -1,7 +1,13 @@
 <%- include('cabecalho') %>
 <h2>Lembretes</h2>
+<% if (typeof erro !== 'undefined' && erro === 'conteudo') { %>
+  <p style="color:#b91c1c;">Digite o conteúdo do lembrete antes de adicionar.</p>
+<% } %>
+<% if (typeof erro !== 'undefined' && erro === 'salvar') { %>
+  <p style="color:#b91c1c;">Não foi possível salvar o lembrete. Tente novamente.</p>
+<% } %>
 <form method="post" action="/lembretes">
-  <textarea name="conteudo" rows="2" cols="50" placeholder="O que lembrar?"></textarea><br>
+  <textarea name="conteudo" rows="2" cols="50" placeholder="O que lembrar?" required></textarea><br>
   <label>Data de vencimento: <input type="date" name="vencimento"></label><br>
   <input type="submit" value="Adicionar">
 </form>

@@ -1,8 +1,50 @@
 <%- include('cabecalho') %>
+<% const pesquisaAtual = (typeof pesquisar !== 'undefined' && pesquisar) ? pesquisar : ''; %>
+<% const classesDisponiveis = (typeof classes !== 'undefined' && classes) ? classes : []; %>
+<% const classeAtual = (typeof classeSelecionada !== 'undefined' && classeSelecionada) ? classeSelecionada : ''; %>
 <h2>Medicamentos</h2>
-<ul>
-  <% Medicamentos.forEach(function(m){ %>
-    <li><strong><%= m.nome %></strong> - <%= m.descricao %> - Dosagem: <%= m.dosagem %> (<%= m.via %>)</li>
-  <% }) %>
-</ul>
+<form method="get" action="/medicamentos" style="margin-bottom:14px;">
+  <input
+    type="text"
+    name="pesquisar"
+    placeholder="Pesquisar princípio ativo, nome comercial, classe, via ou diluição"
+    value="<%= pesquisaAtual %>"
+    style="padding:8px; width:100%; max-width:520px; border:1px solid #000; border-radius:4px;"
+  >
+  <button type="submit" style="padding:8px 12px; margin-left:6px; background:#a51b0b; color:#fff; border:1px solid #000; border-radius:4px; cursor:pointer;">
+    Pesquisar
+  </button>
+  <select name="classe" style="padding:8px; margin-left:6px; border:1px solid #000; border-radius:4px;">
+    <option value="">Todas as classes</option>
+    <% classesDisponiveis.forEach(function(c){ %>
+      <option value="<%= c %>" <%= classeAtual === c ? 'selected' : '' %>><%= c %></option>
+    <% }) %>
+  </select>
+</form>
+<%
+  const grupos = {};
+  Medicamentos.forEach(function(m){
+    const chave = (m.classe && m.classe.trim()) ? m.classe.trim() : 'Sem classe';
+    if (!grupos[chave]) grupos[chave] = [];
+    grupos[chave].push(m);
+  });
+  const classesOrdenadas = Object.keys(grupos).sort(function(a,b){ return a.localeCompare(b, 'pt-BR'); });
+%>
+<% if (classesOrdenadas.length === 0) { %>
+  <p>Nenhum medicamento encontrado para o filtro informado.</p>
+<% } %>
+<% classesOrdenadas.forEach(function(nomeClasse){ %>
+  <h3 style="margin-top:18px; border-left:4px solid #a51b0b; padding-left:8px;"><%= nomeClasse %></h3>
+  <ul>
+    <% grupos[nomeClasse].forEach(function(m){ %>
+      <li>
+        <strong>Princípio ativo:</strong> <%= m.principioAtivo || m.descricao || '-' %><br>
+        <strong>Nome comercial:</strong> <%= m.nomeComercial || m.nome || '-' %><br>
+        <strong>Classe:</strong> <%= m.classe || m.fabricante || '-' %><br>
+        <strong>Via:</strong> <%= m.via || '-' %><br>
+        <strong>Diluição:</strong> <%= m.diluicao || m.dosagem || '-' %>
+      </li>
+    <% }) %>
+  </ul>
+<% }) %>
 <%- include('rodape') %>

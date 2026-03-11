@@ -1,7 +1,13 @@
 <%- include('cabecalho') %>
 <h2>Notas</h2>
+<% if (typeof erro !== 'undefined' && erro === 'conteudo') { %>
+  <p style="color:#b91c1c;">Digite o conteúdo da nota antes de salvar.</p>
+<% } %>
+<% if (typeof erro !== 'undefined' && erro === 'salvar') { %>
+  <p style="color:#b91c1c;">Não foi possível salvar a nota. Tente novamente.</p>
+<% } %>
 <form method="post" action="/notas">
-  <textarea name="conteudo" rows="4" cols="50" placeholder="Escreva sua nota aqui..."></textarea><br>
+  <textarea name="conteudo" rows="4" cols="50" placeholder="Escreva sua nota aqui..." required></textarea><br>
   <input type="submit" value="Salvar">
 </form>
 <ul>

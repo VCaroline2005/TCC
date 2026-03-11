@@ -9,11 +9,15 @@
 <body>
 
     <div class="login-container">
+    <img class="logo" src="/site/img/logo.png" alt="Portal Enfermagem">
     <h2>Bem-vindo ao seu Manual</h2>
     <p>Faça login em sua conta para ter acesso a conteúdos </p>
 
     <% if (typeof error !== 'undefined' && error) { %>
       <div style="color:#c0392b; margin-bottom:12px;"><%= error %></div>
+    <% } %>
+    <% if (typeof cadastro !== 'undefined' && cadastro === 'ok') { %>
+      <div style="color:#a51b0b; margin-bottom:12px;">Cadastro realizado com sucesso. Faça login.</div>
     <% } %>
     
     <form action="/login" method="POST">
@@ -36,7 +40,7 @@
       <!-- Links de recuperação de senha e criação de conta -->
       <div class="footer">
         <a href="#">Esqueceu a senha?</a><br>
-        <a href="#">Ainda não tem uma conta? Cadastre-se aqui</a>
+        <a href="/cadastro">Ainda não tem uma conta? Cadastre-se aqui</a>
       </div>
     </form>
 </div>
@@ -61,6 +65,14 @@
     width: 100%;
     max-width: 400px;
     text-align: center;
+  }
+
+  .logo {
+    display: block;
+    height: 64px;
+    width: auto;
+    margin: 0 auto 12px;
+    filter: drop-shadow(0 2px 6px rgba(0,0,0,0.35));
   }
   
   /* Título do formulário */
@@ -99,7 +111,7 @@
   }
   
   .input-group input:focus {
-    border-color: #007476; /* Cor laranja para destacar o foco */
+    border-color: #a51b0b; /* Cor laranja para destacar o foco */
     outline: none;
   }
   
@@ -107,7 +119,7 @@
   .btn-submit {
     width: 100%;
     padding: 12px;
-    background-color: #007476; /* Laranja */
+    background-color: #a51b0b; /* Laranja */
     color: white;
     border: none;
     border-radius: 4px;
@@ -116,7 +128,7 @@
   }
   
   .btn-submit:hover {
-    background-color: #007476;
+    background-color: #a51b0b;
   }
   
   /* Links de recuperação de senha e cadastro */
@@ -125,7 +137,7 @@
   }
   
   .footer a {
-    color: #007476;
+    color: #a51b0b;
     text-decoration: none;
     font-size: 14px;
   }
