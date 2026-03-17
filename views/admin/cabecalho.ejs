@@ -24,7 +24,7 @@
         }
 
         .admin-topbar {
-            background: linear-gradient(90deg, var(--admin-red), #7a1408);
+            background: linear-gradient(90deg, #a51b0b 0%, #6f1208 45%, #160504 100%);
             box-shadow: 0 3px 12px rgba(0, 0, 0, 0.18);
         }
 
@@ -46,6 +46,30 @@
 
         .admin-topbar .nav-link:hover {
             color: #ffffff !important;
+        }
+
+        .admin-controls {
+            display: flex;
+            gap: 8px;
+            margin-left: auto;
+            flex-wrap: wrap;
+        }
+
+        .admin-controls .nav-btn {
+            background: rgba(255,255,255,0.12);
+            border: 1px solid rgba(255,255,255,0.28);
+            color: #fff;
+            padding: 6px 10px;
+            border-radius: 6px;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .admin-controls .nav-btn:hover {
+            background: rgba(255,255,255,0.22);
+            color: #fff;
+            text-decoration: none;
         }
 
         .admin-layout {
@@ -156,6 +180,11 @@
                 <li class="nav-item"><a class="nav-link" href="/admin/medicamento/lst">Medicamentos</a></li>
                 <li class="nav-item"><a class="nav-link" href="/admin/quiz/lst">Quiz</a></li>
             </ul>
+            <div class="admin-controls">
+                <button type="button" class="nav-btn" onclick="history.back()">Voltar</button>
+                <a class="nav-btn" href="/login">Sair</a>
+                <button type="button" class="nav-btn" onclick="history.forward()">Avançar</button>
+            </div>
         </div>
     </nav>
 

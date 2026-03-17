@@ -22,9 +22,10 @@
       color: var(--text);
     }
     .topbar {
-      background: var(--primary);
+      background: linear-gradient(90deg, #a51b0b 0%, #6f1208 45%, #160504 100%);
       color: #fff;
       padding: 14px 18px;
+      box-shadow: 0 3px 12px rgba(0, 0, 0, 0.18);
     }
     .topbar-inner {
       max-width: 1080px;
@@ -47,6 +48,22 @@
       font-weight: 600;
     }
     .auth a:hover { text-decoration: underline; }
+    .topbar-controls {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .topbar-btn {
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.28);
+      color: #fff;
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .topbar-btn:hover { background: rgba(255,255,255,0.22); }
     .nav {
       background: var(--primary-2);
     }
@@ -146,21 +163,15 @@
         <a href="/login">Minha Conta</a>
         <a href="/cadastro">Cadastre-se</a>
       </nav>
+      <div class="topbar-controls">
+        <button type="button" class="topbar-btn" onclick="history.back()">Voltar</button>
+        <a class="topbar-btn" href="/login">Sair</a>
+
+      </div>
     </div>
   </header>
 
-  <nav class="nav">
-    <div class="nav-inner">
-      <a href="/">Início</a>
-      <a href="/procedimentos">Procedimentos</a>
-      <a href="/medicamentos">Medicamentos</a>
-      <a href="/terminologias">Terminologias</a>
-      <a href="/quiz">Quiz</a>
-      <a href="/notas">Notas</a>
-      <a href="/lembretes">Lembretes</a>
-    </div>
-  </nav>
-
+  
   <main class="container">
     <section class="hero">
       <h2>Seu apoio rápido na prática de enfermagem</h2>
@@ -190,7 +201,6 @@
         <a href="/medicamentos">Consultar medicamentos</a>
         <a href="/terminologias">Ver terminologias</a>
         <a href="/quiz">Responder quiz</a>
-        <a href="/notas">Gerenciar notas</a>
         <a href="/lembretes">Gerenciar lembretes</a>
       </div>
     </section>

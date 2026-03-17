@@ -6,12 +6,15 @@
   <title>Portal Enfermagem</title>
   <style>
     body { font-family: Arial, sans-serif; margin: 0; background: #f7f9fb; color: #1f2937; }
-    header { background: #a51b0b; color: #fff; padding: 16px; }
+    header { background: linear-gradient(90deg, #a51b0b 0%, #6f1208 45%, #160504 100%); color: #fff; padding: 16px; box-shadow: 0 3px 12px rgba(0, 0, 0, 0.18); }
     .brand { display: flex; align-items: center; gap: 12px; }
     .brand img { height: 46px; width: auto; display: block; filter: drop-shadow(0 2px 6px rgba(0,0,0,0.35)); }
     nav { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 8px; }
     nav a { color: #fff; text-decoration: none; font-weight: 600; }
     nav a:hover { text-decoration: underline; }
+    .nav-controls { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+    .nav-btn { background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.28); color: #fff; padding: 6px 10px; border-radius: 6px; font-weight: 600; text-decoration: none; cursor: pointer; }
+    .nav-btn:hover { background: rgba(255,255,255,0.22); }
     main { max-width: 900px; margin: 24px auto; background: #fff; border-radius: 8px; padding: 20px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08); }
     ul { padding-left: 20px; }
     li { margin-bottom: 8px; }
@@ -32,10 +35,14 @@
       <a href="/medicamentos">Medicamentos</a>
       <a href="/terminologias">Terminologias</a>
       <a href="/quiz">Quiz</a>
-      <a href="/notas">Notas</a>
       <a href="/lembretes">Lembretes</a>
       <a href="/login">Minha Conta</a>
       <a href="/cadastro">Cadastre-se</a>
     </nav>
+    <div class="nav-controls">
+      <button type="button" class="nav-btn" onclick="history.back()">Voltar</button>
+      <a class="nav-btn" href="/login">Sair</a>
+      <button type="button" class="nav-btn" onclick="history.forward()">Avançar</button>
+    </div>
   </header>
   <main>

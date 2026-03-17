@@ -48,6 +48,8 @@ import {
         abreaddquiz,
         addquiz,
         listarquiz,
+        abreedtquiz,
+        edtquiz,
         deletarquiz,
         publicarquiz,
         despublicarquiz
@@ -120,6 +122,8 @@ router.get('/admin/quiz/add', abreaddquiz)
 router.post('/admin/quiz/add', addquiz)
 
 router.get('/admin/quiz/lst', listarquiz)
+router.get('/admin/quiz/edt/:id', abreedtquiz)
+router.post('/admin/quiz/edt/:id', edtquiz)
 router.get('/admin/quiz/del/:id', deletarquiz)
 router.get('/admin/quiz/pub/:id', publicarquiz)
 router.get('/admin/quiz/unpub/:id', despublicarquiz)

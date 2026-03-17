@@ -8,8 +8,22 @@
 </head>
 <body>
 
+    <header class="auth-topbar">
+      <div class="bar-inner">
+        <div class="brand">
+          <a href="/"><img class="logo" src="/site/img/logo.png" alt="Portal Enfermagem"></a>
+          <h1>Portal Enfermagem</h1>
+        </div>
+        <div class="nav-controls">
+          <button type="button" class="nav-btn" onclick="history.back()">Voltar</button>
+          <a class="nav-btn" href="/login">Sair</a>
+          <button type="button" class="nav-btn" onclick="history.forward()">Avançar</button>
+        </div>
+      </div>
+    </header>
+
+    <main class="auth-main">
     <div class="login-container">
-    <img class="logo" src="/site/img/logo.png" alt="Portal Enfermagem">
     <h2>Bem-vindo ao seu Manual</h2>
     <p>Faça login em sua conta para ter acesso a conteúdos </p>
 
@@ -43,17 +57,74 @@
         <a href="/cadastro">Ainda não tem uma conta? Cadastre-se aqui</a>
       </div>
     </form>
-</div>
+    </div>
+    </main>
       <style>
   /* Estilos globais */
   body {
     font-family: 'Arial', sans-serif;
     background-color: #f4f4f4;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
     margin: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .auth-topbar {
+    background: linear-gradient(90deg, #a51b0b 0%, #6f1208 45%, #160504 100%);
+    color: #fff;
+    padding: 14px 16px;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.18);
+  }
+
+  .auth-topbar .bar-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    max-width: 1100px;
+    margin: 0 auto;
+    flex-wrap: wrap;
+  }
+
+  .auth-topbar .brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .auth-topbar h1 {
+    margin: 0;
+    font-size: 20px;
+  }
+
+  .auth-main {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px 16px;
+  }
+
+  .nav-controls {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .nav-btn {
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.28);
+    color: #fff;
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .nav-btn:hover {
+    background: rgba(255,255,255,0.22);
   }
   
   /* Contêiner do formulário de login */
@@ -69,9 +140,8 @@
 
   .logo {
     display: block;
-    height: 64px;
+    height: 44px;
     width: auto;
-    margin: 0 auto 12px;
     filter: drop-shadow(0 2px 6px rgba(0,0,0,0.35));
   }
   

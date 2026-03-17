@@ -1,0 +1,34 @@
+<%-include('../cabecalho.ejs')%>
+<section class="col-12 col-md-10">
+    <div class="card my-4">
+        <h5 class="card-header">Editar Questão de Quiz</h5>
+        <div class="card-body">
+            <form method="post">
+                <div class="mb-3">
+                    <label for="id" class="form-label">ID</label>
+                    <input type="text" name="id" readonly id="id" class="form-control" value="<%=Quiz._id%>">
+                </div>
+                <div class="mb-3">
+                    <label for="pergunta" class="form-label">Pergunta</label>
+                    <textarea name="pergunta" id="pergunta" required class="form-control"><%=Quiz.pergunta%></textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="opcoes" class="form-label">Opções (cada linha é uma alternativa)</label>
+                    <textarea name="opcoes" id="opcoes" class="form-control"><%=(Quiz.opcoes || []).join('\n')%></textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="correta" class="form-label">Índice da opção correta (A, B, C,...)</label>
+                    <input type="text" name="correta" id="correta" class="form-control" required value="<%=Quiz.correta%>">
+                </div>
+                <div class="mb-3">
+                    <label for="categoria" class="form-label">Categoria/Assunto (opcional)</label>
+                    <input type="text" name="categoria" id="categoria" class="form-control" value="<%=Quiz.categoria%>">
+                </div>
+                <div class="mb-3">
+                    <input type="submit" value="Salvar" class="form-control">
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+<%-include('../rodape.ejs')%>

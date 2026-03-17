@@ -15,18 +15,59 @@
         }
 
         header {
-            background-color: #a51b0b;
+            background: linear-gradient(90deg, #a51b0b 0%, #6f1208 45%, #160504 100%);
             color: white;
-            text-align: center;
             padding: 1rem;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.18);
+        }
+
+        header .header-inner {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        header .brand-block {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 22px;
         }
 
         .logo {
             display: block;
             height: 60px;
             width: auto;
-            margin: 0 auto 8px;
             filter: drop-shadow(0 2px 6px rgba(0,0,0,0.35));
+        }
+
+        .nav-controls {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            background: rgba(255,255,255,0.12);
+            border: 1px solid rgba(255,255,255,0.28);
+            color: #fff;
+            padding: 6px 10px;
+            border-radius: 6px;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .nav-btn:hover {
+            background: rgba(255,255,255,0.22);
         }
 
         .container {
@@ -121,8 +162,17 @@
 <body>
 
     <header>
-        <img class="logo" src="/site/img/logo.png" alt="Portal Enfermagem">
-        <h1>Cadastro de Usuário</h1>
+        <div class="header-inner">
+            <div class="brand-block">
+                <img class="logo" src="/site/img/logo.png" alt="Portal Enfermagem">
+                <h1>Cadastro de Usuário</h1>
+            </div>
+            <div class="nav-controls">
+                <button type="button" class="nav-btn" onclick="history.back()">Voltar</button>
+                <a class="nav-btn" href="/login">Sair</a>
+                
+            </div>
+        </div>
     </header>
 
     <div class="container">
@@ -154,12 +204,7 @@
                 <input type="text" name="telefone" id="telefone" placeholder="Seu telefone">
                 <div id="telefone-error" class="error-message"></div>
             </div>
-
-            <div class="form-group">
-                <label for="endereco">Endereço</label>
-                <input type="text" name="endereco" id="endereco" placeholder="Seu endereço">
-                <div id="endereço-error" class="error-message"></div>
-            </div>
+            
             <div class="form-group">
                 <label for="foto">Foto</label>
                 <input type="file" name="foto" id="foto" placeholder="Adione uma foto">

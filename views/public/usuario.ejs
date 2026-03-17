@@ -2,6 +2,28 @@
 <h2>Área do Usuário</h2>
 <p>Bem-vindo. Aqui você acessa apenas conteúdos publicados pelo administrador.</p>
 
+<% if (typeof lembretesProximos !== 'undefined' && lembretesProximos.length) { %>
+  <div style="border:1px solid #f59e0b; background:#fff7ed; padding:12px; border-radius:8px; margin:12px 0;">
+    <strong>Você tem lembretes vencendo em até 3 dias:</strong>
+    <ul>
+      <% lembretesProximos.forEach(function(l){ %>
+        <li>
+          <%= l.conteudo %>
+          <% if (l.vencimento) { %>
+            - <%= l.vencimento.toISOString().substr(0,10) %>
+            <% if (agora && l.vencimento <= agora) { %>
+              <strong style="color:#b91c1c;">(vencido)</strong>
+            <% } %>
+          <% } else { %>
+            - sem data
+          <% } %>
+        </li>
+      <% }) %>
+    </ul>
+    <a href="/lembretes">Ver todos os lembretes</a>
+  </div>
+<% } %>
+
 <ul>
   <li>Procedimentos publicados: <strong><%= procedimentoCount %></strong></li>
   <li>Medicamentos publicados: <strong><%= medicamentoCount %></strong></li>

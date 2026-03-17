@@ -5,7 +5,7 @@ const upload = multer({ dest: 'public/usuarios/' })
 
 import { abrecadastro, cadastro, abrelogin, login, abreindex,
          listarProcedimentos, listarMedicamentos, listarTerminologias,
-         fazerQuiz, responderQuiz, salvarNota, listarNotas, adicionarLembrete, listarLembretes,
+         fazerQuiz, responderQuiz, adicionarLembrete, listarLembretes,
          abreusuario
  } from '../controllers/public.js';
 
@@ -31,9 +31,8 @@ router.get('/terminologias', listarTerminologias)
 router.get('/quiz', fazerQuiz)
 router.post('/quiz/answer', responderQuiz)
 
-// notas e lembretes
-router.get('/notas', listarNotas)
-router.post('/notas', salvarNota)
+// lembretes
+
 router.get('/lembretes', listarLembretes)
 router.post('/lembretes', adicionarLembrete)
 

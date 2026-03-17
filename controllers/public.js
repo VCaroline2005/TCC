@@ -3,7 +3,6 @@ import Procedimento from '../models/procedimento.js'
 import Medicamento from '../models/medicamento.js'
 import Terminologia from '../models/terminologia.js'
 import Quiz from '../models/quiz.js'
-import Nota from '../models/nota.js'
 import Lembrete from '../models/lembrete.js'
 
 export async function abrecadastro(req, res){
@@ -96,11 +95,19 @@ export async function abreusuario(req, res){
     const medicamentoCount = await Medicamento.countDocuments({ publicado: true })
     const termoCount = await Terminologia.countDocuments({ publicado: true })
     const quizCount = await Quiz.countDocuments({ publicado: true })
+    const agora = new Date()
+    const limite = new Date()
+    limite.setDate(limite.getDate() + 3)
+    const lembretesProximos = await Lembrete.find({
+        vencimento: { $lte: limite }
+    }).sort({ vencimento: 1 })
     res.render('public/usuario.ejs', {
         procedimentoCount,
         medicamentoCount,
         termoCount,
-        quizCount
+        quizCount,
+        lembretesProximos,
+        agora
     })
 }
 
@@ -186,27 +193,6 @@ export async function fazerQuiz(req,res){
     res.render('public/quiz.ejs',{Pergunta:pergunta})
 }
 
-export async function salvarNota(req,res){
-    try{
-        const conteudo = (req.body.conteudo || '').trim()
-        if(!conteudo){
-            return res.redirect('/notas?erro=conteudo')
-        }
-        await Nota.create({usuario:req.body.usuario, conteudo})
-        return res.redirect('/notas')
-    }catch(err){
-        console.error(err)
-        return res.redirect('/notas?erro=salvar')
-    }
-}
-
-export async function listarNotas(req,res){
-    const notas = await Nota.find({})
-    res.render('public/notas.ejs',{
-        Notas:notas,
-        erro:req.query.erro
-    })
-}
 
 export async function adicionarLembrete(req,res){
     try{

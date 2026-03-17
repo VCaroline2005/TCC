@@ -21,6 +21,7 @@
                         <td><%=q.categoria%></td>
                         <td><%=q.publicado ? 'Sim' : 'Não'%></td>
                         <td>
+                            <a href="/admin/quiz/edt/<%=q._id%>">Editar</a> |
                             <% if(q.publicado){ %>
                                 <a href="/admin/quiz/unpub/<%=q._id%>">Despublicar</a> |
                             <% } else { %>

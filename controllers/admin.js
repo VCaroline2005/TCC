@@ -4,8 +4,7 @@ import Procedimento from '../models/procedimento.js';
 import Medicamento from '../models/medicamento.js';
 import Terminologia from '../models/terminologia.js';
 import Quiz from '../models/quiz.js';
-import Nota from '../models/nota.js';
-import Lembrete from '../models/lembrete.js';
+import Lembrete from '../models/lembrete.js'
 
 export async function listarusuarios(req, res){
     const usuarios = await Usuario.find({}).catch(function(err){console.log(err)});
@@ -247,6 +246,21 @@ export async function addquiz(req, res) {
 export async function listarquiz(req, res) {
     const perguntas = await Quiz.find({})
     res.render('admin/quiz/lst',{Quizzes: perguntas});
+}
+
+export async function abreedtquiz(req, res) {
+    const quiz = await Quiz.findById(req.params.id)
+    res.render('admin/quiz/edt.ejs', {Quiz: quiz})
+}
+
+export async function edtquiz(req, res) {
+    await Quiz.findByIdAndUpdate(req.params.id, {
+        pergunta: req.body.pergunta,
+        opcoes: req.body.opcoes ? req.body.opcoes.split("\n") : [],
+        correta: parseInt(req.body.correta, 10),
+        categoria: req.body.categoria
+    })
+    res.redirect('/admin/quiz/lst')
 }
 
 export async function deletarquiz(req, res) {

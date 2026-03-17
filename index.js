@@ -15,10 +15,14 @@ app.use(express.static('public'));
 //importa os arquivos de rotas (os endereços são cadastrados neles)
 import publicroutes from './routes/public.js';
 import adminroutes from './routes/admin.js';
+import { abreedtquiz, edtquiz } from './controllers/admin.js';
 
 //usa os arquivos de rotas
 app.use(publicroutes);
 app.use(adminroutes);
+// rota direta de edição de quiz (garante acesso mesmo se o router admin não recarregar)
+app.get('/admin/quiz/edt/:id', abreedtquiz);
+app.post('/admin/quiz/edt/:id', edtquiz);
 
 //faz a aplicação ficar escurando a porta cadastrada
 app.listen(3000);
