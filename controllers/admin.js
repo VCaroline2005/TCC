@@ -6,6 +6,19 @@ import Terminologia from '../models/terminologia.js';
 import Quiz from '../models/quiz.js';
 import Lembrete from '../models/lembrete.js'
 
+function parseCorretaInput(valor) {
+    if (valor === undefined || valor === null) return NaN
+    const texto = String(valor).trim()
+    if (!texto) return NaN
+    if (/^[A-Za-z]$/.test(texto)) {
+        return texto.toUpperCase().charCodeAt(0) - 65
+    }
+    if (/^[0-9]+$/.test(texto)) {
+        return parseInt(texto, 10)
+    }
+    return NaN
+}
+
 export async function listarusuarios(req, res){
     const usuarios = await Usuario.find({}).catch(function(err){console.log(err)});
     res.render('admin/usuarios/lst', {usuarios: usuarios});
@@ -230,14 +243,18 @@ export async function edtmedicamento(req,res){
 
 // --------- quiz CRUD (simple) ---------
 export async function abreaddquiz(req, res) {
-    res.render('admin/quiz/add')
+    res.render('admin/quiz/add', { erro: req.query.erro })
 }
 
 export async function addquiz(req, res) {
+    const correta = parseCorretaInput(req.body.correta)
+    if (Number.isNaN(correta)) {
+        return res.redirect('/admin/quiz/add?erro=correta')
+    }
     await Quiz.create({
         pergunta:req.body.pergunta,
         opcoes: req.body.opcoes ? req.body.opcoes.split("\n") : [],
-        correta: parseInt(req.body.correta,10),
+        correta,
         categoria: req.body.categoria
     })
     res.redirect('/admin/quiz/add')
@@ -250,14 +267,18 @@ export async function listarquiz(req, res) {
 
 export async function abreedtquiz(req, res) {
     const quiz = await Quiz.findById(req.params.id)
-    res.render('admin/quiz/edt.ejs', {Quiz: quiz})
+    res.render('admin/quiz/edt.ejs', {Quiz: quiz, erro: req.query.erro})
 }
 
 export async function edtquiz(req, res) {
+    const correta = parseCorretaInput(req.body.correta)
+    if (Number.isNaN(correta)) {
+        return res.redirect('/admin/quiz/edt/' + req.params.id + '?erro=correta')
+    }
     await Quiz.findByIdAndUpdate(req.params.id, {
         pergunta: req.body.pergunta,
         opcoes: req.body.opcoes ? req.body.opcoes.split("\n") : [],
-        correta: parseInt(req.body.correta, 10),
+        correta,
         categoria: req.body.categoria
     })
     res.redirect('/admin/quiz/lst')

@@ -1,13 +1,87 @@
 <%- include('cabecalho') %>
-<h2>Quiz rápido</h2>
-<% if(Pergunta){ %>
-  <p><%= Pergunta.pergunta %></p>
-  <form method="post" action="/quiz/answer">
-    <% Pergunta.opcoes.forEach(function(opt, idx){ %>
-      <div><label><input type="radio" name="escolha" value="<%=idx%>"> <%=opt%></label></div>
+<style>
+  .quiz-group {
+    margin-top: 18px;
+    padding-top: 8px;
+    border-top: 2px solid #a51b0b;
+  }
+  .quiz-card {
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 12px;
+    margin-top: 10px;
+    background: #fff;
+  }
+  .quiz-question {
+    margin: 0 0 8px;
+    font-weight: 600;
+  }
+  .quiz-option {
+    display: block;
+    margin: 4px 0;
+  }
+  .quiz-actions {
+    margin-top: 16px;
+  }
+</style>
+
+<% const perguntasLista = (typeof Perguntas !== 'undefined' && Perguntas) ? Perguntas : []; %>
+<% const sistemasLista = (typeof sistemas !== 'undefined' && sistemas) ? sistemas : []; %>
+<% const sistemaAtual = (typeof sistemaSelecionado !== 'undefined' && sistemaSelecionado) ? sistemaSelecionado : ''; %>
+
+<h2>Quiz por sistema</h2>
+
+<form method="get" action="/quiz" style="margin-bottom:14px;">
+  <label for="sistema" style="font-weight:600;">Filtrar por sistema</label>
+  <select name="sistema" id="sistema" style="margin-left:8px; padding:6px; border:1px solid #000; border-radius:4px;">
+    <option value="">Todos</option>
+    <% if (sistemasLista.length) { %>
+      <% sistemasLista.forEach(function(s){ %>
+        <option value="<%= s %>" <%= (sistemaAtual === s) ? 'selected' : '' %>><%= s %></option>
+      <% }) %>
+    <% } %>
+  </select>
+  <button type="submit" style="margin-left:6px;">Aplicar</button>
+</form>
+
+<% if(perguntasLista.length){ %>
+  <form method="post" action="/quiz/responder">
+    <%
+      const grupos = {};
+      perguntasLista.forEach(function(p){
+        const sistema = (p.categoria && p.categoria.trim()) ? p.categoria.trim() : 'Sem sistema';
+        if (!grupos[sistema]) grupos[sistema] = [];
+        grupos[sistema].push(p);
+      });
+      const sistemasOrdenados = Object.keys(grupos).sort(function(a,b){ return a.localeCompare(b, 'pt-BR'); });
+      let contador = 1;
+    %>
+    <% sistemasOrdenados.forEach(function(sistema){ %>
+      <section class="quiz-group">
+        <h3><%= sistema %></h3>
+        <% grupos[sistema].forEach(function(p){ %>
+          <div class="quiz-card">
+            <p class="quiz-question"><%= contador %>. <%= p.pergunta %></p>
+            <input type="hidden" name="perguntas[]" value="<%= p._id %>">
+            <% if (p.opcoes && p.opcoes.length) { %>
+              <% p.opcoes.forEach(function(opt, optIdx){ %>
+                <label class="quiz-option">
+                  <input type="radio" name="respostas[<%= p._id %>]" value="<%= optIdx %>" <%= optIdx === 0 ? 'required' : '' %>>
+                  <%= opt %>
+                </label>
+              <% }) %>
+            <% } else { %>
+              <p>Sem opções cadastradas para esta questão.</p>
+            <% } %>
+          </div>
+          <% contador += 1; %>
+        <% }) %>
+      </section>
     <% }) %>
-    <input type="hidden" name="id" value="<%=Pergunta._id%>">
-    <button type="submit">Enviar</button>
+
+    <div class="quiz-actions">
+      <button type="submit">Enviar respostas</button>
+    </div>
   </form>
 <% } else { %>
   <p>Não há questões cadastradas ainda.</p>

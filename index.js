@@ -25,4 +25,4 @@ app.get('/admin/quiz/edt/:id', abreedtquiz);
 app.post('/admin/quiz/edt/:id', edtquiz);
 
 //faz a aplicação ficar escurando a porta cadastrada
-app.listen(3000);
+app.listen(3001);

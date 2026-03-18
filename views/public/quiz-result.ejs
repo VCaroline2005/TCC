@@ -1,10 +1,22 @@
 <%- include('cabecalho') %>
 <h2>Resultado do Quiz</h2>
-<% if(pergunta){ %>
-  <p>Pergunta: <%=pergunta.pergunta%></p>
-  <p>Você respondeu: <%=pergunta.opcoes[pergunta.correta]%> (correta: <%= correto ? 'sim' : 'não' %>)</p>
+
+<% if (total > 0) { %>
+  <p>Total de questões: <strong><%= total %></strong></p>
+  <p>Acertos: <strong><%= corretas %></strong></p>
+  <p>Erros: <strong><%= erradas %></strong></p>
+
+  <% if (sistemas && sistemas.length) { %>
+    <h3>Resultado por sistema</h3>
+    <ul>
+      <% sistemas.forEach(function(s){ %>
+        <li><strong><%= s.nome %></strong>: <%= s.corretas %> acertos, <%= s.erradas %> erros (de <%= s.total %>)</li>
+      <% }) %>
+    </ul>
+  <% } %>
 <% } else { %>
-  <p>Questão não encontrada.</p>
+  <p>Nenhuma resposta foi enviada.</p>
 <% } %>
-<a href="/quiz">Tentar outra</a>
+
+<a href="/quiz">Fazer novamente</a>
 <%- include('rodape') %>

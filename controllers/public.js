@@ -186,11 +186,21 @@ export async function listarTerminologias(req,res){
 }
 
 export async function fazerQuiz(req,res){
-    const perguntas = await Quiz.find({ publicado: true })
-    // choose random question
-    const idx = Math.floor(Math.random() * perguntas.length);
-    const pergunta = perguntas[idx];
-    res.render('public/quiz.ejs',{Pergunta:pergunta})
+    const sistema = (req.query.sistema || '').trim()
+    const filtro = { publicado: true }
+    if (sistema) {
+        filtro.categoria = new RegExp(`^${sistema}$`, 'i')
+    }
+
+    const perguntas = await Quiz.find(filtro).sort({ categoria: 1, _id: 1 })
+    const sistemas = await Quiz.distinct('categoria', { publicado: true, categoria: { $nin: [null, ''] } })
+    sistemas.sort((a, b) => a.localeCompare(b, 'pt-BR'))
+
+    res.render('public/quiz.ejs',{
+        Perguntas:perguntas,
+        sistemas,
+        sistemaSelecionado: sistema
+    })
 }
 
 
@@ -217,10 +227,51 @@ export async function listarLembretes(req,res){
 }
 
 export async function responderQuiz(req,res){
-    const pergunta = await Quiz.findOne({ _id: req.body.id, publicado: true })
-    let correto = false;
-    if(pergunta && parseInt(req.body.escolha,10) === pergunta.correta){
-        correto = true;
+    const respostas = req.body.respostas || {}
+    const ids = Array.isArray(req.body.perguntas)
+        ? req.body.perguntas
+        : (req.body.perguntas ? [req.body.perguntas] : [])
+
+    if (ids.length === 0) {
+        return res.render('public/quiz-result.ejs',{
+            total: 0,
+            corretas: 0,
+            erradas: 0,
+            sistemas: []
+        })
     }
-    res.render('public/quiz-result.ejs',{pergunta, correto});
+
+    const perguntas = await Quiz.find({ _id: { $in: ids }, publicado: true })
+    let corretas = 0
+    let erradas = 0
+    const porSistema = {}
+
+    perguntas.forEach((p) => {
+        const sistema = (p.categoria && p.categoria.trim()) ? p.categoria.trim() : 'Sem sistema'
+        if (!porSistema[sistema]) {
+            porSistema[sistema] = { nome: sistema, total: 0, corretas: 0, erradas: 0 }
+        }
+        porSistema[sistema].total += 1
+
+        const escolhaRaw = respostas[String(p._id)]
+        const escolha = escolhaRaw !== undefined ? parseInt(escolhaRaw, 10) : NaN
+        const acertou = escolha === p.correta
+
+        if (acertou) {
+            corretas += 1
+            porSistema[sistema].corretas += 1
+        } else {
+            erradas += 1
+            porSistema[sistema].erradas += 1
+        }
+    })
+
+    const sistemas = Object.values(porSistema).sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR'))
+
+    res.render('public/quiz-result.ejs',{
+        total: perguntas.length,
+        corretas,
+        erradas,
+        sistemas
+    })
 }

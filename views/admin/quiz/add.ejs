@@ -3,6 +3,9 @@
     <div class="card my-4">
         <h5 class="card-header">Adicionar Questão de Quiz</h5>
         <div class="card-body">
+            <% if (erro === 'correta') { %>
+                <div class="alert alert-danger">Informe a opção correta como letra (A, B, C) ou número (0, 1, 2).</div>
+            <% } %>
             <form method="post">
                 <div class="mb-3">
                     <label for="pergunta" class="form-label">Pergunta</label>
@@ -13,11 +16,11 @@
                     <textarea name="opcoes" id="opcoes" class="form-control"></textarea>
                 </div>
                 <div class="mb-3">
-                    <label for="correta" class="form-label">Índice da opção correta (A, B, C, ...)</label>
-                    <input type="text" name="correta" id="correta" class="form-control" required>
+                    <label for="correta" class="form-label">Índice da opção correta (A, B, C... ou 0, 1, 2...)</label>
+                    <input type="text" name="correta" id="correta" class="form-control" required placeholder="Ex.: A ou 0">
                 </div>
                 <div class="mb-3">
-                    <label for="categoria" class="form-label">Categoria/Assunto (opcional)</label>
+                    <label for="categoria" class="form-label">Sistema</label>
                     <input type="text" name="categoria" id="categoria" class="form-control">
                 </div>
                 <div class="mb-3">

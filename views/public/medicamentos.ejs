@@ -2,6 +2,31 @@
 <% const pesquisaAtual = (typeof pesquisar !== 'undefined' && pesquisar) ? pesquisar : ''; %>
 <% const classesDisponiveis = (typeof classes !== 'undefined' && classes) ? classes : []; %>
 <% const classeAtual = (typeof classeSelecionada !== 'undefined' && classeSelecionada) ? classeSelecionada : ''; %>
+<style>
+  .med-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 16px;
+    font-size: 14px;
+  }
+  .med-table th,
+  .med-table td {
+    border: 1px solid #000;
+    padding: 8px;
+    text-align: left;
+    vertical-align: top;
+  }
+  .med-table th {
+    background: #f3f4f6;
+  }
+  .med-table tbody tr:nth-child(even) {
+    background: #fafafa;
+  }
+  .med-preline {
+    white-space: pre-line;
+  }
+</style>
+
 <h2>Medicamentos</h2>
 <form method="get" action="/medicamentos" style="margin-bottom:14px;">
   <input
@@ -21,30 +46,35 @@
     <% }) %>
   </select>
 </form>
-<%
-  const grupos = {};
-  Medicamentos.forEach(function(m){
-    const chave = (m.classe && m.classe.trim()) ? m.classe.trim() : 'Sem classe';
-    if (!grupos[chave]) grupos[chave] = [];
-    grupos[chave].push(m);
-  });
-  const classesOrdenadas = Object.keys(grupos).sort(function(a,b){ return a.localeCompare(b, 'pt-BR'); });
-%>
-<% if (classesOrdenadas.length === 0) { %>
+<% if (!Medicamentos || Medicamentos.length === 0) { %>
   <p>Nenhum medicamento encontrado para o filtro informado.</p>
+<% } else { %>
+  <table class="med-table" aria-label="Tabela de medicamentos">
+    <thead>
+      <tr>
+        <th>Princípio ativo</th>
+        <th>Nome comercial</th>
+        <th>Classe</th>
+        <th>Via</th>
+        <th>Diluição</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% Medicamentos.forEach(function(m){ %>
+        <% const principioAtivo = m.principioAtivo || m.descricao || '-'; %>
+         <% const nomeComercial = m.nomeComercial || m.nome || '-'; %>
+        <% const classe = m.classe || m.fabricante || '-'; %>
+        <% const via = m.via || '-'; %>
+        <% const diluicao = m.diluicao || m.dosagem || '-'; %>
+        <tr>
+          <td><%= principioAtivo %></td>
+          <td><%= nomeComercial %></td>
+          <td><%= classe %></td>
+          <td class="med-preline"><%= via %></td>
+          <td class="med-preline"><%= diluicao %></td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
 <% } %>
-<% classesOrdenadas.forEach(function(nomeClasse){ %>
-  <h3 style="margin-top:18px; border-left:4px solid #a51b0b; padding-left:8px;"><%= nomeClasse %></h3>
-  <ul>
-    <% grupos[nomeClasse].forEach(function(m){ %>
-      <li>
-        <strong>Princípio ativo:</strong> <%= m.principioAtivo || m.descricao || '-' %><br>
-        <strong>Nome comercial:</strong> <%= m.nomeComercial || m.nome || '-' %><br>
-        <strong>Classe:</strong> <%= m.classe || m.fabricante || '-' %><br>
-        <strong>Via:</strong> <%= m.via || '-' %><br>
-        <strong>Diluição:</strong> <%= m.diluicao || m.dosagem || '-' %>
-      </li>
-    <% }) %>
-  </ul>
-<% }) %>
 <%- include('rodape') %>

@@ -22,11 +22,11 @@
                 </div>
                 <div class="mb-3">
                     <label for="via" class="form-label">Via</label>
-                    <input type="text" name="via" id="via" class="form-control" value="<%=Medicamento.via%>">
+                    <textarea name="via" id="via" class="form-control" rows="3"><%=Medicamento.via || ''%></textarea>
                 </div>
                 <div class="mb-3">
                     <label for="diluicao" class="form-label">Diluição</label>
-                    <input type="text" name="diluicao" id="diluicao" class="form-control" value="<%=Medicamento.diluicao || Medicamento.dosagem || ''%>">
+                    <textarea name="diluicao" id="diluicao" class="form-control" rows="3"><%=Medicamento.diluicao || Medicamento.dosagem || ''%></textarea>
                 </div>
                 <div class="mb-3">
                     <input type="submit" value="Salvar" class="form-control">

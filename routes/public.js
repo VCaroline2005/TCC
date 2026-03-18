@@ -29,7 +29,7 @@ router.get('/procedimentos', listarProcedimentos)
 router.get('/medicamentos', listarMedicamentos)
 router.get('/terminologias', listarTerminologias)
 router.get('/quiz', fazerQuiz)
-router.post('/quiz/answer', responderQuiz)
+router.post('/quiz/responder', responderQuiz)
 
 // lembretes
 

@@ -3,6 +3,9 @@
     <div class="card my-4">
         <h5 class="card-header">Editar Questão de Quiz</h5>
         <div class="card-body">
+            <% if (erro === 'correta') { %>
+                <div class="alert alert-danger">Informe a opção correta como letra (A, B, C) ou número (0, 1, 2).</div>
+            <% } %>
             <form method="post">
                 <div class="mb-3">
                     <label for="id" class="form-label">ID</label>
@@ -17,8 +20,8 @@
                     <textarea name="opcoes" id="opcoes" class="form-control"><%=(Quiz.opcoes || []).join('\n')%></textarea>
                 </div>
                 <div class="mb-3">
-                    <label for="correta" class="form-label">Índice da opção correta (A, B, C,...)</label>
-                    <input type="text" name="correta" id="correta" class="form-control" required value="<%=Quiz.correta%>">
+                    <label for="correta" class="form-label">Índice da opção correta (A, B, C... ou 0, 1, 2...)</label>
+                    <input type="text" name="correta" id="correta" class="form-control" required value="<%=Quiz.correta%>" placeholder="Ex.: A ou 0">
                 </div>
                 <div class="mb-3">
                     <label for="categoria" class="form-label">Categoria/Assunto (opcional)</label>

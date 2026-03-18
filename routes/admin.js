@@ -56,6 +56,7 @@ import {
     } from '../controllers/admin.js';
 
 //configuração de rotas que apontam para controllers que serão executados
+router.get('/admin', (req, res) => res.redirect('/admin/usuarios/lst'))
 router.get("/admin/usuarios/lst", listarusuarios)
 router.get("/admin/usuarios/detalhe/:id", detalhe)
 
