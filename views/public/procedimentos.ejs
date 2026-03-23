@@ -1,36 +1,354 @@
 <%- include('cabecalho') %>
 <% const pesquisaAtual = (typeof pesquisar !== 'undefined' && pesquisar) ? pesquisar : ''; %>
-<h2>Procedimentos</h2>
-<form method="get" action="/procedimentos" style="margin-bottom:14px;">
-  <input
-    type="text"
-    name="pesquisar"
-    placeholder="Pesquisar por nome, descrição ou categoria"
-    value="<%= pesquisaAtual %>"
-    style="padding:8px; width:100%; max-width:420px; border:1px solid #000; border-radius:4px;"
-  >
-  <button type="submit" style="padding:8px 12px; margin-left:6px; background:#a51b0b; color:#fff; border:1px solid #000; border-radius:4px; cursor:pointer;">
-    Pesquisar
-  </button>
-</form>
+<%
+  function escapeHtml(text) {
+    return String(text)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
+  function formatProcedimento(text) {
+    if (!text) return '';
+    const lines = String(text).replace(/\r\n/g, '\n').split('\n');
+    let html = '';
+    let inOl = false;
+    let inUl = false;
+    let openLi = false;
+
+    function closeListItem() {
+      if (openLi) {
+        html += '</li>';
+        openLi = false;
+      }
+    }
+
+    function closeLists() {
+      closeListItem();
+      if (inOl) {
+        html += '</ol>';
+        inOl = false;
+      }
+      if (inUl) {
+        html += '</ul>';
+        inUl = false;
+      }
+    }
+
+    lines.forEach((line) => {
+      const trimmed = line.trim();
+      if (!trimmed) {
+        closeLists();
+        html += '<div class="proc-gap"></div>';
+        return;
+      }
+
+      const isAllCaps = /^[A-Z0-9ÁÉÍÓÚÂÊÔÃÕÇ\s().-]{6,}$/.test(trimmed);
+      const isHeading = /:$/.test(trimmed) || isAllCaps;
+      if (isHeading) {
+        closeLists();
+        const clean = trimmed.replace(/:$/, '');
+        html += `<h4 class="proc-section-title">${escapeHtml(clean)}</h4>`;
+        return;
+      }
+
+      const orderedMatch = trimmed.match(/^(\d+)\.\s+(.*)$/);
+      if (orderedMatch) {
+        if (!inOl) {
+          closeLists();
+          html += '<ol class="proc-steps-list">';
+          inOl = true;
+        }
+        closeListItem();
+        html += `<li><div class="proc-step">${escapeHtml(orderedMatch[2])}</div>`;
+        openLi = true;
+        return;
+      }
+
+      const bulletMatch = trimmed.match(/^[-•]\s+(.*)$/);
+      if (bulletMatch) {
+        if (!inUl) {
+          closeLists();
+          html += '<ul class="proc-bullets">';
+          inUl = true;
+        }
+        closeListItem();
+        html += `<li>${escapeHtml(bulletMatch[1])}</li>`;
+        return;
+      }
+
+      const justificativaMatch = /^Justificativa:/i.test(trimmed);
+      if (inOl && openLi && justificativaMatch) {
+        html += `<div class="proc-justificativa">${escapeHtml(trimmed)}</div>`;
+        return;
+      }
+
+      closeLists();
+      html += `<p class="proc-paragraph">${escapeHtml(trimmed)}</p>`;
+    });
+
+    closeLists();
+    return html;
+  }
+%>
 <style>
-  .proc-item { border:1px solid #000; border-radius:6px; padding:10px; margin-bottom:10px; }
-  .proc-toggle { width:100%; text-align:left; background:#f3f3f3; border:1px solid #000; border-radius:4px; padding:8px; cursor:pointer; }
-  .proc-details { display:none; margin-top:8px; }
-  .proc-details.is-open { display:block; }
+  :root {
+    --proc-red: #a51b0b;
+    --proc-red-dark: #7a1408;
+    --proc-ink: #1f2937;
+    --proc-muted: #6b7280;
+    --proc-paper: #ffffff;
+    --proc-sand: #fff5f2;
+    --proc-line: #e6e6e6;
+  }
+
+  .proc-hero {
+    background: linear-gradient(135deg, rgba(165, 27, 11, 0.08), rgba(255, 245, 242, 0.95));
+    border: 1px solid var(--proc-line);
+    border-radius: 14px;
+    padding: 22px;
+    margin-bottom: 18px;
+    display: grid;
+    gap: 16px;
+  }
+
+  .proc-eyebrow {
+    text-transform: uppercase;
+    letter-spacing: 1.8px;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--proc-red-dark);
+    margin: 0 0 6px 0;
+  }
+
+  .proc-title {
+    font-size: 28px;
+    margin: 0 0 6px 0;
+    color: var(--proc-ink);
+  }
+
+  .proc-subtitle {
+    margin: 0;
+    color: var(--proc-muted);
+    font-size: 15px;
+  }
+
+  .proc-search {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .proc-search input {
+    flex: 1 1 280px;
+    min-width: 220px;
+    padding: 10px 12px;
+    border: 1px solid var(--proc-line);
+    border-radius: 10px;
+    font-size: 15px;
+  }
+
+  .proc-search button {
+    padding: 10px 18px;
+    background: var(--proc-red);
+    color: #fff;
+    border: 1px solid var(--proc-red);
+    border-radius: 999px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+  }
+
+  .proc-search button:hover {
+    background: var(--proc-red-dark);
+    transform: translateY(-1px);
+    box-shadow: 0 10px 18px rgba(122, 20, 8, 0.2);
+  }
+
+  .proc-list {
+    list-style: none;
+    padding-left: 0;
+    display: grid;
+    gap: 14px;
+  }
+
+  .proc-card {
+    border: 1px solid var(--proc-line);
+    border-radius: 14px;
+    padding: 14px;
+    background: var(--proc-paper);
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.06);
+  }
+
+  .proc-toggle {
+    width: 100%;
+    text-align: left;
+    background: var(--proc-sand);
+    border: 1px solid var(--proc-line);
+    border-radius: 12px;
+    padding: 12px 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--proc-ink);
+    transition: border 0.15s ease, background 0.15s ease;
+  }
+
+  .proc-toggle:hover {
+    background: #ffe9e4;
+    border-color: #f0b0a7;
+  }
+
+  .proc-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .proc-category {
+    background: #ffffff;
+    border: 1px solid var(--proc-line);
+    color: var(--proc-red-dark);
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    padding: 4px 8px;
+    border-radius: 999px;
+  }
+
+  .proc-arrow {
+    font-size: 18px;
+    transition: transform 0.15s ease;
+  }
+
+  .proc-toggle.is-open .proc-arrow {
+    transform: rotate(180deg);
+  }
+
+  .proc-details {
+    display: none;
+    margin-top: 12px;
+    padding: 12px 4px 4px 4px;
+    border-top: 1px dashed var(--proc-line);
+  }
+
+  .proc-details.is-open {
+    display: block;
+  }
+
+  .proc-doc {
+    margin-top: 6px;
+  }
+
+  .proc-section-title {
+    font-size: 16px;
+    margin: 14px 0 6px 0;
+    color: var(--proc-red-dark);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+  }
+
+  .proc-paragraph {
+    margin: 6px 0;
+    color: var(--proc-ink);
+    line-height: 1.5;
+  }
+
+  .proc-steps-list,
+  .proc-bullets {
+    margin: 6px 0 0 18px;
+    color: var(--proc-ink);
+    line-height: 1.5;
+  }
+
+  .proc-steps-list li,
+  .proc-bullets li {
+    margin-bottom: 4px;
+  }
+
+  .proc-step {
+    font-weight: 600;
+  }
+
+  .proc-justificativa {
+    margin-top: 4px;
+    color: var(--proc-muted);
+    font-size: 14px;
+    line-height: 1.45;
+  }
+
+  .proc-gap {
+    height: 6px;
+  }
+
+  .proc-steps ol {
+    margin: 6px 0 0 18px;
+  }
+
+  .proc-photos {
+    margin-top: 8px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .proc-photos img {
+    max-width: 220px;
+    height: auto;
+    border: 1px solid var(--proc-line);
+    border-radius: 10px;
+  }
 </style>
-<ul style="list-style:none; padding-left:0;">
+
+<section class="proc-hero">
+  <div>
+    <p class="proc-eyebrow">Biblioteca clínica</p>
+    <h2 class="proc-title">Procedimentos</h2>
+    <p class="proc-subtitle">Encontre protocolos, descrições e passo a passo em um só lugar.</p>
+  </div>
+  <form method="get" action="/procedimentos" class="proc-search">
+    <input
+      type="text"
+      name="pesquisar"
+      placeholder="Pesquisar por nome, descrição ou categoria"
+      value="<%= pesquisaAtual %>"
+    >
+    <button type="submit">Pesquisar</button>
+  </form>
+</section>
+
+<ul class="proc-list">
   <% Procedimentos.forEach(function(p, idx){ %>
-    <li class="proc-item">
-      <button type="button" class="proc-toggle" data-target="proc-<%= idx %>">
-        <strong><%= p.nome %></strong> (<%= p.categoria %>)
+    <li class="proc-card">
+      <button
+        type="button"
+        class="proc-toggle"
+        data-target="proc-<%= idx %>"
+        aria-expanded="false"
+        aria-controls="proc-<%= idx %>"
+      >
+        <span class="proc-meta">
+          <span><%= p.nome %></span>
+          <span class="proc-category"><%= p.categoria %></span>
+        </span>
+        <span class="proc-arrow">▾</span>
       </button>
       <div id="proc-<%= idx %>" class="proc-details">
-        <div style="margin-top:6px;"><%= p.descricao %></div>
+        <div class="proc-doc">
+          <%- formatProcedimento(p.descricao) %>
+        </div>
         <% if (p.passos && p.passos.length) { %>
-          <div style="margin-top:8px;">
+          <div class="proc-steps" style="margin-top:8px;">
             <strong>Passo a passo:</strong>
-            <ol style="margin:6px 0 0 18px;">
+            <ol>
               <% p.passos.forEach(function(passo){ %>
                 <li><%= passo %></li>
               <% }) %>
@@ -38,9 +356,9 @@
           </div>
         <% } %>
         <% if (p.fotos && p.fotos.length) { %>
-          <div style="margin-top:8px; display:flex; flex-wrap:wrap; gap:8px;">
+          <div class="proc-photos">
             <% p.fotos.forEach(function(foto){ %>
-              <img src="/fotos/<%= foto %>" alt="Foto do procedimento" style="max-width:220px; height:auto; border:1px solid #000; border-radius:4px;">
+              <img src="/fotos/<%= foto %>" alt="Foto do procedimento">
             <% }) %>
           </div>
         <% } %>
@@ -54,7 +372,9 @@
       const id = btn.getAttribute('data-target');
       const el = document.getElementById(id);
       if (!el) return;
-      el.classList.toggle('is-open');
+      const isOpen = el.classList.toggle('is-open');
+      btn.classList.toggle('is-open', isOpen);
+      btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
     });
   });
 </script>
