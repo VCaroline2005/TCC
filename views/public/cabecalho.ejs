@@ -25,6 +25,7 @@
 </head>
 <body>
   <header>
+    <% const usuarioLocal = (typeof usuario !== 'undefined' && usuario) ? usuario : null; %>
     <div class="brand">
       <img src="/site/img/logo.png" alt="Portal Enfermagem">
       <h1 style="margin:0; font-size:22px;">Portal Enfermagem</h1>
@@ -36,12 +37,23 @@
       <a href="/terminologias">Terminologias</a>
       <a href="/quiz">Quiz</a>
       <a href="/lembretes">Lembretes</a>
-      <a href="/login">Minha Conta</a>
-      <a href="/cadastro">Cadastre-se</a>
+      <% if (usuarioLocal) { %>
+        <a href="/usuario">Minha Conta</a>
+        <% if (usuarioLocal.admin) { %>
+          <a href="/admin/usuarios/lst">Admin</a>
+        <% } %>
+      <% } else { %>
+        <a href="/login">Entrar</a>
+        <a href="/cadastro">Cadastre-se</a>
+      <% } %>
     </nav>
     <div class="nav-controls">
       <button type="button" class="nav-btn" onclick="history.back()">Voltar</button>
-      <a class="nav-btn" href="/login">Sair</a>
+      <% if (usuarioLocal) { %>
+        <a class="nav-btn" href="/sair">Sair</a>
+      <% } else { %>
+        <a class="nav-btn" href="/login">Entrar</a>
+      <% } %>
     </div>
   </header>
   <main>

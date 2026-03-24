@@ -1,0 +1,48 @@
+<%- include('cabecalho') %>
+<h2>Editar meus dados</h2>
+
+<% if (typeof erro !== 'undefined' && erro === 'email') { %>
+  <p style="color:#b91c1c;">E-mail já cadastrado.</p>
+<% } %>
+<% if (typeof erro !== 'undefined' && erro === 'salvar') { %>
+  <p style="color:#b91c1c;">Não foi possível salvar. Tente novamente.</p>
+<% } %>
+
+<form method="post" action="/usuario/editar" enctype="multipart/form-data">
+  <div style="margin-bottom:10px;">
+    <label>Nome</label><br>
+    <input type="text" name="nome" value="<%= dadosUsuario.nome %>" required>
+  </div>
+  <div style="margin-bottom:10px;">
+    <label>E-mail</label><br>
+    <input type="email" name="email" value="<%= dadosUsuario.email %>" required>
+  </div>
+  <div style="margin-bottom:10px;">
+    <label>Telefone</label><br>
+    <input type="text" name="telefone" value="<%= dadosUsuario.telefone || '' %>">
+  </div>
+  <div style="margin-bottom:10px;">
+    <label>Endereço</label><br>
+    <input type="text" name="endereco" value="<%= dadosUsuario.endereco || '' %>">
+  </div>
+  <div style="margin-bottom:10px;">
+    <label>CPF</label><br>
+    <input type="text" name="cpf" value="<%= dadosUsuario.cpf || '' %>">
+  </div>
+  <div style="margin-bottom:10px;">
+    <label>Data de nascimento</label><br>
+    <input type="date" name="datanasc" value="<%= dadosUsuario.datanasc ? dadosUsuario.datanasc.toISOString().substr(0,10) : '' %>">
+  </div>
+  <div style="margin-bottom:10px;">
+    <label>Nova senha (opcional)</label><br>
+    <input type="password" name="senha" placeholder="Deixe em branco para não alterar">
+  </div>
+  <div style="margin-bottom:10px;">
+    <label>Foto (opcional)</label><br>
+    <input type="file" name="foto">
+  </div>
+  <button type="submit">Salvar alterações</button>
+  <a href="/usuario" style="margin-left:8px;">Cancelar</a>
+</form>
+
+<%- include('rodape') %>

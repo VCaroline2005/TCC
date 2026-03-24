@@ -2,6 +2,26 @@
 <h2>Área do Usuário</h2>
 <p>Bem-vindo. Aqui você acessa apenas conteúdos publicados pelo administrador.</p>
 
+<% if (typeof dadosUsuario !== 'undefined' && dadosUsuario) { %>
+  <section style="border:1px solid #e5e7eb; border-radius:10px; padding:14px; margin:12px 0; background:#fff;">
+    <h3 style="margin:0 0 8px 0;">Meus dados</h3>
+    <% if (dadosUsuario.foto) { %>
+      <img src="/usuarios/<%= dadosUsuario.foto %>" alt="Foto do usuário" style="max-width:120px; border-radius:8px; border:1px solid #e5e7eb; margin-bottom:8px;">
+    <% } %>
+    <ul style="list-style:none; padding-left:0; margin:0;">
+      <li><strong>Nome:</strong> <%= dadosUsuario.nome %></li>
+      <li><strong>E-mail:</strong> <%= dadosUsuario.email %></li>
+      <li><strong>Telefone:</strong> <%= dadosUsuario.telefone || 'não informado' %></li>
+      <li><strong>Endereço:</strong> <%= dadosUsuario.endereco || 'não informado' %></li>
+      <li><strong>CPF:</strong> <%= dadosUsuario.cpf || 'não informado' %></li>
+      <li><strong>Data de nascimento:</strong> <%= dadosUsuario.datanasc ? dadosUsuario.datanasc.toISOString().substr(0,10) : 'não informada' %></li>
+    </ul>
+    <div style="margin-top:10px;">
+      <a href="/usuario/editar">Editar meus dados</a>
+    </div>
+  </section>
+<% } %>
+
 <% if (typeof lembretesProximos !== 'undefined' && lembretesProximos.length) { %>
   <div style="border:1px solid #f59e0b; background:#fff7ed; padding:12px; border-radius:8px; margin:12px 0;">
     <strong>Você tem lembretes vencendo em até 3 dias:</strong>

@@ -1,5 +1,6 @@
 //importa a biblioteca express
 import express from 'express';
+import session from 'express-session';
 //inicializa a aplicação usando a bibliotea express
 const app = express();
 //cria uma variável com o número da porta
@@ -11,6 +12,24 @@ app.set('view engine', 'ejs');
 app.use(express.urlencoded({ extended: true }));
 //configura a pasta de arquivos estáticos (fotos, vídeos ...)
 app.use(express.static('public'));
+//sessões (mantém login entre páginas)
+app.set('trust proxy', 1)
+app.use(session({
+    name: 'ifstore.sid',
+    secret: process.env.SESSION_SECRET || 'ifstore-secret',
+    resave: false,
+    saveUninitialized: false,
+    rolling: true,
+    cookie: {
+        maxAge: 1000 * 60 * 60 * 24,
+        sameSite: 'lax'
+    }
+}))
+// deixa o usuário disponível nas views
+app.use((req, res, next) => {
+    res.locals.usuario = req.session?.usuario || null
+    next()
+})
 
 //importa os arquivos de rotas (os endereços são cadastrados neles)
 import publicroutes from './routes/public.js';
@@ -25,4 +44,4 @@ app.get('/admin/quiz/edt/:id', abreedtquiz);
 app.post('/admin/quiz/edt/:id', edtquiz);
 
 //faz a aplicação ficar escurando a porta cadastrada
-app.listen(3001);
+app.listen(3000);

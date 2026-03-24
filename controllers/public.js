@@ -68,6 +68,12 @@ export async function login(req, res){
         }
 
         // Autenticação concluída; direciona por perfil
+        req.session.usuario = {
+            id: user._id.toString(),
+            nome: user.nome,
+            email: user.email,
+            admin: isAdmin
+        }
         if (isAdmin) {
             return res.redirect('/admin/usuarios/lst')
         }
@@ -76,6 +82,15 @@ export async function login(req, res){
         console.error(err)
         return res.render('login', { error: 'Erro no servidor.' })
     }
+}
+
+export async function sair(req, res){
+    if (!req.session) {
+        return res.redirect('/login')
+    }
+    req.session.destroy(() => {
+        res.redirect('/login')
+    })
 }
 
 export async function abreindex(req, res){
@@ -91,6 +106,10 @@ export async function abreindex(req, res){
 }
 
 export async function abreusuario(req, res){
+    let dadosUsuario = null
+    if (req.session && req.session.usuario && req.session.usuario.id) {
+        dadosUsuario = await usuario.findById(req.session.usuario.id)
+    }
     const procedimentoCount = await Procedimento.countDocuments({ publicado: true })
     const medicamentoCount = await Medicamento.countDocuments({ publicado: true })
     const termoCount = await Terminologia.countDocuments({ publicado: true })
@@ -102,6 +121,7 @@ export async function abreusuario(req, res){
         vencimento: { $lte: limite }
     }).sort({ vencimento: 1 })
     res.render('public/usuario.ejs', {
+        dadosUsuario,
         procedimentoCount,
         medicamentoCount,
         termoCount,
@@ -109,6 +129,64 @@ export async function abreusuario(req, res){
         lembretesProximos,
         agora
     })
+}
+
+export async function abreEditarUsuario(req, res){
+    if (!req.session || !req.session.usuario) {
+        return res.redirect('/login')
+    }
+    const dadosUsuario = await usuario.findById(req.session.usuario.id)
+    if (!dadosUsuario) {
+        return res.redirect('/login')
+    }
+    res.render('public/usuario-editar.ejs', {
+        dadosUsuario,
+        erro: req.query.erro
+    })
+}
+
+export async function editarUsuario(req, res){
+    if (!req.session || !req.session.usuario) {
+        return res.redirect('/login')
+    }
+    try{
+        const dadosUsuario = await usuario.findById(req.session.usuario.id)
+        if (!dadosUsuario) {
+            return res.redirect('/login')
+        }
+        const atualizacao = {
+            nome: req.body.nome,
+            email: req.body.email,
+            endereco: req.body.endereco,
+            telefone: req.body.telefone,
+            cpf: req.body.cpf,
+            datanasc: req.body.datanasc
+        }
+        if (req.body.senha && String(req.body.senha).trim()) {
+            atualizacao.senha = req.body.senha
+        }
+        if (req.file && req.file.filename) {
+            atualizacao.foto = req.file.filename
+        }
+        const usuarioAtualizado = await usuario.findByIdAndUpdate(
+            req.session.usuario.id,
+            atualizacao,
+            { new: true }
+        )
+        req.session.usuario = {
+            id: usuarioAtualizado._id.toString(),
+            nome: usuarioAtualizado.nome,
+            email: usuarioAtualizado.email,
+            admin: usuarioAtualizado.admin
+        }
+        return res.redirect('/usuario')
+    }catch(err){
+        console.error(err)
+        if(err.code === 11000){
+            return res.redirect('/usuario/editar?erro=email')
+        }
+        return res.redirect('/usuario/editar?erro=salvar')
+    }
 }
 
 export async function listarProcedimentos(req,res){
@@ -222,8 +300,46 @@ export async function listarLembretes(req,res){
     const lembretes = await Lembrete.find({})
     res.render('public/lembretes.ejs',{
         Lembretes:lembretes,
-        erro:req.query.erro
+        erro:req.query.erro,
+        editando: false,
+        LembreteEdicao: null
     })
+}
+
+export async function abreEditarLembrete(req,res){
+    const lembretes = await Lembrete.find({})
+    const lembrete = await Lembrete.findById(req.params.id)
+    if (!lembrete) {
+        return res.redirect('/lembretes')
+    }
+    res.render('public/lembretes.ejs',{
+        Lembretes:lembretes,
+        erro:req.query.erro,
+        editando: true,
+        LembreteEdicao: lembrete
+    })
+}
+
+export async function editarLembrete(req,res){
+    try{
+        const conteudo = (req.body.conteudo || '').trim()
+        if(!conteudo){
+            return res.redirect(`/lembretes/edt/${req.params.id}?erro=conteudo`)
+        }
+        await Lembrete.findByIdAndUpdate(req.params.id, {
+            conteudo,
+            vencimento: req.body.vencimento
+        })
+        return res.redirect('/lembretes')
+    }catch(err){
+        console.error(err)
+        return res.redirect(`/lembretes/edt/${req.params.id}?erro=salvar`)
+    }
+}
+
+export async function deletarLembrete(req,res){
+    await Lembrete.findByIdAndDelete(req.params.id)
+    res.redirect('/lembretes')
 }
 
 export async function responderQuiz(req,res){

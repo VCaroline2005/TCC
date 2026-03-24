@@ -153,19 +153,70 @@
       font-size: 14px;
       padding: 24px 0 30px;
     }
+    .guest-hero {
+      background: linear-gradient(120deg, #a51b0b, #000000);
+      color: #fff;
+      border-radius: 12px;
+      padding: 28px;
+      box-shadow: 0 10px 24px rgba(0,0,0,0.12);
+    }
+    .guest-hero p { margin: 0 0 12px; }
+    .guest-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 18px;
+      background: #ffffff;
+      color: #7a1408;
+      border-radius: 999px;
+      text-decoration: none;
+      font-weight: 700;
+    }
+    .guest-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+      margin-top: 16px;
+    }
+    .guest-card {
+      border: 1px solid #000000;
+      border-radius: 12px;
+      overflow: hidden;
+      background: #ffffff;
+    }
+    .guest-card img {
+      width: 100%;
+      display: block;
+      height: 140px;
+      object-fit: cover;
+    }
+    .guest-card p {
+      margin: 0;
+      padding: 10px 12px;
+      font-weight: 600;
+    }
   </style>
 </head>
 <body>
+  <% const usuarioLocal = (typeof usuario !== 'undefined' && usuario) ? usuario : null; %>
   <header class="topbar">
     <div class="topbar-inner">
       <h1 class="brand">Portal Enfermagem</h1>
       <nav class="auth">
-        <a href="/login">Minha Conta</a>
-        <a href="/cadastro">Cadastre-se</a>
+        <% if (usuarioLocal) { %>
+          <a href="/usuario">Minha Conta</a>
+        <% } else { %>
+          <a href="/login">Entrar</a>
+          <a href="/cadastro">Cadastre-se</a>
+        <% } %>
       </nav>
       <div class="topbar-controls">
         <button type="button" class="topbar-btn" onclick="history.back()">Voltar</button>
-        <a class="topbar-btn" href="/login">Sair</a>
+        <% if (usuarioLocal) { %>
+          <a class="topbar-btn" href="/sair">Sair</a>
+        <% } else { %>
+          <a class="topbar-btn" href="/login">Entrar</a>
+        <% } %>
 
       </div>
     </div>
@@ -173,37 +224,60 @@
 
   
   <main class="container">
-    <section class="hero">
-      <h2>Seu apoio rápido na prática de enfermagem</h2>
-      <p>Consulte conteúdos essenciais, revise protocolos, teste conhecimentos e organize sua rotina em um só lugar.</p>
-    </section>
+    <% if (!usuarioLocal) { %>
+      <section class="guest-hero">
+        <h2>Seu apoio rápido na prática de enfermagem</h2>
+        <p>Veja conteúdos introdutórios e exemplos visuais. Para acessar todos os módulos, faça login.</p>
+        <a class="guest-cta" href="/login">Entrar e acessar tudo</a>
+      </section>
 
-    <section class="grid" aria-label="Resumo">
-      <article class="card">
-        <h3>Procedimentos</h3>
-        <div class="value"><%= procedimentoCount %></div>
-      </article>
-      <article class="card">
-        <h3>Medicamentos</h3>
-        <div class="value"><%= medicamentoCount %></div>
-      </article>
-      <article class="card">
-        <h3>Terminologias</h3>
-        <div class="value"><%= termoCount %></div>
-      </article>
-    </section>
+      <section class="guest-grid" aria-label="Prévia de conteúdos">
+        <div class="guest-card">
+          <img src="/site/img/product01.png" alt="Prévia de procedimentos">
+          <p>Protocolos essenciais em poucos cliques</p>
+        </div>
+        <div class="guest-card">
+          <img src="/site/img/product02.png" alt="Prévia de medicamentos">
+          <p>Medicamentos organizados por classe</p>
+        </div>
+        <div class="guest-card">
+          <img src="/site/img/product03.png" alt="Prévia de terminologias">
+          <p>Termos e definições para revisão rápida</p>
+        </div>
+      </section>
+    <% } else { %>
+      <section class="hero">
+        <h2>Seu apoio rápido na prática de enfermagem</h2>
+        <p>Consulte conteúdos essenciais, revise protocolos, teste conhecimentos e organize sua rotina em um só lugar.</p>
+      </section>
 
-    <section class="section">
-      <h3>Acessos rápidos</h3>
-      <p class="muted">Abra direto o recurso que você precisa no momento.</p>
-      <div class="links">
-        <a href="/procedimentos">Consultar procedimentos</a>
-        <a href="/medicamentos">Consultar medicamentos</a>
-        <a href="/terminologias">Ver terminologias</a>
-        <a href="/quiz">Responder quiz</a>
-        <a href="/lembretes">Gerenciar lembretes</a>
-      </div>
-    </section>
+      <section class="grid" aria-label="Resumo">
+        <article class="card">
+          <h3>Procedimentos</h3>
+          <div class="value"><%= procedimentoCount %></div>
+        </article>
+        <article class="card">
+          <h3>Medicamentos</h3>
+          <div class="value"><%= medicamentoCount %></div>
+        </article>
+        <article class="card">
+          <h3>Terminologias</h3>
+          <div class="value"><%= termoCount %></div>
+        </article>
+      </section>
+
+      <section class="section">
+        <h3>Acessos rápidos</h3>
+        <p class="muted">Abra direto o recurso que você precisa no momento.</p>
+        <div class="links">
+          <a href="/procedimentos">Consultar procedimentos</a>
+          <a href="/medicamentos">Consultar medicamentos</a>
+          <a href="/terminologias">Ver terminologias</a>
+          <a href="/quiz">Responder quiz</a>
+          <a href="/lembretes">Gerenciar lembretes</a>
+        </div>
+      </section>
+    <% } %>
 
     <div class="footer">Portal Enfermagem</div>
   </main>

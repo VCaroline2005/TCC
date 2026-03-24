@@ -29,6 +29,11 @@ export async function detalhe(req, res) {
     res.render('admin/usuarios/detalhe', {usuario: usuario});
 }
 
+export async function deletarusuario(req, res) {
+    await Usuario.findByIdAndDelete(req.params.id)
+    res.redirect('/admin/usuarios/lst')
+}
+
 export async function abreaddcategoria(req, res) {
     res.render('admin/categoria/add')
 }

@@ -13,6 +13,7 @@ import {
         edtcategoria, 
         listarusuarios, 
         detalhe, 
+        deletarusuario,
         abreaddcategoria,
         deletacategoria, 
         addcategoria, 
@@ -59,6 +60,7 @@ import {
 router.get('/admin', (req, res) => res.redirect('/admin/usuarios/lst'))
 router.get("/admin/usuarios/lst", listarusuarios)
 router.get("/admin/usuarios/detalhe/:id", detalhe)
+router.get("/admin/usuarios/del/:id", deletarusuario)
 
 //create do modelo categoria (create)
 router.get('/admin/categoria/add', abreaddcategoria)

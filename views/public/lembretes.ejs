@@ -1,19 +1,92 @@
 <%- include('cabecalho') %>
+<style>
+  .lembrete-form {
+    margin-bottom: 12px;
+  }
+  .lembrete-btn {
+    padding: 10px 18px;
+    background: #a51b0b;
+    color: #fff;
+    border: 1px solid #a51b0b;
+    border-radius: 999px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+  }
+  .lembrete-btn:hover {
+    background: #7a1408;
+    transform: translateY(-1px);
+    box-shadow: 0 10px 18px rgba(122, 20, 8, 0.2);
+  }
+  .lembrete-cancel {
+    margin-left: 8px;
+    text-decoration: none;
+    font-weight: 700;
+    color: #7a1408;
+  }
+  .lembrete-actions {
+    display: inline-flex;
+    gap: 8px;
+    margin-left: 6px;
+  }
+  .lembrete-link {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 12px;
+    border-radius: 999px;
+    border: 1px solid #a51b0b;
+    font-weight: 700;
+    text-decoration: none;
+    color: #a51b0b;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease, color 0.15s ease;
+  }
+  .lembrete-link:hover {
+    background: #a51b0b;
+    color: #fff;
+    transform: translateY(-1px);
+    box-shadow: 0 8px 16px rgba(122, 20, 8, 0.18);
+  }
+  .lembrete-link.danger {
+    border-color: #7a1408;
+    color: #7a1408;
+  }
+  .lembrete-link.danger:hover {
+    background: #7a1408;
+    color: #fff;
+  }
+</style>
 <h2>Lembretes</h2>
+<% const editandoLocal = (typeof editando !== 'undefined' && editando); %>
+<% const lembreteEdicaoLocal = (typeof LembreteEdicao !== 'undefined' && LembreteEdicao) ? LembreteEdicao : null; %>
 <% if (typeof erro !== 'undefined' && erro === 'conteudo') { %>
   <p style="color:#b91c1c;">Digite o conteúdo do lembrete antes de adicionar.</p>
 <% } %>
 <% if (typeof erro !== 'undefined' && erro === 'salvar') { %>
   <p style="color:#b91c1c;">Não foi possível salvar o lembrete. Tente novamente.</p>
 <% } %>
-<form method="post" action="/lembretes">
-  <textarea name="conteudo" rows="2" cols="50" placeholder="O que lembrar?" required></textarea><br>
-  <label>Data de vencimento: <input type="date" name="vencimento"></label><br>
-  <input type="submit" value="Adicionar">
-</form>
+<% if (editandoLocal && lembreteEdicaoLocal) { %>
+  <form method="post" action="/lembretes/edt/<%= lembreteEdicaoLocal._id %>" class="lembrete-form">
+    <textarea name="conteudo" rows="2" cols="50" placeholder="O que lembrar?" required><%= lembreteEdicaoLocal.conteudo %></textarea><br>
+    <label>Data de vencimento: <input type="date" name="vencimento" value="<%= lembreteEdicaoLocal.vencimento ? lembreteEdicaoLocal.vencimento.toISOString().substr(0,10) : '' %>"></label><br>
+    <input type="submit" value="Salvar" class="lembrete-btn">
+    <a href="/lembretes" class="lembrete-cancel">Cancelar</a>
+  </form>
+<% } else { %>
+  <form method="post" action="/lembretes" class="lembrete-form">
+    <textarea name="conteudo" rows="2" cols="50" placeholder="O que lembrar?" required></textarea><br>
+    <label>Data de vencimento: <input type="date" name="vencimento"></label><br>
+    <input type="submit" value="Adicionar" class="lembrete-btn">
+  </form>
+<% } %>
 <ul>
   <% Lembretes.forEach(function(l){ %>
-    <li><strong><%=l.conteudo%></strong> até <%= l.vencimento ? l.vencimento.toISOString().substr(0,10) : 'sem data' %></li>
+    <li>
+      <strong><%=l.conteudo%></strong> até <%= l.vencimento ? l.vencimento.toISOString().substr(0,10) : 'sem data' %>
+      <span class="lembrete-actions">
+        <a class="lembrete-link" href="/lembretes/edt/<%= l._id %>">Editar</a>
+        <a class="lembrete-link danger" href="/lembretes/del/<%= l._id %>" onclick="return confirm('Tem certeza que deseja excluir este lembrete?')">Excluir</a>
+      </span>
+    </li>
   <% }) %>
 </ul>
 <%- include('rodape') %>
