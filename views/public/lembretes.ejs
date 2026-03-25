@@ -54,8 +54,45 @@
     background: #7a1408;
     color: #fff;
   }
+  .lembrete-alert {
+    margin: 12px 0;
+    padding: 10px 12px;
+    border-radius: 10px;
+    background: #fff7ed;
+    border: 1px solid #f59e0b;
+    color: #92400e;
+    font-weight: 600;
+  }
+  .lembrete-badge {
+    display: inline-flex;
+    align-items: center;
+    margin-left: 6px;
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+    border: 1px solid transparent;
+  }
+  .lembrete-badge.warn {
+    background: #fef3c7;
+    color: #92400e;
+    border-color: #f59e0b;
+  }
+  .lembrete-badge.danger {
+    background: #fee2e2;
+    color: #b91c1c;
+    border-color: #fca5a5;
+  }
 </style>
 <h2>Lembretes</h2>
+<% const agora = new Date(); %>
+<% const limite = new Date(); limite.setDate(limite.getDate() + 3); %>
+<% const lembretesProximos = Lembretes.filter(function(l){ return l.vencimento && l.vencimento <= limite; }); %>
+<% if (lembretesProximos.length) { %>
+  <div class="lembrete-alert">
+    Você tem <%= lembretesProximos.length %> lembrete(s) vencendo em até 3 dias.
+  </div>
+<% } %>
 <% const editandoLocal = (typeof editando !== 'undefined' && editando); %>
 <% const lembreteEdicaoLocal = (typeof LembreteEdicao !== 'undefined' && LembreteEdicao) ? LembreteEdicao : null; %>
 <% if (typeof erro !== 'undefined' && erro === 'conteudo') { %>
@@ -80,8 +117,15 @@
 <% } %>
 <ul>
   <% Lembretes.forEach(function(l){ %>
+    <% const vencido = l.vencimento && l.vencimento <= agora; %>
+    <% const vencendo = l.vencimento && l.vencimento > agora && l.vencimento <= limite; %>
     <li>
       <strong><%=l.conteudo%></strong> até <%= l.vencimento ? l.vencimento.toISOString().substr(0,10) : 'sem data' %>
+      <% if (vencido) { %>
+        <span class="lembrete-badge danger">Vencido</span>
+      <% } else if (vencendo) { %>
+        <span class="lembrete-badge warn">Vencendo</span>
+      <% } %>
       <span class="lembrete-actions">
         <a class="lembrete-link" href="/lembretes/edt/<%= l._id %>">Editar</a>
         <a class="lembrete-link danger" href="/lembretes/del/<%= l._id %>" onclick="return confirm('Tem certeza que deseja excluir este lembrete?')">Excluir</a>

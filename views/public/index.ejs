@@ -195,6 +195,35 @@
       padding: 10px 12px;
       font-weight: 600;
     }
+    .content-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+      margin-top: 12px;
+    }
+    .content-card {
+      border: 1px solid #000000;
+      border-radius: 12px;
+      overflow: hidden;
+      background: #ffffff;
+      text-decoration: none;
+      color: #000000;
+      display: block;
+    }
+    .content-card img {
+      width: 100%;
+      display: block;
+      height: 140px;
+      object-fit: cover;
+    }
+    .content-card .content-text {
+      margin: 0;
+      padding: 10px 12px;
+      font-weight: 600;
+    }
+    .content-card:hover {
+      background: #f5f5f5;
+    }
   </style>
 </head>
 <body>
@@ -249,6 +278,33 @@
       <section class="hero">
         <h2>Seu apoio rápido na prática de enfermagem</h2>
         <p>Consulte conteúdos essenciais, revise protocolos, teste conhecimentos e organize sua rotina em um só lugar.</p>
+      </section>
+
+      <section class="section">
+        <h3>Conteúdos e fotos</h3>
+        <p class="muted">Acesse rapidamente os principais módulos com prévias visuais.</p>
+        <div class="content-grid">
+          <a class="content-card" href="/procedimentos">
+            <img src="/site/img/product01.png" alt="Procedimentos">
+            <div class="content-text">Procedimentos</div>
+          </a>
+          <a class="content-card" href="/medicamentos">
+            <img src="/site/img/product02.png" alt="Medicamentos">
+            <div class="content-text">Medicamentos</div>
+          </a>
+          <a class="content-card" href="/terminologias">
+            <img src="/site/img/product03.png" alt="Terminologias">
+            <div class="content-text">Terminologias</div>
+          </a>
+          <a class="content-card" href="/quiz">
+            <img src="/site/img/product04.png" alt="Quiz">
+            <div class="content-text">Quiz</div>
+          </a>
+          <a class="content-card" href="/lembretes">
+            <img src="/site/img/product05.png" alt="Lembretes">
+            <div class="content-text">Lembretes</div>
+          </a>
+        </div>
       </section>
 
       <section class="grid" aria-label="Resumo">

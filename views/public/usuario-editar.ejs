@@ -10,6 +10,14 @@
 
 <form method="post" action="/usuario/editar" enctype="multipart/form-data">
   <div style="margin-bottom:10px;">
+    <label>Foto atual</label><br>
+    <% if (dadosUsuario.foto) { %>
+      <img src="/usuarios/<%= dadosUsuario.foto %>" alt="Foto atual do usuário" style="width:84px; height:84px; object-fit:cover; border-radius:50%; border:1px solid #e5e7eb;">
+    <% } else { %>
+      <span style="color:#6b7280;">Sem foto cadastrada</span>
+    <% } %>
+  </div>
+  <div style="margin-bottom:10px;">
     <label>Nome</label><br>
     <input type="text" name="nome" value="<%= dadosUsuario.nome %>" required>
   </div>
@@ -39,7 +47,7 @@
   </div>
   <div style="margin-bottom:10px;">
     <label>Foto (opcional)</label><br>
-    <input type="file" name="foto">
+    <input type="file" name="foto" accept="image/*">
   </div>
   <button type="submit">Salvar alterações</button>
   <a href="/usuario" style="margin-left:8px;">Cancelar</a>

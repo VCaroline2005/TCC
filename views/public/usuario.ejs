@@ -1,13 +1,41 @@
 <%- include('cabecalho') %>
 <h2>Área do Usuário</h2>
-<p>Bem-vindo. Aqui você acessa apenas conteúdos publicados pelo administrador.</p>
+<% if (typeof dadosUsuario !== 'undefined' && dadosUsuario) { %>
+  <div style="margin:10px 0 14px; padding:12px; border-radius:10px; background:linear-gradient(120deg,#a51b0b,#000); color:#fff; display:flex; gap:12px; align-items:center;">
+    <div style="flex:0 0 auto;">
+      <% if (dadosUsuario.foto) { %>
+        <img src="/usuarios/<%= dadosUsuario.foto %>" alt="Foto do usuário" style="width:64px; height:64px; object-fit:cover; border-radius:50%; border:2px solid rgba(255,255,255,0.6);">
+      <% } else { %>
+        <div style="width:64px; height:64px; border-radius:50%; background:rgba(255,255,255,0.2); display:flex; align-items:center; justify-content:center; font-weight:700;">
+          <%= dadosUsuario.nome ? dadosUsuario.nome.charAt(0).toUpperCase() : '?' %>
+        </div>
+      <% } %>
+    </div>
+    <div>
+      Bem-vindo, <strong><%= dadosUsuario.nome %></strong>! Aqui você acessa apenas conteúdos publicados pelo administrador.
+    </div>
+  </div>
+<% } else { %>
+  <p>Bem-vindo. Aqui você acessa apenas conteúdos publicados pelo administrador.</p>
+<% } %>
 
 <% if (typeof dadosUsuario !== 'undefined' && dadosUsuario) { %>
+ 
+
   <section style="border:1px solid #e5e7eb; border-radius:10px; padding:14px; margin:12px 0; background:#fff;">
     <h3 style="margin:0 0 8px 0;">Meus dados</h3>
-    <% if (dadosUsuario.foto) { %>
-      <img src="/usuarios/<%= dadosUsuario.foto %>" alt="Foto do usuário" style="max-width:120px; border-radius:8px; border:1px solid #e5e7eb; margin-bottom:8px;">
-    <% } %>
+    <div style="display:flex; gap:12px; align-items:center; margin:6px 0 12px 0;">
+      <% if (dadosUsuario.foto) { %>
+        <img src="/usuarios/<%= dadosUsuario.foto %>" alt="Foto do usuário" style="width:72px; height:72px; object-fit:cover; border-radius:50%; border:1px solid #e5e7eb;">
+      <% } else { %>
+        <div style="width:72px; height:72px; border-radius:50%; background:#f3f4f6; border:1px solid #e5e7eb; display:flex; align-items:center; justify-content:center; font-weight:700;">
+          <%= dadosUsuario.nome ? dadosUsuario.nome.charAt(0).toUpperCase() : '?' %>
+        </div>
+      <% } %>
+      <div style="color:#4b5563;">
+        Você pode editar seus dados e trocar sua foto de perfil.
+      </div>
+    </div>
     <ul style="list-style:none; padding-left:0; margin:0;">
       <li><strong>Nome:</strong> <%= dadosUsuario.nome %></li>
       <li><strong>E-mail:</strong> <%= dadosUsuario.email %></li>
@@ -17,7 +45,7 @@
       <li><strong>Data de nascimento:</strong> <%= dadosUsuario.datanasc ? dadosUsuario.datanasc.toISOString().substr(0,10) : 'não informada' %></li>
     </ul>
     <div style="margin-top:10px;">
-      <a href="/usuario/editar">Editar meus dados</a>
+      <a href="/usuario/editar">Editar meus dados e foto</a>
     </div>
   </section>
 <% } %>
@@ -44,17 +72,4 @@
   </div>
 <% } %>
 
-<ul>
-  <li>Procedimentos publicados: <strong><%= procedimentoCount %></strong></li>
-  <li>Medicamentos publicados: <strong><%= medicamentoCount %></strong></li>
-  <li>Terminologias publicadas: <strong><%= termoCount %></strong></li>
-  <li>Perguntas de quiz publicadas: <strong><%= quizCount %></strong></li>
-</ul>
-
-<p>
-  <a href="/procedimentos">Ver procedimentos</a> |
-  <a href="/medicamentos">Ver medicamentos</a> |
-  <a href="/terminologias">Ver terminologias</a> |
-  <a href="/quiz">Fazer quiz</a>
-</p>
 <%- include('rodape') %>

@@ -31,7 +31,11 @@
       <h1 style="margin:0; font-size:22px;">Portal Enfermagem</h1>
     </div>
     <nav>
-      <a href="/">Início</a>
+      <% if (usuarioLocal) { %>
+        <a href="/home">Home</a>
+      <% } else { %>
+        <a href="/">Início</a>
+      <% } %>
       <a href="/procedimentos">Procedimentos</a>
       <a href="/medicamentos">Medicamentos</a>
       <a href="/terminologias">Terminologias</a>

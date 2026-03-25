@@ -77,7 +77,7 @@ export async function login(req, res){
         if (isAdmin) {
             return res.redirect('/admin/usuarios/lst')
         }
-        return res.redirect('/usuario')
+        return res.redirect('/home')
     }catch(err){
         console.error(err)
         return res.render('login', { error: 'Erro no servidor.' })
@@ -94,6 +94,12 @@ export async function sair(req, res){
 }
 
 export async function abreindex(req, res){
+    if (req.session && req.session.usuario) {
+        if (req.session.usuario.admin) {
+            return res.redirect('/admin/usuarios/lst')
+        }
+        return res.redirect('/home')
+    }
     // homepage can include summaries or links
     const procedimentoCount = await Procedimento.countDocuments({ publicado: true })
     const medicamentoCount = await Medicamento.countDocuments({ publicado: true })
@@ -102,6 +108,28 @@ export async function abreindex(req, res){
         procedimentoCount,
         medicamentoCount,
         termoCount
+    })
+}
+
+export async function abrehome(req, res){
+    if (req.session && req.session.usuario && req.session.usuario.admin) {
+        return res.redirect('/admin/usuarios/lst')
+    }
+    const procedimentoCount = await Procedimento.countDocuments({ publicado: true })
+    const medicamentoCount = await Medicamento.countDocuments({ publicado: true })
+    const termoCount = await Terminologia.countDocuments({ publicado: true })
+    const agora = new Date()
+    const limite = new Date()
+    limite.setDate(limite.getDate() + 3)
+    const lembretesProximos = await Lembrete.find({
+        vencimento: { $lte: limite }
+    }).sort({ vencimento: 1 })
+    res.render('public/home.ejs', {
+        procedimentoCount,
+        medicamentoCount,
+        termoCount,
+        lembretesProximos,
+        agora
     })
 }
 
