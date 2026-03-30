@@ -1,3 +1,4 @@
+import 'dotenv/config'
 //importa a biblioteca express
 import express from 'express';
 import session from 'express-session';

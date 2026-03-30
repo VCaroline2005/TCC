@@ -2,12 +2,24 @@ import express from 'express';
 const router = express.Router();
 import multer from 'multer';
 const upload = multer({ dest: 'public/usuarios/' })
+const quizUpload = multer({
+    dest: 'public/uploads/quiz/',
+    limits: { fileSize: 10 * 1024 * 1024 },
+    fileFilter: (req, file, cb) => {
+        const isPdfMime = file.mimetype === 'application/pdf'
+        const isPdfExt = (file.originalname || '').toLowerCase().endsWith('.pdf')
+        if (isPdfMime || isPdfExt) {
+            return cb(null, true)
+        }
+        return cb(new Error('Apenas arquivos PDF são permitidos.'))
+    }
+})
 
 import { abrecadastro, cadastro, abrelogin, login, abreindex, abrehome,
          listarProcedimentos, listarMedicamentos, listarTerminologias,
          fazerQuiz, responderQuiz, adicionarLembrete, listarLembretes,
          abreusuario, sair, abreEditarLembrete, editarLembrete, deletarLembrete,
-         abreEditarUsuario, editarUsuario
+         abreEditarUsuario, editarUsuario, receberQuizPdf
  } from '../controllers/public.js';
 
 function requireLogin(req, res, next) {
@@ -42,6 +54,14 @@ router.get('/medicamentos', requireLogin, listarMedicamentos)
 router.get('/terminologias', requireLogin, listarTerminologias)
 router.get('/quiz', requireLogin, fazerQuiz)
 router.post('/quiz/responder', requireLogin, responderQuiz)
+router.post('/quiz/upload', requireLogin, (req, res, next) => {
+    quizUpload.single('arquivo')(req, res, (err) => {
+        if (err) {
+            return res.redirect('/quiz?upload=erro')
+        }
+        return next()
+    })
+}, receberQuizPdf)
 
 // lembretes
 

@@ -4,6 +4,9 @@ import Medicamento from '../models/medicamento.js'
 import Terminologia from '../models/terminologia.js'
 import Quiz from '../models/quiz.js'
 import Lembrete from '../models/lembrete.js'
+import fs from 'node:fs/promises'
+import pdfParse from 'pdf-parse'
+import { GoogleGenAI } from '@google/genai'
 
 export async function abrecadastro(req, res){
     res.render('cadastro')
@@ -291,8 +294,124 @@ export async function listarTerminologias(req,res){
     })
 }
 
+const MAX_PDF_CHARS = 20000
+const MIN_PDF_CHARS = 300
+const MAX_QUESTOES = 12
+const MOCK_LIMIT = 8
+const geminiClient = new GoogleGenAI({})
+
+function isMockMode() {
+    const raw = String(process.env.AI_MOCK || process.env.OPENAI_MOCK || '').toLowerCase()
+    return raw === '1' || raw === 'true' || raw === 'on' || raw === 'yes'
+}
+
+function extrairJsonDoTexto(texto) {
+    if (!texto) return null
+    const inicio = texto.indexOf('{')
+    const fim = texto.lastIndexOf('}')
+    if (inicio === -1 || fim === -1 || fim <= inicio) return null
+    const candidato = texto.slice(inicio, fim + 1)
+    try {
+        return JSON.parse(candidato)
+    } catch (err) {
+        return null
+    }
+}
+
+function normalizarPerguntas(payload) {
+    const perguntasBrutas = Array.isArray(payload?.perguntas) ? payload.perguntas : []
+    const perguntas = []
+    for (const p of perguntasBrutas) {
+        const pergunta = String(p?.pergunta || '').trim()
+        const opcoes = Array.isArray(p?.opcoes) ? p.opcoes.map((o) => String(o || '').trim()).filter(Boolean) : []
+        const correta = Number.isInteger(p?.correta) ? p.correta : parseInt(p?.correta, 10)
+        const categoria = String(p?.categoria || 'Gerado por PDF').trim() || 'Gerado por PDF'
+        if (!pergunta || opcoes.length < 2 || Number.isNaN(correta) || correta < 0 || correta >= opcoes.length) {
+            continue
+        }
+        perguntas.push({ pergunta, opcoes, correta, categoria })
+        if (perguntas.length >= MAX_QUESTOES) break
+    }
+    return perguntas
+}
+
+function gerarQuizMock(textoBase) {
+    const palavras = textoBase
+        .toLowerCase()
+        .replace(/[^a-zà-ú0-9\s]/gi, ' ')
+        .split(/\s+/)
+        .map((p) => p.trim())
+        .filter((p) => p.length >= 5)
+    const unicas = [...new Set(palavras)]
+    const total = Math.max(3, Math.min(MOCK_LIMIT, unicas.length))
+    const perguntas = []
+    for (let i = 0; i < total; i += 1) {
+        const termo = unicas[i] || `conteudo${i + 1}`
+        const opcoes = [
+            termo,
+            `${termo}x`,
+            `${termo}y`,
+            `${termo}z`
+        ]
+        perguntas.push({
+            pergunta: `Qual termo aparece no texto?`,
+            opcoes,
+            correta: 0,
+            categoria: 'Teste (Mock)'
+        })
+    }
+    return perguntas
+}
+
+async function gerarQuizComGemini(textoBase) {
+    if (!process.env.GEMINI_API_KEY) {
+        const erro = new Error('GEMINI_API_KEY não configurada')
+        erro.code = 'sem_chave'
+        throw erro
+    }
+
+    const modelo = process.env.GEMINI_MODEL || 'gemini-2.5-flash'
+    const prompt = [
+        'Você é um gerador de questões de enfermagem.',
+        'Use somente o conteúdo fornecido para criar perguntas objetivas.',
+        'Responda apenas com JSON válido, sem nenhum texto extra.',
+        '',
+        'Crie entre 8 e 12 questões de múltipla escolha.',
+        'Cada questão deve ter 4 alternativas e apenas 1 correta.',
+        'Responda no formato:',
+        '{"perguntas":[{"pergunta":"...","opcoes":["A","B","C","D"],"correta":0,"categoria":"Sistema ou tema"}]}',
+        'Texto base:',
+        textoBase
+    ].join('\n')
+
+    let resposta
+    try {
+        resposta = await geminiClient.models.generateContent({
+            model: modelo,
+            contents: prompt
+        })
+    } catch (err) {
+        const erro = new Error(`Gemini API erro: ${err?.message || err}`)
+        erro.code = 'api'
+        throw erro
+    }
+
+    const textoResposta = typeof resposta?.text === 'string' ? resposta.text : ''
+    const payload = extrairJsonDoTexto(textoResposta)
+    const perguntas = normalizarPerguntas(payload)
+    if (!perguntas.length) {
+        const erro = new Error('Resposta sem perguntas válidas')
+        erro.code = 'parse'
+        throw erro
+    }
+    return perguntas
+}
+
 export async function fazerQuiz(req,res){
     const sistema = (req.query.sistema || '').trim()
+    const uploadStatus = (req.query.upload || '').trim()
+    const uploadCount = parseInt(req.query.novas, 10)
+    const mockMode = isMockMode()
     const filtro = { publicado: true }
     if (sistema) {
         filtro.categoria = new RegExp(`^${sistema}$`, 'i')
@@ -305,7 +424,11 @@ export async function fazerQuiz(req,res){
     res.render('public/quiz.ejs',{
         Perguntas:perguntas,
         sistemas,
-        sistemaSelecionado: sistema
+        sistemaSelecionado: sistema,
+        uploadStatus,
+        uploadCount: Number.isNaN(uploadCount) ? 0 : uploadCount,
+        aiEnabled: Boolean(process.env.GEMINI_API_KEY) || mockMode,
+        mockMode
     })
 }
 
@@ -418,4 +541,62 @@ export async function responderQuiz(req,res){
         erradas,
         sistemas
     })
+}
+
+export async function receberQuizPdf(req, res) {
+    if (!req.file) {
+        return res.redirect('/quiz?upload=erro')
+    }
+
+    const mockMode = isMockMode()
+    if (!process.env.GEMINI_API_KEY && !mockMode) {
+        return res.redirect('/quiz?upload=sem-chave')
+    }
+
+    const caminho = req.file.path
+    try {
+        const buffer = await fs.readFile(caminho)
+        const pdfData = await pdfParse(buffer)
+        const textoCru = String(pdfData?.text || '')
+        const textoLimpo = textoCru.replace(/\s+/g, ' ').trim()
+
+        if (textoLimpo.length < MIN_PDF_CHARS) {
+            return res.redirect('/quiz?upload=pdf-vazio')
+        }
+
+        const textoBase = textoLimpo.length > MAX_PDF_CHARS
+            ? textoLimpo.slice(0, MAX_PDF_CHARS)
+            : textoLimpo
+
+        const perguntas = mockMode
+            ? gerarQuizMock(textoBase)
+            : await gerarQuizComGemini(textoBase)
+        const agora = new Date()
+        const documentos = perguntas.map((p) => ({
+            pergunta: p.pergunta,
+            opcoes: p.opcoes,
+            correta: p.correta,
+            categoria: p.categoria,
+            publicado: true,
+            publicadoEm: agora
+        }))
+
+        await Quiz.insertMany(documentos)
+        return res.redirect(`/quiz?upload=ok&novas=${documentos.length}`)
+    } catch (err) {
+        console.error(err)
+        if (err?.code === 'parse') {
+            return res.redirect('/quiz?upload=gerar')
+        }
+        if (err?.code === 'api') {
+            return res.redirect('/quiz?upload=api')
+        }
+        return res.redirect('/quiz?upload=erro')
+    } finally {
+        try {
+            await fs.unlink(caminho)
+        } catch (err) {
+            // ignore
+        }
+    }
 }

@@ -23,13 +23,78 @@
   .quiz-actions {
     margin-top: 16px;
   }
+  .upload-box {
+    border: 1px dashed #a51b0b;
+    border-radius: 10px;
+    padding: 12px;
+    margin: 12px 0 16px;
+    background: #fff5f2;
+  }
+  .upload-box h3 {
+    margin: 0 0 6px 0;
+  }
+  .upload-note {
+    margin: 0 0 10px 0;
+    color: #4b5563;
+  }
+  .upload-actions {
+    margin-top: 8px;
+  }
+  .upload-msg {
+    margin-top: 10px;
+    padding: 8px 10px;
+    border-radius: 8px;
+    font-size: 14px;
+  }
+  .upload-msg.success {
+    background: #ecfdf5;
+    border: 1px solid #34d399;
+    color: #065f46;
+  }
+  .upload-msg.error {
+    background: #fef2f2;
+    border: 1px solid #fca5a5;
+    color: #991b1b;
+  }
 </style>
 
 <% const perguntasLista = (typeof Perguntas !== 'undefined' && Perguntas) ? Perguntas : []; %>
 <% const sistemasLista = (typeof sistemas !== 'undefined' && sistemas) ? sistemas : []; %>
 <% const sistemaAtual = (typeof sistemaSelecionado !== 'undefined' && sistemaSelecionado) ? sistemaSelecionado : ''; %>
+<% const statusUpload = (typeof uploadStatus !== 'undefined' && uploadStatus) ? uploadStatus : ''; %>
+<% const totalNovas = (typeof uploadCount !== 'undefined' && uploadCount) ? uploadCount : 0; %>
+<% const aiOk = (typeof aiEnabled !== 'undefined') ? aiEnabled : false; %>
+<% const mockModeEnabled = (typeof mockMode !== 'undefined') ? mockMode : false; %>
 
 <h2>Quiz por sistema</h2>
+
+<section class="upload-box" aria-label="Envio de PDF para gerar quiz">
+  <h3>Gerar quiz a partir de PDF</h3>
+  <p class="upload-note">Envie um PDF para gerar questões automaticamente.</p>
+  <form method="post" action="/quiz/upload" enctype="multipart/form-data">
+    <input type="file" name="arquivo" accept=".pdf,application/pdf" required <%= aiOk ? '' : 'disabled' %>>
+    <div class="upload-actions">
+      <button type="submit" <%= aiOk ? '' : 'disabled' %>>Enviar PDF</button>
+    </div>
+  </form>
+  <% if (!aiOk) { %>
+    <div class="upload-msg error">Configuração necessária: defina a variável GEMINI_API_KEY no servidor.</div>
+  <% } else if (mockModeEnabled) { %>
+    <div class="upload-msg success">Modo teste ativo: as perguntas serão geradas localmente (sem IA).</div>
+  <% } else if (statusUpload === 'ok') { %>
+    <div class="upload-msg success">Quiz criado com sucesso. <%= totalNovas %> questão(ões) adicionada(s).</div>
+  <% } else if (statusUpload === 'pdf-vazio') { %>
+    <div class="upload-msg error">O PDF enviado não contém texto suficiente para gerar perguntas.</div>
+  <% } else if (statusUpload === 'gerar') { %>
+    <div class="upload-msg error">Não foi possível gerar perguntas com este PDF.</div>
+  <% } else if (statusUpload === 'api') { %>
+    <div class="upload-msg error">Erro ao chamar a API. Verifique sua chave e tente novamente.</div>
+  <% } else if (statusUpload === 'sem-chave') { %>
+    <div class="upload-msg error">A chave da API não está configurada no servidor.</div>
+  <% } else if (statusUpload === 'erro') { %>
+    <div class="upload-msg error">Não foi possível enviar o PDF. Tente novamente.</div>
+  <% } %>
+</section>
 
 <form method="get" action="/quiz" style="margin-bottom:14px;">
   <label for="sistema" style="font-weight:600;">Filtrar por sistema</label>
