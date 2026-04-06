@@ -118,6 +118,10 @@ export async function abrehome(req, res){
     if (req.session && req.session.usuario && req.session.usuario.admin) {
         return res.redirect('/admin/usuarios/lst')
     }
+    const usuarioId = req.session?.usuario?.id
+    if (!usuarioId) {
+        return res.redirect('/login')
+    }
     const procedimentoCount = await Procedimento.countDocuments({ publicado: true })
     const medicamentoCount = await Medicamento.countDocuments({ publicado: true })
     const termoCount = await Terminologia.countDocuments({ publicado: true })
@@ -125,6 +129,7 @@ export async function abrehome(req, res){
     const limite = new Date()
     limite.setDate(limite.getDate() + 3)
     const lembretesProximos = await Lembrete.find({
+        usuario: usuarioId,
         vencimento: { $lte: limite }
     }).sort({ vencimento: 1 })
     res.render('public/home.ejs', {
@@ -138,8 +143,12 @@ export async function abrehome(req, res){
 
 export async function abreusuario(req, res){
     let dadosUsuario = null
-    if (req.session && req.session.usuario && req.session.usuario.id) {
-        dadosUsuario = await usuario.findById(req.session.usuario.id)
+    const usuarioId = req.session?.usuario?.id
+    if (usuarioId) {
+        dadosUsuario = await usuario.findById(usuarioId)
+    }
+    if (!dadosUsuario) {
+        return res.redirect('/login')
     }
     const procedimentoCount = await Procedimento.countDocuments({ publicado: true })
     const medicamentoCount = await Medicamento.countDocuments({ publicado: true })
@@ -149,6 +158,7 @@ export async function abreusuario(req, res){
     const limite = new Date()
     limite.setDate(limite.getDate() + 3)
     const lembretesProximos = await Lembrete.find({
+        usuario: usuarioId,
         vencimento: { $lte: limite }
     }).sort({ vencimento: 1 })
     res.render('public/usuario.ejs', {
@@ -412,13 +422,21 @@ export async function fazerQuiz(req,res){
     const uploadStatus = (req.query.upload || '').trim()
     const uploadCount = parseInt(req.query.novas, 10)
     const mockMode = isMockMode()
-    const filtro = { publicado: true }
+    const usuarioId = req.session?.usuario?.id
+    if (!usuarioId) {
+        return res.redirect('/login')
+    }
+    const filtro = { publicado: true, usuario: usuarioId }
     if (sistema) {
         filtro.categoria = new RegExp(`^${sistema}$`, 'i')
     }
 
     const perguntas = await Quiz.find(filtro).sort({ categoria: 1, _id: 1 })
-    const sistemas = await Quiz.distinct('categoria', { publicado: true, categoria: { $nin: [null, ''] } })
+    const sistemas = await Quiz.distinct('categoria', {
+        publicado: true,
+        usuario: usuarioId,
+        categoria: { $nin: [null, ''] }
+    })
     sistemas.sort((a, b) => a.localeCompare(b, 'pt-BR'))
 
     res.render('public/quiz.ejs',{
@@ -435,11 +453,19 @@ export async function fazerQuiz(req,res){
 
 export async function adicionarLembrete(req,res){
     try{
+        const usuarioId = req.session?.usuario?.id
+        if (!usuarioId) {
+            return res.redirect('/login')
+        }
         const conteudo = (req.body.conteudo || '').trim()
         if(!conteudo){
             return res.redirect('/lembretes?erro=conteudo')
         }
-        await Lembrete.create({usuario:req.body.usuario, conteudo, vencimento:req.body.vencimento})
+        await Lembrete.create({
+            usuario: usuarioId,
+            conteudo,
+            vencimento: req.body.vencimento || null
+        })
         return res.redirect('/lembretes')
     }catch(err){
         console.error(err)
@@ -448,7 +474,12 @@ export async function adicionarLembrete(req,res){
 }
 
 export async function listarLembretes(req,res){
-    const lembretes = await Lembrete.find({})
+    const usuarioId = req.session?.usuario?.id
+    if (!usuarioId) {
+        return res.redirect('/login')
+    }
+    const lembretes = await Lembrete.find({ usuario: usuarioId })
+        .sort({ vencimento: 1, _id: 1 })
     res.render('public/lembretes.ejs',{
         Lembretes:lembretes,
         erro:req.query.erro,
@@ -458,8 +489,13 @@ export async function listarLembretes(req,res){
 }
 
 export async function abreEditarLembrete(req,res){
-    const lembretes = await Lembrete.find({})
-    const lembrete = await Lembrete.findById(req.params.id)
+    const usuarioId = req.session?.usuario?.id
+    if (!usuarioId) {
+        return res.redirect('/login')
+    }
+    const lembretes = await Lembrete.find({ usuario: usuarioId })
+        .sort({ vencimento: 1, _id: 1 })
+    const lembrete = await Lembrete.findOne({ _id: req.params.id, usuario: usuarioId })
     if (!lembrete) {
         return res.redirect('/lembretes')
     }
@@ -473,14 +509,24 @@ export async function abreEditarLembrete(req,res){
 
 export async function editarLembrete(req,res){
     try{
+        const usuarioId = req.session?.usuario?.id
+        if (!usuarioId) {
+            return res.redirect('/login')
+        }
         const conteudo = (req.body.conteudo || '').trim()
         if(!conteudo){
             return res.redirect(`/lembretes/edt/${req.params.id}?erro=conteudo`)
         }
-        await Lembrete.findByIdAndUpdate(req.params.id, {
+        const atualizado = await Lembrete.findOneAndUpdate({
+            _id: req.params.id,
+            usuario: usuarioId
+        }, {
             conteudo,
-            vencimento: req.body.vencimento
+            vencimento: req.body.vencimento || null
         })
+        if (!atualizado) {
+            return res.redirect('/lembretes')
+        }
         return res.redirect('/lembretes')
     }catch(err){
         console.error(err)
@@ -489,11 +535,22 @@ export async function editarLembrete(req,res){
 }
 
 export async function deletarLembrete(req,res){
-    await Lembrete.findByIdAndDelete(req.params.id)
+    const usuarioId = req.session?.usuario?.id
+    if (!usuarioId) {
+        return res.redirect('/login')
+    }
+    await Lembrete.findOneAndDelete({
+        _id: req.params.id,
+        usuario: usuarioId
+    })
     res.redirect('/lembretes')
 }
 
 export async function responderQuiz(req,res){
+    const usuarioId = req.session?.usuario?.id
+    if (!usuarioId) {
+        return res.redirect('/login')
+    }
     const respostas = req.body.respostas || {}
     const ids = Array.isArray(req.body.perguntas)
         ? req.body.perguntas
@@ -508,10 +565,15 @@ export async function responderQuiz(req,res){
         })
     }
 
-    const perguntas = await Quiz.find({ _id: { $in: ids }, publicado: true })
+    const perguntas = await Quiz.find({
+        _id: { $in: ids },
+        publicado: true,
+        usuario: usuarioId
+    })
     let corretas = 0
     let erradas = 0
     const porSistema = {}
+    const errosDetalhes = []
 
     perguntas.forEach((p) => {
         const sistema = (p.categoria && p.categoria.trim()) ? p.categoria.trim() : 'Sem sistema'
@@ -530,6 +592,18 @@ export async function responderQuiz(req,res){
         } else {
             erradas += 1
             porSistema[sistema].erradas += 1
+            const corretaTexto = (p.opcoes && Number.isInteger(p.correta) && p.opcoes[p.correta])
+                ? p.opcoes[p.correta]
+                : 'Resposta correta não encontrada'
+            const escolhaTexto = (p.opcoes && Number.isInteger(escolha) && p.opcoes[escolha])
+                ? p.opcoes[escolha]
+                : 'Não respondida'
+            errosDetalhes.push({
+                pergunta: p.pergunta,
+                sistema,
+                corretaTexto,
+                escolhaTexto
+            })
         }
     })
 
@@ -539,13 +613,18 @@ export async function responderQuiz(req,res){
         total: perguntas.length,
         corretas,
         erradas,
-        sistemas
+        sistemas,
+        errosDetalhes
     })
 }
 
 export async function receberQuizPdf(req, res) {
     if (!req.file) {
         return res.redirect('/quiz?upload=erro')
+    }
+    const usuarioId = req.session?.usuario?.id
+    if (!usuarioId) {
+        return res.redirect('/login')
     }
 
     const mockMode = isMockMode()
@@ -573,6 +652,7 @@ export async function receberQuizPdf(req, res) {
             : await gerarQuizComGemini(textoBase)
         const agora = new Date()
         const documentos = perguntas.map((p) => ({
+            usuario: usuarioId,
             pergunta: p.pergunta,
             opcoes: p.opcoes,
             correta: p.correta,

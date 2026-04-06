@@ -256,7 +256,9 @@ export async function addquiz(req, res) {
     if (Number.isNaN(correta)) {
         return res.redirect('/admin/quiz/add?erro=correta')
     }
+    const usuarioId = req.session?.usuario?.id || 'admin'
     await Quiz.create({
+        usuario: usuarioId,
         pergunta:req.body.pergunta,
         opcoes: req.body.opcoes ? req.body.opcoes.split("\n") : [],
         correta,

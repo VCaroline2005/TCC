@@ -23,8 +23,12 @@ import { abrecadastro, cadastro, abrelogin, login, abreindex, abrehome,
  } from '../controllers/public.js';
 
 function requireLogin(req, res, next) {
-    if (req.session && req.session.usuario) {
+    if (req.session && req.session.usuario && req.session.usuario.id) {
         return next()
+    }
+    if (req.session) {
+        req.session.destroy(() => res.redirect('/login'))
+        return
     }
     return res.redirect('/login')
 }

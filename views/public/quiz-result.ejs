@@ -2,6 +2,7 @@
 <h2>Resultado do Quiz</h2>
 
 <% if (total > 0) { %>
+  <% const percentual = total ? Math.round((corretas / total) * 100) : 0; %>
   <p>Total de questões: <strong><%= total %></strong></p>
   <p>Acertos: <strong><%= corretas %></strong></p>
   <p>Erros: <strong><%= erradas %></strong></p>
@@ -14,6 +15,22 @@
       <% }) %>
     </ul>
   <% } %>
+
+  <% if (typeof errosDetalhes !== 'undefined' && errosDetalhes.length) { %>
+    <h3>Questões erradas</h3>
+    <ul>
+      <% errosDetalhes.forEach(function(e){ %>
+        <li>
+          <strong><%= e.pergunta %></strong><br>
+          Sua resposta: <%= e.escolhaTexto %><br>
+          Correta: <%= e.corretaTexto %>
+        </li>
+      <% }) %>
+    </ul>
+  <% } %>
+
+  <h3>Pontuação</h3>
+  <p><strong><%= corretas %></strong> de <strong><%= total %></strong> (<strong><%= percentual %>%</strong>)</p>
 <% } else { %>
   <p>Nenhuma resposta foi enviada.</p>
 <% } %>
