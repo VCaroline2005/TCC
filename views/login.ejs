@@ -33,6 +33,9 @@
     <% if (typeof cadastro !== 'undefined' && cadastro === 'ok') { %>
       <div style="color:#a51b0b; margin-bottom:12px;">Cadastro realizado com sucesso. Faça login.</div>
     <% } %>
+    <% if (typeof senha !== 'undefined' && senha === 'ok') { %>
+      <div style="color:#0f766e; margin-bottom:12px;">Senha atualizada. Faça login.</div>
+    <% } %>
     
     <form action="/login" method="POST">
       
@@ -53,7 +56,7 @@
       
       <!-- Links de recuperação de senha e criação de conta -->
       <div class="footer">
-        <a href="#">Esqueceu a senha?</a><br>
+        <a href="recuperar-senha">Esqueceu a senha?</a><br>
         <a href="/cadastro">Ainda não tem uma conta? Cadastre-se aqui</a>
       </div>
     </form>

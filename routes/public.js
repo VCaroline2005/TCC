@@ -19,7 +19,8 @@ import { abrecadastro, cadastro, abrelogin, login, abreindex, abrehome,
          listarProcedimentos, listarMedicamentos, listarTerminologias,
          fazerQuiz, responderQuiz, adicionarLembrete, listarLembretes,
          abreusuario, sair, abreEditarLembrete, editarLembrete, deletarLembrete,
-         abreEditarUsuario, editarUsuario, receberQuizPdf
+         abreEditarUsuario, editarUsuario, receberQuizPdf,
+         abreRecuperarSenha, recuperarSenha
  } from '../controllers/public.js';
 
 function requireLogin(req, res, next) {
@@ -41,10 +42,14 @@ router.get('/login', abrelogin)
 
 router.post('/login', login)
 router.get('/sair', sair)
+router.get('/recuperar-senha', abreRecuperarSenha)
+router.post('/recuperar-senha', recuperarSenha)
 
 // atalhos compatíveis com caminhos que apontam para /site
 router.get('/site/login', abrelogin)
 router.post('/site/login', login)
+router.get('/site/recuperar-senha', abreRecuperarSenha)
+router.post('/site/recuperar-senha', recuperarSenha)
 
 router.get('/', abreindex)
 router.get('/home', requireLogin, abrehome)

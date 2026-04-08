@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Recuperar Senha - Portal Enfermagem</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <header class="auth-topbar">
+    <div class="bar-inner">
+      <div class="brand">
+        <a href="/"><img class="logo" src="/site/img/logo.png" alt="Portal Enfermagem"></a>
+        <h1>Portal Enfermagem</h1>
+      </div>
+      <div class="nav-controls">
+        <button type="button" class="nav-btn" onclick="history.back()">Voltar</button>
+        <a class="nav-btn" href="login">Login</a>
+        <button type="button" class="nav-btn" onclick="history.forward()">Avançar</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="auth-main">
+    <div class="login-container">
+      <h2>Recuperar senha</h2>
+      <p>Informe seu e-mail e escolha uma nova senha.</p>
+
+      <% if (typeof error !== 'undefined' && error) { %>
+        <div style="color:#c0392b; margin-bottom:12px;">
+          <% if (error === 'campos') { %>
+            Preencha todos os campos.
+          <% } else if (error === 'confirmar') { %>
+            As senhas não coincidem.
+          <% } else if (error === 'tamanho') { %>
+            A senha deve ter pelo menos 6 caracteres.
+          <% } else if (error === 'nao-encontrado') { %>
+            E-mail não encontrado.
+          <% } else { %>
+            Erro ao recuperar senha.
+          <% } %>
+        </div>
+      <% } %>
+
+      <% if (typeof sucesso !== 'undefined' && sucesso) { %>
+        <div style="color:#0f766e; margin-bottom:12px;">Senha atualizada. Você já pode fazer login.</div>
+      <% } %>
+
+      <form action="recuperar-senha" method="POST">
+        <div class="input-group">
+          <label for="email">E-mail</label>
+          <input type="email" id="email" name="email" placeholder="Digite seu e-mail" required>
+        </div>
+
+        <div class="input-group">
+          <label for="senha">Nova senha</label>
+          <input type="password" id="senha" name="senha" placeholder="Digite a nova senha" minlength="6" required>
+        </div>
+
+        <div class="input-group">
+          <label for="confirmar">Confirmar nova senha</label>
+          <input type="password" id="confirmar" name="confirmar" placeholder="Confirme a nova senha" minlength="6" required>
+        </div>
+
+        <button type="submit" class="btn-submit">Atualizar senha</button>
+
+        <div class="footer">
+          <a href="login">Voltar ao login</a>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .auth-topbar {
+      background: linear-gradient(90deg, #a51b0b 0%, #6f1208 45%, #160504 100%);
+      color: #fff;
+      padding: 14px 16px;
+      box-shadow: 0 3px 12px rgba(0, 0, 0, 0.18);
+    }
+
+    .auth-topbar .bar-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      max-width: 1100px;
+      margin: 0 auto;
+      flex-wrap: wrap;
+    }
+
+    .auth-topbar .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .auth-topbar h1 {
+      margin: 0;
+      font-size: 20px;
+    }
+
+    .auth-main {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 16px;
+    }
+
+    .nav-controls {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .nav-btn {
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.28);
+      color: #fff;
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .nav-btn:hover {
+      background: rgba(255,255,255,0.22);
+    }
+
+    .login-container {
+      background-color: #f4f4f4;
+      padding: 40px;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+    }
+
+    .logo {
+      display: block;
+      height: 44px;
+      width: auto;
+      filter: drop-shadow(0 2px 6px rgba(0,0,0,0.35));
+    }
+
+    h2 {
+      color: #000;
+      margin-bottom: 15px;
+    }
+
+    p {
+      color: #000;
+      font-size: 14px;
+      margin-bottom: 25px;
+    }
+
+    .input-group {
+      margin-bottom: 20px;
+      text-align: left;
+    }
+
+    .input-group label {
+      display: block;
+      font-weight: bold;
+      color: #000;
+    }
+
+    .input-group input {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #000;
+      border-radius: 4px;
+      font-size: 14px;
+      color: #000;
+    }
+
+    .input-group input:focus {
+      border-color: #a51b0b;
+      outline: none;
+    }
+
+    .btn-submit {
+      width: 100%;
+      padding: 12px;
+      background-color: #a51b0b;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .btn-submit:hover {
+      background-color: #a51b0b;
+    }
+
+    .footer {
+      margin-top: 20px;
+    }
+
+    .footer a {
+      color: #a51b0b;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    .footer a:hover {
+      text-decoration: underline;
+    }
+  </style>
+
+</body>
+</html>

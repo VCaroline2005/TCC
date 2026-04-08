@@ -40,7 +40,7 @@ export async function cadastro(req, res){
 }
 
 export async function abrelogin(req, res){
-    res.render('login', { cadastro: req.query.cadastro })
+    res.render('login', { cadastro: req.query.cadastro, senha: req.query.senha })
 }
 
 export async function login(req, res){
@@ -96,6 +96,44 @@ export async function sair(req, res){
     })
 }
 
+export async function abreRecuperarSenha(req, res){
+    res.render('recuperar-senha', {
+        error: req.query.error,
+        sucesso: req.query.sucesso
+    })
+}
+
+export async function recuperarSenha(req, res){
+    try{
+        const email = (req.body.email || '').trim()
+        const senha = (req.body.senha || '').trim()
+        const confirmar = (req.body.confirmar || '').trim()
+
+        if (!email || !senha || !confirmar) {
+            return res.redirect('/recuperar-senha?error=campos')
+        }
+
+        if (senha.length < 6) {
+            return res.redirect('/recuperar-senha?error=tamanho')
+        }
+
+        if (senha !== confirmar) {
+            return res.redirect('/recuperar-senha?error=confirmar')
+        }
+
+        const user = await usuario.findOne({ email: email })
+        if (!user) {
+            return res.redirect('/recuperar-senha?error=nao-encontrado')
+        }
+
+        await usuario.findByIdAndUpdate(user._id, { senha: senha })
+        return res.redirect('/login?senha=ok')
+    }catch(err){
+        console.error(err)
+        return res.redirect('/recuperar-senha?error=server')
+    }
+}
+
 export async function abreindex(req, res){
     if (req.session && req.session.usuario) {
         if (req.session.usuario.admin) {
@@ -125,6 +163,7 @@ export async function abrehome(req, res){
     const procedimentoCount = await Procedimento.countDocuments({ publicado: true })
     const medicamentoCount = await Medicamento.countDocuments({ publicado: true })
     const termoCount = await Terminologia.countDocuments({ publicado: true })
+    const quizCount = await Quiz.countDocuments({ publicado: true })
     const agora = new Date()
     const limite = new Date()
     limite.setDate(limite.getDate() + 3)
@@ -136,6 +175,7 @@ export async function abrehome(req, res){
         procedimentoCount,
         medicamentoCount,
         termoCount,
+        quizCount,
         lembretesProximos,
         agora
     })

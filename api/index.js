@@ -12,7 +12,7 @@ app.set('view engine', 'ejs');
 //configura o node para receber dados dos formulários
 app.use(express.urlencoded({ extended: true }));
 //configura a pasta de arquivos estáticos (fotos, vídeos ...)
-app.use(express.static('public'));
+app.use(express.static('../public'));
 //sessões (mantém login entre páginas)
 app.set('trust proxy', 1)
 app.use(session({
@@ -33,9 +33,9 @@ app.use((req, res, next) => {
 })
 
 //importa os arquivos de rotas (os endereços são cadastrados neles)
-import publicroutes from './routes/public.js';
-import adminroutes from './routes/admin.js';
-import { abreedtquiz, edtquiz } from './controllers/admin.js';
+import publicroutes from '../routes/public.js';
+import adminroutes from '../routes/admin.js';
+import { abreedtquiz, edtquiz } from '../controllers/admin.js';
 
 //usa os arquivos de rotas
 app.use(publicroutes);

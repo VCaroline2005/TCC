@@ -20,7 +20,11 @@
 
     function closeListItem() {
       if (openLi) {
-        html += '</li>';
+        if (inOl) {
+          html += '</div></li>';
+        } else {
+          html += '</li>';
+        }
         openLi = false;
       }
     }
@@ -51,6 +55,10 @@
         closeLists();
         const clean = trimmed.replace(/:$/, '');
         html += `<h4 class="proc-section-title">${escapeHtml(clean)}</h4>`;
+        const headingLower = clean.toLowerCase();
+        if (headingLower.includes('ação de enfermagem e justificativa') || headingLower.includes('acao de enfermagem e justificativa')) {
+          html += '<div class="proc-table-head"><span>Ação</span><span>Justificativa</span></div>';
+        }
         return;
       }
 
@@ -62,7 +70,7 @@
           inOl = true;
         }
         closeListItem();
-        html += `<li><div class="proc-step">${escapeHtml(orderedMatch[2])}</div>`;
+        html += `<li class="proc-step-row"><div class="proc-step-col"><div class="proc-step">${escapeHtml(orderedMatch[2])}</div></div><div class="proc-just-col">`;
         openLi = true;
         return;
       }
@@ -81,7 +89,8 @@
 
       const justificativaMatch = /^Justificativa:/i.test(trimmed);
       if (inOl && openLi && justificativaMatch) {
-        html += `<div class="proc-justificativa">${escapeHtml(trimmed)}</div>`;
+        const justificativaText = trimmed.replace(/^Justificativa:\s*/i, '');
+        html += `<div class="proc-justificativa"><span class="proc-just-label">Justificativa</span>${escapeHtml(justificativaText)}</div>`;
         return;
       }
 
@@ -269,9 +278,41 @@
     line-height: 1.5;
   }
 
+  .proc-steps-list {
+    list-style-position: inside;
+  }
+
   .proc-steps-list li,
   .proc-bullets li {
     margin-bottom: 4px;
+  }
+
+  .proc-steps-list li {
+    margin-bottom: 10px;
+    padding: 10px 12px;
+    border: 1px solid var(--proc-line);
+    border-radius: 10px;
+    background: #fff;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .proc-steps-list li::marker {
+    color: var(--proc-red-dark);
+    font-weight: 700;
+  }
+
+  .proc-step-col {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .proc-just-col {
+    color: var(--proc-muted);
+    font-size: 14px;
+    line-height: 1.45;
   }
 
   .proc-step {
@@ -279,14 +320,37 @@
   }
 
   .proc-justificativa {
-    margin-top: 4px;
-    color: var(--proc-muted);
-    font-size: 14px;
-    line-height: 1.45;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .proc-just-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    color: var(--proc-red-dark);
+    font-weight: 700;
   }
 
   .proc-gap {
     height: 6px;
+  }
+
+  .proc-table-head {
+    margin-top: 8px;
+    padding: 6px 8px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    border: 1px dashed var(--proc-line);
+    border-radius: 10px;
+    background: #faf7f6;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    color: var(--proc-muted);
+    font-weight: 700;
   }
 
   .proc-steps ol {
@@ -305,6 +369,17 @@
     height: auto;
     border: 1px solid var(--proc-line);
     border-radius: 10px;
+  }
+
+  @media (max-width: 720px) {
+    .proc-steps-list li,
+    .proc-table-head {
+      grid-template-columns: 1fr;
+    }
+    .proc-just-col {
+      border-top: 1px dashed var(--proc-line);
+      padding-top: 6px;
+    }
   }
 </style>
 
