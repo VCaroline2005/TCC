@@ -1,56 +1,56 @@
-<%- include('cabecalho') %>
+<%- include('cabecalho', { pageClass: 'page-usuario-editar' }) %>
 <h2>Editar meus dados</h2>
 
 <% if (typeof erro !== 'undefined' && erro === 'email') { %>
-  <p style="color:#b91c1c;">E-mail já cadastrado.</p>
+  <p class="form-error">E-mail já cadastrado.</p>
 <% } %>
 <% if (typeof erro !== 'undefined' && erro === 'salvar') { %>
-  <p style="color:#b91c1c;">Não foi possível salvar. Tente novamente.</p>
+  <p class="form-error">Não foi possível salvar. Tente novamente.</p>
 <% } %>
 
-<form method="post" action="/usuario/editar" enctype="multipart/form-data">
-  <div style="margin-bottom:10px;">
+<form method="post" action="/usuario/editar" enctype="multipart/form-data" class="user-edit-form">
+  <div class="form-row">
     <label>Foto atual</label><br>
     <% if (dadosUsuario.foto) { %>
-      <img src="/usuarios/<%= dadosUsuario.foto %>" alt="Foto atual do usuário" style="width:84px; height:84px; object-fit:cover; border-radius:50%; border:1px solid #e5e7eb;">
+      <img src="/usuarios/<%= dadosUsuario.foto %>" alt="Foto atual do usuário" class="user-edit-avatar">
     <% } else { %>
-      <span style="color:#6b7280;">Sem foto cadastrada</span>
+      <span class="muted-text">Sem foto cadastrada</span>
     <% } %>
   </div>
-  <div style="margin-bottom:10px;">
+  <div class="form-row">
     <label>Nome</label><br>
     <input type="text" name="nome" value="<%= dadosUsuario.nome %>" required>
   </div>
-  <div style="margin-bottom:10px;">
+  <div class="form-row">
     <label>E-mail</label><br>
     <input type="email" name="email" value="<%= dadosUsuario.email %>" required>
   </div>
-  <div style="margin-bottom:10px;">
+  <div class="form-row">
     <label>Telefone</label><br>
     <input type="text" name="telefone" value="<%= dadosUsuario.telefone || '' %>">
   </div>
-  <div style="margin-bottom:10px;">
+  <div class="form-row">
     <label>Endereço</label><br>
     <input type="text" name="endereco" value="<%= dadosUsuario.endereco || '' %>">
   </div>
-  <div style="margin-bottom:10px;">
+  <div class="form-row">
     <label>CPF</label><br>
     <input type="text" name="cpf" value="<%= dadosUsuario.cpf || '' %>">
   </div>
-  <div style="margin-bottom:10px;">
+  <div class="form-row">
     <label>Data de nascimento</label><br>
     <input type="date" name="datanasc" value="<%= dadosUsuario.datanasc ? dadosUsuario.datanasc.toISOString().substr(0,10) : '' %>">
   </div>
-  <div style="margin-bottom:10px;">
+  <div class="form-row">
     <label>Nova senha (opcional)</label><br>
     <input type="password" name="senha" placeholder="Deixe em branco para não alterar">
   </div>
-  <div style="margin-bottom:10px;">
+  <div class="form-row">
     <label>Foto (opcional)</label><br>
     <input type="file" name="foto" accept="image/*">
   </div>
   <button type="submit">Salvar alterações</button>
-  <a href="/usuario" style="margin-left:8px;">Cancelar</a>
+  <a href="/usuario" class="inline-cancel">Cancelar</a>
 </form>
 
 <%- include('rodape') %>

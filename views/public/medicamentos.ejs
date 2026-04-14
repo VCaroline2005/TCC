@@ -1,45 +1,21 @@
-<%- include('cabecalho') %>
+<%- include('cabecalho', { pageClass: 'page-medicamentos' }) %>
 <% const pesquisaAtual = (typeof pesquisar !== 'undefined' && pesquisar) ? pesquisar : ''; %>
 <% const classesDisponiveis = (typeof classes !== 'undefined' && classes) ? classes : []; %>
 <% const classeAtual = (typeof classeSelecionada !== 'undefined' && classeSelecionada) ? classeSelecionada : ''; %>
-<style>
-  .med-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 16px;
-    font-size: 14px;
-  }
-  .med-table th,
-  .med-table td {
-    border: 1px solid #000;
-    padding: 8px;
-    text-align: left;
-    vertical-align: top;
-  }
-  .med-table th {
-    background: #f3f4f6;
-  }
-  .med-table tbody tr:nth-child(even) {
-    background: #fafafa;
-  }
-  .med-preline {
-    white-space: pre-line;
-  }
-</style>
 
 <h2>Medicamentos</h2>
-<form method="get" action="/medicamentos" style="margin-bottom:14px;">
+<form method="get" action="/medicamentos" class="filter-form">
   <input
     type="text"
     name="pesquisar"
     placeholder="Pesquisar princípio ativo, nome comercial, classe, via ou diluição"
     value="<%= pesquisaAtual %>"
-    style="padding:8px; width:100%; max-width:520px; border:1px solid #000; border-radius:4px;"
+    class="filter-input filter-input-wide"
   >
-  <button type="submit" style="padding:8px 12px; margin-left:6px; background:#a51b0b; color:#fff; border:1px solid #000; border-radius:4px; cursor:pointer;">
+  <button type="submit" class="filter-btn">
     Pesquisar
   </button>
-  <select name="classe" style="padding:8px; margin-left:6px; border:1px solid #000; border-radius:4px;">
+  <select name="classe" class="filter-select">
     <option value="">Todas as classes</option>
     <% classesDisponiveis.forEach(function(c){ %>
       <option value="<%= c %>" <%= classeAtual === c ? 'selected' : '' %>><%= c %></option>

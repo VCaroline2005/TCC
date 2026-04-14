@@ -1,12 +1,12 @@
-<%- include('cabecalho') %>
+<%- include('cabecalho', { pageClass: 'page-usuario' }) %>
 <h2>Área do Usuário</h2>
 <% if (typeof dadosUsuario !== 'undefined' && dadosUsuario) { %>
-  <div style="margin:10px 0 14px; padding:12px; border-radius:10px; background:linear-gradient(120deg,#a51b0b,#000); color:#fff; display:flex; gap:12px; align-items:center;">
-    <div style="flex:0 0 auto;">
+  <div class="user-banner">
+    <div class="user-banner-avatar-wrap">
       <% if (dadosUsuario.foto) { %>
-        <img src="/usuarios/<%= dadosUsuario.foto %>" alt="Foto do usuário" style="width:64px; height:64px; object-fit:cover; border-radius:50%; border:2px solid rgba(255,255,255,0.6);">
+        <img src="/usuarios/<%= dadosUsuario.foto %>" alt="Foto do usuário" class="user-banner-avatar">
       <% } else { %>
-        <div style="width:64px; height:64px; border-radius:50%; background:rgba(255,255,255,0.2); display:flex; align-items:center; justify-content:center; font-weight:700;">
+        <div class="user-banner-avatar-placeholder">
           <%= dadosUsuario.nome ? dadosUsuario.nome.charAt(0).toUpperCase() : '?' %>
         </div>
       <% } %>
@@ -20,23 +20,23 @@
 <% } %>
 
 <% if (typeof dadosUsuario !== 'undefined' && dadosUsuario) { %>
- 
 
-  <section style="border:1px solid #e5e7eb; border-radius:10px; padding:14px; margin:12px 0; background:#fff;">
-    <h3 style="margin:0 0 8px 0;">Meus dados</h3>
-    <div style="display:flex; gap:12px; align-items:center; margin:6px 0 12px 0;">
+
+  <section class="user-card">
+    <h3 class="user-card-title">Meus dados</h3>
+    <div class="user-card-top">
       <% if (dadosUsuario.foto) { %>
-        <img src="/usuarios/<%= dadosUsuario.foto %>" alt="Foto do usuário" style="width:72px; height:72px; object-fit:cover; border-radius:50%; border:1px solid #e5e7eb;">
+        <img src="/usuarios/<%= dadosUsuario.foto %>" alt="Foto do usuário" class="user-card-avatar">
       <% } else { %>
-        <div style="width:72px; height:72px; border-radius:50%; background:#f3f4f6; border:1px solid #e5e7eb; display:flex; align-items:center; justify-content:center; font-weight:700;">
+        <div class="user-card-avatar-placeholder">
           <%= dadosUsuario.nome ? dadosUsuario.nome.charAt(0).toUpperCase() : '?' %>
         </div>
       <% } %>
-      <div style="color:#4b5563;">
+      <div class="user-card-note">
         Você pode editar seus dados e trocar sua foto de perfil.
       </div>
     </div>
-    <ul style="list-style:none; padding-left:0; margin:0;">
+    <ul class="user-data-list">
       <li><strong>Nome:</strong> <%= dadosUsuario.nome %></li>
       <li><strong>E-mail:</strong> <%= dadosUsuario.email %></li>
       <li><strong>Telefone:</strong> <%= dadosUsuario.telefone || 'não informado' %></li>
@@ -44,14 +44,14 @@
       <li><strong>CPF:</strong> <%= dadosUsuario.cpf || 'não informado' %></li>
       <li><strong>Data de nascimento:</strong> <%= dadosUsuario.datanasc ? dadosUsuario.datanasc.toISOString().substr(0,10) : 'não informada' %></li>
     </ul>
-    <div style="margin-top:10px;">
+    <div class="user-card-actions">
       <a href="/usuario/editar">Editar meus dados e foto</a>
     </div>
   </section>
 <% } %>
 
 <% if (typeof lembretesProximos !== 'undefined' && lembretesProximos.length) { %>
-  <div style="border:1px solid #f59e0b; background:#fff7ed; padding:12px; border-radius:8px; margin:12px 0;">
+  <div class="user-reminder-box">
     <strong>Você tem lembretes vencendo em até 3 dias:</strong>
     <ul>
       <% lembretesProximos.forEach(function(l){ %>
@@ -60,7 +60,7 @@
           <% if (l.vencimento) { %>
             - <%= l.vencimento.toISOString().substr(0,10) %>
             <% if (agora && l.vencimento <= agora) { %>
-              <strong style="color:#b91c1c;">(vencido)</strong>
+              <strong class="text-danger">(vencido)</strong>
             <% } %>
           <% } else { %>
             - sem data

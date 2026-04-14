@@ -1,89 +1,4 @@
-<%- include('cabecalho') %>
-<style>
-  .lembrete-form {
-    margin-bottom: 12px;
-  }
-  .lembrete-btn {
-    padding: 10px 18px;
-    background: #a51b0b;
-    color: #fff;
-    border: 1px solid #a51b0b;
-    border-radius: 999px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
-  }
-  .lembrete-btn:hover {
-    background: #7a1408;
-    transform: translateY(-1px);
-    box-shadow: 0 10px 18px rgba(122, 20, 8, 0.2);
-  }
-  .lembrete-cancel {
-    margin-left: 8px;
-    text-decoration: none;
-    font-weight: 700;
-    color: #7a1408;
-  }
-  .lembrete-actions {
-    display: inline-flex;
-    gap: 8px;
-    margin-left: 6px;
-  }
-  .lembrete-link {
-    display: inline-flex;
-    align-items: center;
-    padding: 6px 12px;
-    border-radius: 999px;
-    border: 1px solid #a51b0b;
-    font-weight: 700;
-    text-decoration: none;
-    color: #a51b0b;
-    transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease, color 0.15s ease;
-  }
-  .lembrete-link:hover {
-    background: #a51b0b;
-    color: #fff;
-    transform: translateY(-1px);
-    box-shadow: 0 8px 16px rgba(122, 20, 8, 0.18);
-  }
-  .lembrete-link.danger {
-    border-color: #7a1408;
-    color: #7a1408;
-  }
-  .lembrete-link.danger:hover {
-    background: #7a1408;
-    color: #fff;
-  }
-  .lembrete-alert {
-    margin: 12px 0;
-    padding: 10px 12px;
-    border-radius: 10px;
-    background: #fff7ed;
-    border: 1px solid #f59e0b;
-    color: #92400e;
-    font-weight: 600;
-  }
-  .lembrete-badge {
-    display: inline-flex;
-    align-items: center;
-    margin-left: 6px;
-    padding: 2px 8px;
-    border-radius: 999px;
-    font-size: 12px;
-    font-weight: 700;
-    border: 1px solid transparent;
-  }
-  .lembrete-badge.warn {
-    background: #fef3c7;
-    color: #92400e;
-    border-color: #f59e0b;
-  }
-  .lembrete-badge.danger {
-    background: #fee2e2;
-    color: #b91c1c;
-    border-color: #fca5a5;
-  }
-</style>
+<%- include('cabecalho', { pageClass: 'page-lembretes' }) %>
 <h2>Lembretes</h2>
 <% const agora = new Date(); %>
 <% const limite = new Date(); limite.setDate(limite.getDate() + 3); %>
@@ -96,10 +11,10 @@
 <% const editandoLocal = (typeof editando !== 'undefined' && editando); %>
 <% const lembreteEdicaoLocal = (typeof LembreteEdicao !== 'undefined' && LembreteEdicao) ? LembreteEdicao : null; %>
 <% if (typeof erro !== 'undefined' && erro === 'conteudo') { %>
-  <p style="color:#b91c1c;">Digite o conteúdo do lembrete antes de adicionar.</p>
+  <p class="form-error">Digite o conteúdo do lembrete antes de adicionar.</p>
 <% } %>
 <% if (typeof erro !== 'undefined' && erro === 'salvar') { %>
-  <p style="color:#b91c1c;">Não foi possível salvar o lembrete. Tente novamente.</p>
+  <p class="form-error">Não foi possível salvar o lembrete. Tente novamente.</p>
 <% } %>
 <% if (editandoLocal && lembreteEdicaoLocal) { %>
   <form method="post" action="/lembretes/edt/<%= lembreteEdicaoLocal._id %>" class="lembrete-form">

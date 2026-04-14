@@ -5,163 +5,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastro - Portal Enfermagem</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #ffffff;
-            margin: 0;
-            padding: 0;
-            color: #000000;
-        }
-
-        header {
-            background: linear-gradient(90deg, #a51b0b 0%, #6f1208 45%, #160504 100%);
-            color: white;
-            padding: 1rem;
-            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.18);
-        }
-
-        header .header-inner {
-            max-width: 1100px;
-            margin: 0 auto;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
-
-        header .brand-block {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        header h1 {
-            margin: 0;
-            font-size: 22px;
-        }
-
-        .logo {
-            display: block;
-            height: 60px;
-            width: auto;
-            filter: drop-shadow(0 2px 6px rgba(0,0,0,0.35));
-        }
-
-        .nav-controls {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-
-        .nav-btn {
-            background: rgba(255,255,255,0.12);
-            border: 1px solid rgba(255,255,255,0.28);
-            color: #fff;
-            padding: 6px 10px;
-            border-radius: 6px;
-            font-weight: 600;
-            text-decoration: none;
-            cursor: pointer;
-        }
-
-        .nav-btn:hover {
-            background: rgba(255,255,255,0.22);
-        }
-
-        .container {
-            width: 40%;
-            margin: 2rem auto;
-            background-color: #ffffff;
-            padding: 2rem;
-            border-radius: 8px;
-            border: 1px solid #000000;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-        }
-
-        h2 {
-            margin-bottom: 1rem;
-            text-align: center;
-        }
-
-        .form-group {
-            margin-bottom: 1rem;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 0.75rem;
-            border: 1px solid #000;
-            border-radius: 4px;
-        }
-
-        .espaco-options {
-            display: flex;
-            gap: 1rem;
-            align-items: center;
-        }
-
-        .espaco-options label {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.4rem;
-            margin: 0;
-        }
-
-        .espaco-options input[type="radio"] {
-            width: auto;
-            padding: 0;
-        }
-
-        .form-group input:focus {
-            outline: none;
-            border-color: #000000;
-        }
-
-        .form-group input.error {
-            border-color: #a51b0b;
-        }
-
-        button {
-            background-color: #a51b0b;
-            color: white;
-            padding: 0.75rem 1.5rem;
-            border: none;
-            width: 100%;
-            cursor: pointer;
-            font-size: 1.1rem;
-            border-radius: 4px;
-            margin-top: 1rem;
-        }
-
-        button:hover {
-            background-color: #a51b0b;
-        }
-
-        .error-message {
-            color: #a51b0b;
-            font-size: 0.9rem;
-            margin-top: 0.5rem;
-        }
-
-        .success-message {
-            color: #a51b0b;
-            font-size: 1rem;
-            margin-top: 1rem;
-            text-align: center;
-        }
-    </style>
+    <link rel="stylesheet" href="/site/css/pages.css">
 </head>
 
-<body>
+<body class="signup-page">
 
-    <header>
+    <header class="signup-header">
         <div class="header-inner">
             <div class="brand-block">
                 <img class="logo" src="/site/img/logo.png" alt="Portal Enfermagem">
@@ -170,15 +19,15 @@
             <div class="nav-controls">
                 <button type="button" class="nav-btn" onclick="history.back()">Voltar</button>
                 <a class="nav-btn" href="/login">Sair</a>
-                
+
             </div>
         </div>
     </header>
 
-    <div class="container">
+    <div class="signup-container">
         <h2>Preencha os dados abaixo para se cadastrar</h2>
         <% if (typeof error !== 'undefined' && error) { %>
-            <div class="error-message" style="margin-bottom:12px;"><%= error %></div>
+            <div class="error-message spaced"><%= error %></div>
         <% } %>
 
         <form id="signup-form" method="post" action="/cadastro" enctype="multipart/form-data">
@@ -200,7 +49,7 @@
                 <input type="text" name="telefone" id="telefone" placeholder="Seu telefone">
                 <div id="telefone-error" class="error-message"></div>
             </div>
-            
+
             <div class="form-group">
                 <label for="foto">Foto</label>
                 <input type="file" name="foto" id="foto" placeholder="Adione uma foto">
@@ -220,7 +69,7 @@
             </div>
 
             <button type="submit">Cadastrar</button>
-            <p style="text-align:center; margin-top:12px;">
+            <p class="auth-helper">
                 Já tem conta? <a href="/login">Entrar</a>
             </p>
 

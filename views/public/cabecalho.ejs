@@ -4,33 +4,17 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Portal Enfermagem</title>
-  <style>
-    body { font-family: Arial, sans-serif; margin: 0; background: #f7f9fb; color: #1f2937; }
-    header { background: linear-gradient(90deg, #a51b0b 0%, #6f1208 45%, #160504 100%); color: #fff; padding: 16px; box-shadow: 0 3px 12px rgba(0, 0, 0, 0.18); text-align: center; }
-    .brand { display: flex; align-items: center; justify-content: center; gap: 12px; }
-    .brand img { height: 52px; width: auto; display: block; filter: drop-shadow(0 2px 6px rgba(0,0,0,0.35)); }
-    nav { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 10px; justify-content: center; }
-    nav a { color: #fff; text-decoration: none; font-weight: 600; font-size: 18px; }
-    nav a:hover { text-decoration: underline; }
-    .nav-controls { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 12px; justify-content: flex-end; width: 100%; }
-    .nav-btn { background: #ffffff; border: 1px solid #ffffff; color: #7a1408; padding: 8px 14px; border-radius: 999px; font-weight: 700; font-size: 16px; text-decoration: none; cursor: pointer; transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease, color 0.15s ease; }
-    .nav-btn:hover { background: #7a1408; color: #ffffff; transform: translateY(-1px); box-shadow: 0 6px 14px rgba(0,0,0,0.18); }
-    main { max-width: 900px; margin: 24px auto; background: #fff; border-radius: 8px; padding: 20px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08); }
-    ul { padding-left: 20px; }
-    li { margin-bottom: 8px; }
-    form textarea, form input[type="text"], form input[type="date"], form input[type="submit"], form button {
-      font-family: inherit;
-    }
-  </style>
+  <link rel="stylesheet" href="/site/css/pages.css">
 </head>
-<body>
-  <header>
-    <% const usuarioLocal = (typeof usuario !== 'undefined' && usuario) ? usuario : null; %>
-    <div class="brand">
+<% const pageClassLocal = (typeof pageClass !== 'undefined' && pageClass) ? pageClass : ''; %>
+<% const usuarioLocal = (typeof usuario !== 'undefined' && usuario) ? usuario : null; %>
+<body class="public-page <%= pageClassLocal %>">
+  <header class="site-header">
+    <div class="site-brand">
       <img src="/site/img/logo.png" alt="Portal Enfermagem">
-      <h1 style="margin:0; font-size:22px;">Portal Enfermagem</h1>
+      <h1 class="portal-title">Portal Enfermagem</h1>
     </div>
-    <nav>
+    <nav class="site-nav">
       <% if (usuarioLocal) { %>
         <a href="/home">Home</a>
       <% } else { %>

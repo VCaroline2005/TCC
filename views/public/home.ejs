@@ -1,147 +1,4 @@
-<%- include('cabecalho') %>
-<style>
-  .home-hero {
-    background: linear-gradient(120deg, #a51b0b, #000000);
-    color: #fff;
-    border-radius: 12px;
-    padding: 24px;
-    box-shadow: 0 10px 24px rgba(0,0,0,0.12);
-  }
-  .home-hero h2 { margin: 0 0 8px; font-size: 28px; }
-  .home-hero p { margin: 0; line-height: 1.5; }
-  .home-section {
-    border: 1px solid #e5e7eb;
-    border-radius: 10px;
-    padding: 14px;
-    margin: 14px 0;
-    background: #fff;
-  }
-  .content-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 10px;
-    margin-top: 10px;
-  }
-  .content-card {
-    border: 1px solid #e5e7eb;
-    border-radius: 10px;
-    overflow: hidden;
-    text-decoration: none;
-    color: #000;
-    background: #fff;
-    display: block;
-  }
-  .content-card img {
-    width: 100%;
-    height: 120px;
-    object-fit: cover;
-    display: block;
-  }
-  .content-card .content-text {
-    padding: 8px 10px;
-    font-weight: 600;
-  }
-  .summary-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 10px;
-    margin-top: 10px;
-  }
-  .toast {
-    position: fixed;
-    right: 18px;
-    bottom: 18px;
-    max-width: 320px;
-    background: #fff7ed;
-    border: 1px solid #f59e0b;
-    color: #92400e;
-    padding: 12px 14px;
-    border-radius: 12px;
-    box-shadow: 0 10px 18px rgba(0,0,0,0.12);
-    z-index: 999;
-    display: flex;
-    gap: 10px;
-    align-items: flex-start;
-  }
-  .toast h4 {
-    margin: 0 0 4px 0;
-    font-size: 14px;
-  }
-  .toast p {
-    margin: 0;
-    font-size: 13px;
-    line-height: 1.4;
-  }
-  .toast button {
-    margin-left: auto;
-    border: none;
-    background: transparent;
-    cursor: pointer;
-    font-size: 16px;
-    color: #92400e;
-    font-weight: 700;
-  }
-  .mini-banner {
-    margin-top: 10px;
-    border-radius: 12px;
-    overflow: hidden;
-    border: 1px solid #e5e7eb;
-    background: linear-gradient(120deg, rgba(165,27,11,0.92), rgba(0,0,0,0.9)),
-      url("/site/img/product06.png") center/cover no-repeat;
-    color: #fff;
-    padding: 16px;
-  }
-  .mini-banner h4 {
-    margin: 0 0 6px 0;
-    font-size: 18px;
-  }
-  .mini-banner p {
-    margin: 0;
-    color: rgba(255,255,255,0.9);
-  }
-  .summary-card {
-    border: 1px solid #e5e7eb;
-    border-radius: 10px;
-    padding: 12px;
-    background: #fff;
-  }
-  .summary-card h4 {
-    margin: 0;
-    font-size: 12px;
-    text-transform: uppercase;
-    letter-spacing: .04em;
-    color: #4b5563;
-  }
-  .summary-card .value {
-    margin-top: 6px;
-    font-size: 26px;
-    font-weight: 700;
-    color: #a51b0b;
-  }
-  .quick-links {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 10px;
-    margin-top: 10px;
-  }
-  .quick-links a {
-    display: block;
-    border: 1px solid #e5e7eb;
-    border-radius: 10px;
-    padding: 10px 12px;
-    text-decoration: none;
-    color: #000;
-    font-weight: 600;
-    background: #fff;
-  }
-  .quick-links a:hover,
-  .content-card:hover {
-    background: #f5f5f5;
-  }
-  .muted {
-    color: #4b5563;
-  }
-</style>
+<%- include('cabecalho', { pageClass: 'page-home' }) %>
 
 <section class="home-hero">
   <h2>Seu apoio rápido na prática de enfermagem</h2>
@@ -166,11 +23,11 @@
 <% } %>
 
 <section class="home-section">
-  <h3 style="margin:0 0 6px 0;">Conteúdos e fotos</h3>
-  <p class="muted" style="margin:0 0 8px 0;">Acesse rapidamente os principais módulos com prévias visuais.</p>
+  <h3 class="section-title">Conteúdos e fotos</h3>
+  <p class="muted section-subtitle">Acesse rapidamente os principais módulos com prévias visuais.</p>
   <div class="content-grid">
     <a class="content-card" href="/procedimentos">
-      <img src="/site/img/proce.png" alt="Procedimentos">
+      <img src="/site/img/procedimento.png" alt="Procedimentos">
       <div class="content-text">Procedimentos</div>
     </a>
     <a class="content-card" href="/medicamentos">
@@ -178,37 +35,33 @@
       <div class="content-text">Medicamentos</div>
     </a>
     <a class="content-card" href="/terminologias">
-      <img src="/site/img/product03.png" alt="Terminologias">
+      <img src="/site/img/terminologia.png" alt="Terminologias">
       <div class="content-text">Terminologias</div>
     </a>
     <a class="content-card" href="/quiz">
-      <img src="/site/img/product04.png" alt="Quiz">
+      <img src="/site/img/quiz.png" alt="Quiz">
       <div class="content-text">Quiz</div>
-    </a>
-    <a class="content-card" href="/lembretes">
-      <img src="/site/img/product05.png" alt="Lembretes">
-      <div class="content-text">Lembretes</div>
     </a>
   </div>
 </section>
 
 <section class="home-section">
-  <h3 style="margin:0 0 6px 0;">Próximos lembretes</h3>
-  <p class="muted" style="margin:0 0 8px 0;">Veja o que vence nos próximos dias.</p>
+  <h3 class="section-title">Próximos lembretes</h3>
+  <p class="muted section-subtitle">Veja o que vence nos próximos dias.</p>
   <% const formatDate = (data) => { try { return new Date(data).toLocaleDateString('pt-BR'); } catch (e) { return ''; } }; %>
   <% if (lembretesCount === 0) { %>
-    <p class="muted" style="margin:0;">Nenhum lembrete por enquanto. Crie um para não perder prazos.</p>
+    <p class="muted no-margin">Nenhum lembrete por enquanto. Crie um para não perder prazos.</p>
   <% } else { %>
     <div class="summary-grid">
       <% lembretesProximos.slice(0, 3).forEach(function(lembrete) { %>
         <div class="summary-card">
           <h4><%= formatDate(lembrete.vencimento) %></h4>
-          <div style="margin-top:6px; font-weight:600;"><%= lembrete.conteudo %></div>
+          <div class="summary-text"><%= lembrete.conteudo %></div>
         </div>
       <% }) %>
     </div>
-    <div style="margin-top:8px;">
-      <a href="/lembretes" class="muted" style="text-decoration:none; font-weight:600;">Ver todos os lembretes →</a>
+    <div class="mt-8">
+      <a href="/lembretes" class="muted home-reminders-link">Ver todos os lembretes →</a>
     </div>
   <% } %>
 </section>

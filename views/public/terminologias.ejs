@@ -1,15 +1,15 @@
-<%- include('cabecalho') %>
+<%- include('cabecalho', { pageClass: 'page-terminologias' }) %>
 <% const pesquisaAtual = (typeof pesquisar !== 'undefined' && pesquisar) ? pesquisar : ''; %>
 <h2>Terminologias</h2>
-<form method="get" action="/terminologias" style="margin-bottom:14px;">
+<form method="get" action="/terminologias" class="filter-form">
   <input
     type="text"
     name="pesquisar"
     placeholder="Pesquisar termo, definição ou categoria"
     value="<%= pesquisaAtual %>"
-    style="padding:8px; width:100%; max-width:420px; border:1px solid #000; border-radius:4px;"
+    class="filter-input"
   >
-  <button type="submit" style="padding:8px 12px; margin-left:6px; background:#a51b0b; color:#fff; border:1px solid #000; border-radius:4px; cursor:pointer;">
+  <button type="submit" class="filter-btn">
     Pesquisar
   </button>
 </form>

@@ -4,233 +4,13 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Portal Enfermagem</title>
-  <style>
-    :root {
-      --bg: #ffffff;
-      --card: #ffffff;
-      --primary: #a51b0b;
-      --primary-2: #000000;
-      --text: #000000;
-      --muted: #222222;
-      --line: #000000;
-    }
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-    }
-    .topbar {
-      background: linear-gradient(90deg, #a51b0b 0%, #6f1208 45%, #160504 100%);
-      color: #fff;
-      padding: 14px 18px;
-      box-shadow: 0 3px 12px rgba(0, 0, 0, 0.18);
-    }
-    .topbar-inner {
-      max-width: 1080px;
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-    .brand {
-      font-size: 22px;
-      font-weight: 700;
-      margin: 0;
-    }
-    .auth a {
-      color: #fff;
-      text-decoration: none;
-      margin-left: 14px;
-      font-weight: 600;
-    }
-    .auth a:hover { text-decoration: underline; }
-    .topbar-controls {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-    .topbar-btn {
-      background: rgba(255,255,255,0.12);
-      border: 1px solid rgba(255,255,255,0.28);
-      color: #fff;
-      padding: 6px 10px;
-      border-radius: 6px;
-      font-weight: 600;
-      text-decoration: none;
-      cursor: pointer;
-    }
-    .topbar-btn:hover { background: rgba(255,255,255,0.22); }
-    .nav {
-      background: var(--primary-2);
-    }
-    .nav-inner {
-      max-width: 1080px;
-      margin: 0 auto;
-      display: flex;
-      gap: 14px;
-      flex-wrap: wrap;
-      padding: 10px 18px;
-    }
-    .nav a {
-      color: #fff;
-      text-decoration: none;
-      font-weight: 600;
-    }
-    .nav a:hover { text-decoration: underline; }
-    .container {
-      max-width: 1080px;
-      margin: 22px auto;
-      padding: 0 18px;
-    }
-    .hero {
-      background: linear-gradient(120deg, #a51b0b, #000000);
-      color: #fff;
-      border-radius: 12px;
-      padding: 28px;
-      box-shadow: 0 10px 24px rgba(0,0,0,0.12);
-    }
-    .hero h2 { margin: 0 0 10px; font-size: 30px; }
-    .hero p { margin: 0; line-height: 1.5; }
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 14px;
-      margin-top: 16px;
-    }
-    .card {
-      background: var(--card);
-      border: 1px solid var(--line);
-      border-radius: 10px;
-      padding: 16px;
-    }
-    .card h3 {
-      margin: 0;
-      color: var(--muted);
-      font-size: 14px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: .04em;
-    }
-    .card .value {
-      margin-top: 10px;
-      font-size: 32px;
-      font-weight: 700;
-      color: var(--primary);
-    }
-    .section {
-      background: var(--card);
-      border: 1px solid var(--line);
-      border-radius: 10px;
-      padding: 18px;
-      margin-top: 16px;
-    }
-    .section h3 { margin-top: 0; }
-    .links {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 10px;
-      margin-top: 12px;
-    }
-    .links a {
-      display: block;
-      background: #ffffff;
-      border: 1px solid #000000;
-      border-radius: 8px;
-      padding: 12px;
-      color: #000000;
-      text-decoration: none;
-      font-weight: 600;
-    }
-    .links a:hover { background: #f5f5f5; }
-    .muted { color: var(--muted); }
-    .footer {
-      text-align: center;
-      color: var(--muted);
-      font-size: 14px;
-      padding: 24px 0 30px;
-    }
-    .guest-hero {
-      background: linear-gradient(120deg, #a51b0b, #000000);
-      color: #fff;
-      border-radius: 12px;
-      padding: 28px;
-      box-shadow: 0 10px 24px rgba(0,0,0,0.12);
-    }
-    .guest-hero p { margin: 0 0 12px; }
-    .guest-cta {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 10px 18px;
-      background: #ffffff;
-      color: #7a1408;
-      border-radius: 999px;
-      text-decoration: none;
-      font-weight: 700;
-    }
-    .guest-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 12px;
-      margin-top: 16px;
-    }
-    .guest-card {
-      border: 1px solid #000000;
-      border-radius: 12px;
-      overflow: hidden;
-      background: #ffffff;
-    }
-    .guest-card img {
-      width: 100%;
-      display: block;
-      height: 140px;
-      object-fit: cover;
-    }
-    .guest-card p {
-      margin: 0;
-      padding: 10px 12px;
-      font-weight: 600;
-    }
-    .content-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 12px;
-      margin-top: 12px;
-    }
-    .content-card {
-      border: 1px solid #000000;
-      border-radius: 12px;
-      overflow: hidden;
-      background: #ffffff;
-      text-decoration: none;
-      color: #000000;
-      display: block;
-    }
-    .content-card img {
-      width: 100%;
-      display: block;
-      height: 140px;
-      object-fit: cover;
-    }
-    .content-card .content-text {
-      margin: 0;
-      padding: 10px 12px;
-      font-weight: 600;
-    }
-    .content-card:hover {
-      background: #f5f5f5;
-    }
-  </style>
+  <link rel="stylesheet" href="/site/css/pages.css">
 </head>
-<body>
+<body class="landing-page">
   <% const usuarioLocal = (typeof usuario !== 'undefined' && usuario) ? usuario : null; %>
   <header class="topbar">
     <div class="topbar-inner">
-      <h1 class="brand">Portal Enfermagem</h1>
+      <h1 class="brand"><img src="/site/img/logo.png" alt="Logo"></h1>
       <nav class="auth">
         <% if (usuarioLocal) { %>
           <a href="/usuario">Minha Conta</a>
@@ -262,15 +42,15 @@
 
       <section class="guest-grid" aria-label="Prévia de conteúdos">
         <div class="guest-card">
-          <img src="/site/img/product06.png" alt="Prévia de procedimentos">
+          <img src="/site/img/protocolo.png" alt="Prévia de procedimentos">
           <p>Protocolos essenciais em poucos cliques</p>
         </div>
         <div class="guest-card">
-          <img src="/site/img/product07.png" alt="Prévia de medicamentos">
+          <img src="/site/img/med.png" alt="Prévia de medicamentos">
           <p>Medicamentos organizados por classe</p>
         </div>
         <div class="guest-card">
-          <img src="/site/img/product08.png" alt="Prévia de terminologias">
+          <img src="/site/img/termo.png" alt="Prévia de terminologias">
           <p>Termos e definições para revisão rápida</p>
         </div>
       </section>
