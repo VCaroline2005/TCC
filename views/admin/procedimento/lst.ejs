@@ -19,6 +19,8 @@
                         <th scope="col">Nome</th>
                         <th scope="col">Categoria</th>
                         <th scope="col">Fotos</th>
+                        <th scope="col">Passos</th>
+                        <th scope="col">POP (PDF)</th>
                         <th scope="col">Publicado</th>
                         <th scope="col">Publicação</th>
                         <th scope="col">Editar</th>
@@ -36,6 +38,25 @@
                             <%procedimento.fotos.forEach(function(foto){%>
                                 <img src="/fotos/<%=foto%>" height="40px" alt="Fotos">  
                             <%})%>
+                        </td>
+                        <td>
+                            <button
+                                type="button"
+                                class="btn btn-sm btn-info js-passos-btn"
+                                data-toggle="modal"
+                                data-target="#passosModal"
+                                data-proc-nome="<%= procedimento.nome %>"
+                            >
+                                Ver passos
+                            </button>
+                            <script type="application/json" class="js-passos-json"><%- JSON.stringify(procedimento.passos || []).replace(/<\/script/gi, '<\\/script') %></script>
+                        </td>
+                        <td>
+                            <% if (procedimento.popPdfNome) { %>
+                                <a class="btn btn-sm btn-outline-light" href="/uploads/pops/<%= procedimento.popPdfNome %>" target="_blank" rel="noopener">Abrir PDF</a>
+                            <% } else { %>
+                                <span class="text-muted">—</span>
+                            <% } %>
                         </td>
                         <td><%=procedimento.publicado ? 'Sim' : 'Não'%></td>
                         <td>
@@ -57,7 +78,92 @@
 
                 </tbody>
             </table>
+
+            <div class="modal fade" id="passosModal" tabindex="-1" role="dialog" aria-labelledby="passosModalTitle" aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="passosModalTitle">Passo a passo</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p class="text-muted mb-2 js-passos-subtitle"></p>
+                            <ol class="js-passos-list mb-0"></ol>
+                            <div class="alert alert-warning js-passos-empty" role="alert" style="display:none;">
+                                Nenhum passo cadastrado neste procedimento.
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </section>
+
+<script>
+    (function () {
+        function safeJsonParse(text) {
+            try { return JSON.parse(text); } catch (e) { return []; }
+        }
+
+        function asList(value) {
+            if (Array.isArray(value)) return value;
+            if (typeof value === 'string' && value.trim()) return value.split('\n');
+            return [];
+        }
+
+        function setText(el, text) {
+            if (!el) return;
+            el.textContent = text || '';
+        }
+
+        function clearChildren(el) {
+            if (!el) return;
+            while (el.firstChild) el.removeChild(el.firstChild);
+        }
+
+        function fillModalFromButton(btn) {
+            var row = btn.closest('tr');
+            var nome = btn.getAttribute('data-proc-nome') || '';
+
+            var jsonEl = row ? row.querySelector('.js-passos-json') : null;
+            var jsonText = (jsonEl && jsonEl.textContent) ? jsonEl.textContent : '[]';
+            var passos = asList(safeJsonParse(jsonText))
+                .map(function (p) { return String(p || '').trim(); })
+                .filter(function (p) { return p.length > 0; });
+
+            var subtitle = document.querySelector('#passosModal .js-passos-subtitle');
+            var list = document.querySelector('#passosModal .js-passos-list');
+            var empty = document.querySelector('#passosModal .js-passos-empty');
+
+            setText(subtitle, nome ? ('Procedimento: ' + nome) : '');
+            clearChildren(list);
+
+            if (!passos.length) {
+                if (empty) empty.style.display = 'block';
+                return;
+            }
+
+            if (empty) empty.style.display = 'none';
+            passos.forEach(function (p) {
+                var li = document.createElement('li');
+                li.textContent = p;
+                list.appendChild(li);
+            });
+        }
+
+        document.addEventListener('click', function (ev) {
+            var btn = ev.target && ev.target.closest ? ev.target.closest('.js-passos-btn') : null;
+            if (!btn) return;
+            fillModalFromButton(btn);
+        });
+
+        // limpeza no "fechar" é opcional; o modal é preenchido toda vez que clicar em "Ver passos"
+    })();
+</script>
 <%-include('../rodape.ejs')%>

@@ -1,0 +1,287 @@
+/* Login page – layout inspired by the provided reference */
+
+body.auth-page.login-page {
+  background:
+    radial-gradient(520px 520px at 5% 35%, rgba(227, 27, 27, 0.14) 0%, rgba(227, 27, 27, 0) 70%),
+    radial-gradient(520px 520px at 95% 80%, rgba(227, 27, 27, 0.10) 0%, rgba(227, 27, 27, 0) 70%),
+    radial-gradient(900px 520px at 50% 0%, rgba(255, 245, 245, 0.9) 0%, rgba(255, 245, 245, 0) 60%),
+    #f6f7fb;
+  position: relative;
+}
+
+body.auth-page.login-page::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 10% 45%, rgba(227, 27, 27, 0.12) 0%, rgba(227, 27, 27, 0) 48%),
+    radial-gradient(circle at 88% 26%, rgba(227, 27, 27, 0.10) 0%, rgba(227, 27, 27, 0) 52%);
+  opacity: 0.9;
+}
+
+body.auth-page.login-page::after {
+  content: "";
+  position: fixed;
+  top: 120px;
+  right: 70px;
+  width: 180px;
+  height: 180px;
+  background-image: radial-gradient(rgba(227, 27, 27, 0.18) 2px, transparent 2px);
+  background-size: 20px 20px;
+  opacity: 0.25;
+  pointer-events: none;
+}
+
+/* Topbar tweaks */
+.auth-page.login-page .auth-topbar {
+  padding: 16px 16px;
+}
+
+.auth-page.login-page .auth-topbar h1 {
+  font-size: 22px;
+  letter-spacing: -0.02em;
+}
+
+.auth-page.login-page .brand {
+  gap: 14px;
+}
+
+.auth-page.login-page .brand-meta {
+  display: grid;
+  gap: 2px;
+}
+
+.auth-page.login-page .brand-subtitle {
+  margin: 0;
+  font-size: 12px;
+  opacity: 0.9;
+  font-weight: 600;
+}
+
+.auth-page.login-page .nav-controls .nav-btn {
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  color: #fff;
+  padding: 8px 12px;
+  border-radius: 10px;
+  font-weight: 800;
+}
+
+.auth-page.login-page .nav-controls .nav-btn:hover {
+  background: rgba(255, 255, 255, 0.20);
+}
+
+/* Card */
+.auth-page.login-page .login-container {
+  background: rgba(255, 255, 255, 0.86);
+  border: 1px solid rgba(17, 24, 39, 0.06);
+  border-radius: 18px;
+  box-shadow: 0 22px 44px rgba(17, 24, 39, 0.10);
+  max-width: 520px;
+  padding: 34px 34px 28px;
+  backdrop-filter: blur(10px);
+}
+
+.auth-page.login-page .login-badge {
+  width: 56px;
+  height: 56px;
+  border-radius: 999px;
+  margin: 0 auto 14px;
+  display: grid;
+  place-items: center;
+  background: rgba(227, 27, 27, 0.10);
+  border: 1px solid rgba(227, 27, 27, 0.18);
+  color: #e31b1b;
+}
+
+.auth-page.login-page .login-title {
+  margin: 0;
+  text-align: center;
+  font-size: 30px;
+  letter-spacing: -0.02em;
+  color: #111827;
+}
+
+.auth-page.login-page .login-title .accent {
+  color: #e31b1b;
+}
+
+.auth-page.login-page .login-lead {
+  margin: 10px auto 0;
+  text-align: center;
+  max-width: 46ch;
+  color: rgba(17, 24, 39, 0.68);
+  line-height: 1.6;
+  font-weight: 600;
+}
+
+.auth-page.login-page .field {
+  margin-top: 14px;
+  text-align: left;
+}
+
+.auth-page.login-page .field label {
+  display: block;
+  font-weight: 900;
+  color: #111827;
+  margin-bottom: 8px;
+}
+
+.auth-page.login-page .field-row {
+  display: grid;
+  grid-template-columns: 44px 1fr 44px;
+  align-items: center;
+  border-radius: 12px;
+  border: 1px solid rgba(17, 24, 39, 0.12);
+  background: #fff;
+  overflow: hidden;
+}
+
+.auth-page.login-page .field-row:focus-within {
+  border-color: rgba(227, 27, 27, 0.55);
+  box-shadow: 0 0 0 4px rgba(227, 27, 27, 0.12);
+}
+
+.auth-page.login-page .field-icon {
+  display: grid;
+  place-items: center;
+  color: rgba(17, 24, 39, 0.55);
+}
+
+.auth-page.login-page .field-input {
+  width: 100%;
+  border: none;
+  outline: none;
+  padding: 12px 10px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.auth-page.login-page .field-action {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  color: rgba(17, 24, 39, 0.55);
+}
+
+.auth-page.login-page .field-action:hover {
+  color: rgba(227, 27, 27, 0.95);
+}
+
+.auth-page.login-page .login-meta {
+  margin-top: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.auth-page.login-page .remember {
+  display: inline-flex;
+  gap: 10px;
+  align-items: center;
+  font-weight: 800;
+  color: rgba(17, 24, 39, 0.75);
+  font-size: 13px;
+}
+
+.auth-page.login-page .remember input {
+  width: 18px;
+  height: 18px;
+  accent-color: #e31b1b;
+}
+
+.auth-page.login-page .forgot {
+  text-decoration: none;
+  color: #e31b1b;
+  font-weight: 900;
+  font-size: 13px;
+}
+
+.auth-page.login-page .forgot:hover {
+  text-decoration: underline;
+}
+
+.auth-page.login-page .btn-submit {
+  margin-top: 16px;
+  border-radius: 12px;
+  background: linear-gradient(90deg, #d01414 0%, #b30d0d 70%, #7a1408 110%);
+  box-shadow: 0 14px 26px rgba(227, 27, 27, 0.22);
+  font-weight: 950;
+  letter-spacing: -0.01em;
+}
+
+.auth-page.login-page .btn-submit:hover {
+  filter: brightness(0.98);
+}
+
+.auth-page.login-page .sep {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 10px;
+  align-items: center;
+  margin: 18px 0 14px;
+  color: rgba(17, 24, 39, 0.55);
+  font-weight: 900;
+  font-size: 12px;
+}
+
+.auth-page.login-page .sep::before,
+.auth-page.login-page .sep::after {
+  content: "";
+  height: 1px;
+  background: rgba(17, 24, 39, 0.12);
+}
+
+.auth-page.login-page .signup-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border-radius: 12px;
+  border: 1px solid rgba(17, 24, 39, 0.12);
+  background: #fff;
+  padding: 12px 14px;
+  color: rgba(17, 24, 39, 0.75);
+  font-weight: 800;
+  font-size: 13px;
+}
+
+.auth-page.login-page .signup-box a {
+  color: #e31b1b;
+  font-weight: 950;
+  text-decoration: none;
+}
+
+.auth-page.login-page .signup-box a:hover {
+  text-decoration: underline;
+}
+
+.auth-page.login-page .secure-note {
+  margin-top: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: rgba(17, 24, 39, 0.62);
+  font-weight: 800;
+  font-size: 12px;
+}
+
+.auth-page.login-page .secure-note strong {
+  color: rgba(17, 24, 39, 0.82);
+  font-weight: 950;
+}
+
+@media (max-width: 520px) {
+  .auth-page.login-page .login-container {
+    padding: 26px 18px 20px;
+  }
+}
+

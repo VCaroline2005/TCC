@@ -1,21 +1,145 @@
 <%- include('cabecalho', { pageClass: 'page-terminologias' }) %>
 <% const pesquisaAtual = (typeof pesquisar !== 'undefined' && pesquisar) ? pesquisar : ''; %>
-<h2>Terminologias</h2>
-<form method="get" action="/terminologias" class="filter-form">
-  <input
-    type="text"
-    name="pesquisar"
-    placeholder="Pesquisar termo, definição ou categoria"
-    value="<%= pesquisaAtual %>"
-    class="filter-input"
-  >
-  <button type="submit" class="filter-btn">
-    Pesquisar
-  </button>
-</form>
-<ul>
-  <% Termos.forEach(function(t){ %>
-    <li><strong><%= t.termo %></strong>: <%= t.definicao %></li>
-  <% }) %>
-</ul>
+<% const categoriasDisponiveis = (typeof categorias !== 'undefined' && categorias) ? categorias : []; %>
+<% const categoriaAtual = (typeof categoriaSelecionada !== 'undefined' && categoriaSelecionada) ? categoriaSelecionada : ''; %>
+<% const termosLocal = (typeof Termos !== 'undefined' && Termos) ? Termos : []; %>
+<% const totalTermosLocal = (typeof totalTermos !== 'undefined' && Number.isFinite(totalTermos)) ? totalTermos : termosLocal.length; %>
+<% const totalCategoriasLocal = (typeof totalCategorias !== 'undefined' && Number.isFinite(totalCategorias)) ? totalCategorias : categoriasDisponiveis.length; %>
+<% const atualizadoEmLocal = (typeof atualizadoEm !== 'undefined' && atualizadoEm) ? atualizadoEm : (new Date()).toLocaleDateString('pt-BR'); %>
+
+<%
+  function excerpt(text, maxLen) {
+    const s = String(text || '').replace(/\s+/g, ' ').trim()
+    if (!s) return ''
+    if (s.length <= maxLen) return s
+    return s.slice(0, maxLen - 1).trimEnd() + '…'
+  }
+
+  function normalizeLetter(s) {
+    const t = String(s || '').trim()
+    if (!t) return '#'
+    const first = t[0]
+    const normalized = first.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toUpperCase()
+    return /^[A-Z]$/.test(normalized) ? normalized : '#'
+  }
+
+  const alphaList = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ#'.split('')
+  const groups = {}
+  termosLocal.forEach(function (t) {
+    const letter = normalizeLetter(t.termo)
+    if (!groups[letter]) groups[letter] = []
+    groups[letter].push(t)
+  })
+  Object.keys(groups).forEach(function (k) {
+    groups[k].sort(function (a, b) {
+      return String(a.termo || '').localeCompare(String(b.termo || ''), 'pt-BR')
+    })
+  })
+%>
+
+<div class="term-shell">
+  <header class="term-hero">
+    <div>
+      <p class="term-eyebrow">Biblioteca clínica</p>
+      <h2 class="term-title">Terminologias</h2>
+      <p class="term-subtitle">Consulte significados de termos técnicos utilizados na área da saúde e enfermagem.</p>
+    </div>
+
+    <form method="get" action="/terminologias" class="term-search" aria-label="Pesquisar terminologias">
+      <div class="term-input">
+        <span aria-hidden="true">⌕</span>
+        <input
+          type="text"
+          name="pesquisar"
+          placeholder="Pesquisar termo, definição ou categoria..."
+          value="<%= pesquisaAtual %>"
+          autocomplete="off"
+        >
+      </div>
+      <button type="submit" class="term-btn">
+        <span aria-hidden="true">⌕</span>
+        Pesquisar
+      </button>
+      <select name="categoria" class="term-select" aria-label="Explorar categorias">
+        <option value="">Explorar categorias</option>
+        <% categoriasDisponiveis.forEach(function(c){ %>
+          <option value="<%= c %>" <%= categoriaAtual === c ? 'selected' : '' %>><%= c %></option>
+        <% }) %>
+      </select>
+    </form>
+
+    <div class="term-alpha" id="termAlpha" aria-label="Filtrar por letra">
+      <% alphaList.forEach(function (ch) { %>
+        <button type="button" class="alpha-btn" data-letter="<%= ch %>"><%= ch %></button>
+      <% }) %>
+    </div>
+  </header>
+
+  <section class="term-summary" aria-label="Resumo">
+    <div class="sum-item">
+      <div class="sum-ic" aria-hidden="true">📄</div>
+      <div><strong><%= totalTermosLocal %></strong><br><span>Termos cadastrados</span></div>
+    </div>
+    <div class="sum-item">
+      <div class="sum-ic" aria-hidden="true">🗂</div>
+      <div><strong><%= totalCategoriasLocal %></strong><br><span>Categorias</span></div>
+    </div>
+    <div class="sum-item">
+      <div class="sum-ic" aria-hidden="true">⏱</div>
+      <div><strong>Atualizado em</strong><br><span><%= atualizadoEmLocal %></span></div>
+    </div>
+  </section>
+
+  <div class="term-body">
+    <section aria-label="Lista de terminologias">
+      <% alphaList.forEach(function (letter) { %>
+        <% if (groups[letter] && groups[letter].length) { %>
+          <div data-letter-group="<%= letter %>">
+            <h3 class="term-letter-title" id="letter-<%= letter %>"><%= letter %></h3>
+            <ul class="term-list">
+              <% groups[letter].forEach(function (t, idx) { %>
+                <% const itemId = `term-${letter}-${idx}`; %>
+                <% const detailsId = `${itemId}-details`; %>
+                <li class="term-item" id="<%= itemId %>">
+                  <button type="button" class="term-toggle" data-term-toggle="<%= itemId %>" aria-controls="<%= detailsId %>" aria-expanded="false">
+                    <span class="term-pill" aria-hidden="true"><%= letter %></span>
+                    <span class="term-line">
+                      <strong><%= t.termo %></strong>: <%= excerpt(t.definicao, 140) %>
+                    </span>
+                    <span class="term-arrow" aria-hidden="true">▾</span>
+                  </button>
+                  <div class="term-details" id="<%= detailsId %>">
+                    <strong><%= t.termo %></strong>
+                    <% if (t.categoria) { %>
+                      <span style="opacity:.7;font-weight:800;"> • <%= t.categoria %></span>
+                    <% } %>
+                    <div style="margin-top:8px;"><%= t.definicao %></div>
+                  </div>
+                </li>
+              <% }) %>
+            </ul>
+          </div>
+        <% } %>
+      <% }) %>
+
+      <% if (!termosLocal || termosLocal.length === 0) { %>
+        <p style="margin-top:14px;">Nenhuma terminologia encontrada para o filtro informado.</p>
+      <% } %>
+    </section>
+
+    <aside class="term-aside" aria-label="Navegação rápida">
+      <h3>Navegação rápida</h3>
+      <div class="quick">
+        <% alphaList.forEach(function (letter) { %>
+          <% if (groups[letter] && groups[letter].length) { %>
+            <a href="#letter-<%= letter %>" data-letter="<%= letter %>"><%= letter %></a>
+          <% } %>
+        <% }) %>
+      </div>
+      <a class="quick-more" href="#" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">Ver mais</a>
+    </aside>
+  </div>
+</div>
+
+<script src="/site/js/terminologias.js" defer></script>
 <%- include('rodape') %>

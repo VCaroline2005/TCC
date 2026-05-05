@@ -5,43 +5,137 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Portal Enfermagem</title>
   <link rel="stylesheet" href="/site/css/pages.css">
+  <% const pageClassLocal = (typeof pageClass !== 'undefined' && pageClass) ? pageClass : ''; %>
+  <% if (pageClassLocal && pageClassLocal.includes('page-home')) { %>
+    <link rel="stylesheet" href="/site/css/home.css">
+  <% } %>
+  <% if (pageClassLocal && pageClassLocal.includes('page-procedimentos')) { %>
+    <link rel="stylesheet" href="/site/css/procedimentos.css">
+  <% } %>
+  <% if (pageClassLocal && pageClassLocal.includes('page-medicamentos')) { %>
+    <link rel="stylesheet" href="/site/css/medicamentos.css">
+  <% } %>
+  <% if (pageClassLocal && pageClassLocal.includes('page-terminologias')) { %>
+    <link rel="stylesheet" href="/site/css/terminologias.css">
+  <% } %>
+  <script src="/site/js/telefone.js" defer></script>
 </head>
-<% const pageClassLocal = (typeof pageClass !== 'undefined' && pageClass) ? pageClass : ''; %>
 <% const usuarioLocal = (typeof usuario !== 'undefined' && usuario) ? usuario : null; %>
 <body class="public-page <%= pageClassLocal %>">
-  <header class="site-header">
-    <div class="site-brand">
-      <img src="/site/img/logo.png" alt="Portal Enfermagem">
-      <h1 class="portal-title">Portal Enfermagem</h1>
-    </div>
-    <nav class="site-nav">
-      <% if (usuarioLocal) { %>
-        <a href="/home">Home</a>
-      <% } else { %>
-        <a href="/">Início</a>
-      <% } %>
-      <a href="/procedimentos">Procedimentos</a>
-      <a href="/medicamentos">Medicamentos</a>
-      <a href="/terminologias">Terminologias</a>
-      <a href="/quiz">Quiz</a>
-      <a href="/lembretes">Lembretes</a>
-      <% if (usuarioLocal) { %>
-        <a href="/usuario">Minha Conta</a>
-        <% if (usuarioLocal.admin) { %>
-          <a href="/admin/usuarios/lst">Admin</a>
+  <% if (pageClassLocal && pageClassLocal.includes('page-home')) { %>
+    <header class="site-header site-header--home">
+      <div class="home-header">
+        <a class="home-brand" href="<%= usuarioLocal ? '/home' : '/' %>">
+          <img class="home-brand-logo" src="/site/img/logo.png" alt="Portal Enfermagem">
+          <span class="home-brand-text">
+            <span class="home-brand-title">Enfermagem</span>
+            <span class="home-brand-subtitle">em estudo</span>
+          </span>
+        </a>
+
+        <nav class="home-nav" aria-label="Menu">
+          <% if (usuarioLocal) { %>
+            <a class="home-nav-link is-active" href="/home">Home</a>
+          <% } else { %>
+            <a class="home-nav-link is-active" href="/">Home</a>
+          <% } %>
+          <a class="home-nav-link" href="/procedimentos">Procedimentos</a>
+          <a class="home-nav-link" href="/medicamentos">Medicamentos</a>
+          <a class="home-nav-link" href="/terminologias">Terminologias</a>
+          <% if (usuarioLocal) { %>
+            <a class="home-nav-link" href="/usuario">Minha conta</a>
+          <% } %>
+        </nav>
+
+        <div class="home-actions">
+          <form class="home-top-search" role="search" aria-label="Pesquisar rápido" onsubmit="return false;">
+            <span class="home-top-search-icon" aria-hidden="true">⌕</span>
+            <input type="text" class="home-top-search-input" placeholder="Buscar..." disabled>
+          </form>
+
+          <% if (usuarioLocal) { %>
+            <a class="home-action-btn" href="/sair">Sair</a>
+          <% } else { %>
+            <a class="home-action-btn" href="/login">Entrar</a>
+          <% } %>
+        </div>
+      </div>
+    </header>
+  <% } else if (pageClassLocal && (pageClassLocal.includes('page-procedimentos') || pageClassLocal.includes('page-medicamentos') || pageClassLocal.includes('page-terminologias'))) { %>
+    <% const isProcedPage = pageClassLocal.includes('page-procedimentos'); %>
+    <% const isMedicPage = pageClassLocal.includes('page-medicamentos'); %>
+    <% const isTermPage = pageClassLocal.includes('page-terminologias'); %>
+    <header class="site-header site-header--app">
+      <div class="app-header">
+        <a class="app-brand" href="<%= usuarioLocal ? '/home' : '/' %>">
+          <img src="/site/img/logo.png" alt="Portal Enfermagem">
+          <strong>Portal Enfermagem</strong>
+        </a>
+
+        <nav class="app-nav" aria-label="Menu">
+          <a href="/home">Home</a>
+          <a class="<%= isProcedPage ? 'is-active' : '' %>" href="/procedimentos">Procedimentos</a>
+          <a class="<%= isMedicPage ? 'is-active' : '' %>" href="/medicamentos">Medicamentos</a>
+          <a class="<%= isTermPage ? 'is-active' : '' %>" href="/terminologias">Terminologias</a>
+          <a href="/quiz">Quiz</a>
+          <% if (usuarioLocal) { %>
+            <a href="/conteudos">Conteúdos</a>
+            <a href="/usuario">Minha Conta</a>
+          <% } %>
+        </nav>
+
+        <div class="app-actions" aria-label="Ações">
+          <div class="app-iconbtn" aria-hidden="true"><span class="app-ic">⌕</span></div>
+          <div class="app-iconbtn" aria-hidden="true"><span class="app-ic">🔔</span><span class="app-badge">3</span></div>
+          <% if (usuarioLocal) { %>
+            <a class="user-pill" href="/usuario" aria-label="Minha conta">
+              <span class="user-dot" aria-hidden="true"><%= usuarioLocal.nome ? usuarioLocal.nome.trim().slice(0, 1).toUpperCase() : 'U' %></span>
+              <span><%= usuarioLocal.nome ? usuarioLocal.nome.split(' ')[0] : 'Usuário' %></span>
+              <span aria-hidden="true">▾</span>
+            </a>
+          <% } else { %>
+            <a class="user-pill" href="/login">Entrar</a>
+          <% } %>
+        </div>
+      </div>
+    </header>
+  <% } else { %>
+    <header class="site-header">
+      <div class="site-brand">
+        <img src="/site/img/logo.png" alt="Portal Enfermagem">
+        <h1 class="portal-title">Portal Enfermagem</h1>
+      </div>
+      <nav class="site-nav">
+        <% if (usuarioLocal) { %>
+          <a href="/home">Home</a>
+        <% } else { %>
+          <a href="/">Início</a>
         <% } %>
-      <% } else { %>
-        <a href="/login">Entrar</a>
-        <a href="/cadastro">Cadastre-se</a>
-      <% } %>
-    </nav>
-    <div class="nav-controls">
-      <button type="button" class="nav-btn" onclick="history.back()">Voltar</button>
-      <% if (usuarioLocal) { %>
-        <a class="nav-btn" href="/sair">Sair</a>
-      <% } else { %>
-        <a class="nav-btn" href="/login">Entrar</a>
-      <% } %>
-    </div>
-  </header>
+        <a href="/procedimentos">Procedimentos</a>
+        <a href="/medicamentos">Medicamentos</a>
+        <a href="/terminologias">Terminologias</a>
+        <a href="/quiz">Quiz</a>
+        <% if (usuarioLocal) { %>
+          <a href="/conteudos">Conteúdos</a>
+        <% } %>
+        <% if (usuarioLocal) { %>
+          <a href="/usuario">Minha Conta</a>
+          <% if (usuarioLocal.admin) { %>
+            <a href="/admin/usuarios/lst">Admin</a>
+          <% } %>
+        <% } else { %>
+          <a href="/login">Entrar</a>
+          <a href="/cadastro">Cadastre-se</a>
+        <% } %>
+      </nav>
+      <div class="nav-controls">
+        <button type="button" class="nav-btn" onclick="history.back()">Voltar</button>
+        <% if (usuarioLocal) { %>
+          <a class="nav-btn" href="/sair">Sair</a>
+        <% } else { %>
+          <a class="nav-btn" href="/login">Entrar</a>
+        <% } %>
+      </div>
+    </header>
+  <% } %>
   <main>

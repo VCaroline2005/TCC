@@ -1,56 +1,89 @@
 <%- include('cabecalho', { pageClass: 'page-usuario-editar' }) %>
-<h2>Editar meus dados</h2>
+<header class="user-edit-header">
+  <h2 class="user-edit-title">Editar meus dados</h2>
+  <p class="user-edit-subtitle">Atualize suas informações e sua foto de perfil.</p>
+</header>
 
 <% if (typeof erro !== 'undefined' && erro === 'email') { %>
   <p class="form-error">E-mail já cadastrado.</p>
+<% } %>
+<% if (typeof erro !== 'undefined' && erro === 'telefone') { %>
+  <p class="form-error">Telefone inválido. Use DDD + número (ex.: (11) 91234-5678).</p>
 <% } %>
 <% if (typeof erro !== 'undefined' && erro === 'salvar') { %>
   <p class="form-error">Não foi possível salvar. Tente novamente.</p>
 <% } %>
 
 <form method="post" action="/usuario/editar" enctype="multipart/form-data" class="user-edit-form">
-  <div class="form-row">
-    <label>Foto atual</label><br>
-    <% if (dadosUsuario.foto) { %>
-      <img src="/usuarios/<%= dadosUsuario.foto %>" alt="Foto atual do usuário" class="user-edit-avatar">
-    <% } else { %>
-      <span class="muted-text">Sem foto cadastrada</span>
-    <% } %>
+  <div class="user-edit-layout">
+    <section class="user-edit-card" aria-label="Foto de perfil">
+      <h3 class="user-edit-card-title">Foto de perfil</h3>
+      <div class="user-edit-avatar-row">
+        <% if (dadosUsuario.foto) { %>
+          <img src="/usuarios/<%= dadosUsuario.foto %>" alt="Foto atual do usuário" class="user-edit-avatar">
+        <% } else { %>
+          <div class="user-edit-avatar-placeholder" aria-hidden="true">
+            <%= dadosUsuario.nome ? dadosUsuario.nome.trim().charAt(0).toUpperCase() : '?' %>
+          </div>
+        <% } %>
+        <div class="user-edit-avatar-hint">
+          <div class="user-edit-avatar-name"><%= dadosUsuario.nome %></div>
+          <div class="muted-text">Formatos comuns: JPG, PNG. Recomendado: imagem quadrada.</div>
+        </div>
+      </div>
+
+      <div class="user-edit-field">
+        <label for="foto">Nova foto (opcional)</label>
+        <input id="foto" type="file" name="foto" accept="image/*">
+      </div>
+    </section>
+
+    <section class="user-edit-card" aria-label="Dados do usuário">
+      <h3 class="user-edit-card-title">Dados</h3>
+
+      <div class="user-edit-grid">
+        <div class="user-edit-field">
+          <label for="nome">Nome</label>
+          <input id="nome" type="text" name="nome" value="<%= dadosUsuario.nome %>" required>
+        </div>
+
+        <div class="user-edit-field">
+          <label for="email">E-mail</label>
+          <input id="email" type="email" name="email" value="<%= dadosUsuario.email %>" required>
+        </div>
+
+        <div class="user-edit-field">
+          <label for="telefone">Telefone</label>
+          <input id="telefone" type="text" name="telefone" value="<%= dadosUsuario.telefone || '' %>">
+        </div>
+
+        <div class="user-edit-field">
+          <label for="cpf">CPF</label>
+          <input id="cpf" type="text" name="cpf" value="<%= dadosUsuario.cpf || '' %>">
+        </div>
+
+        <div class="user-edit-field user-edit-field-wide">
+          <label for="endereco">Endereço</label>
+          <input id="endereco" type="text" name="endereco" value="<%= dadosUsuario.endereco || '' %>">
+        </div>
+
+        <div class="user-edit-field">
+          <label for="datanasc">Data de nascimento</label>
+          <input id="datanasc" type="date" name="datanasc" value="<%= dadosUsuario.datanasc ? dadosUsuario.datanasc.toISOString().substr(0,10) : '' %>">
+        </div>
+
+        <div class="user-edit-field">
+          <label for="senha">Nova senha (opcional)</label>
+          <input id="senha" type="password" name="senha" placeholder="Deixe em branco para não alterar">
+        </div>
+      </div>
+
+      <div class="user-edit-actions">
+        <button type="submit" class="user-edit-btn primary">Salvar alterações</button>
+        <a href="/usuario" class="user-edit-btn">Cancelar</a>
+      </div>
+    </section>
   </div>
-  <div class="form-row">
-    <label>Nome</label><br>
-    <input type="text" name="nome" value="<%= dadosUsuario.nome %>" required>
-  </div>
-  <div class="form-row">
-    <label>E-mail</label><br>
-    <input type="email" name="email" value="<%= dadosUsuario.email %>" required>
-  </div>
-  <div class="form-row">
-    <label>Telefone</label><br>
-    <input type="text" name="telefone" value="<%= dadosUsuario.telefone || '' %>">
-  </div>
-  <div class="form-row">
-    <label>Endereço</label><br>
-    <input type="text" name="endereco" value="<%= dadosUsuario.endereco || '' %>">
-  </div>
-  <div class="form-row">
-    <label>CPF</label><br>
-    <input type="text" name="cpf" value="<%= dadosUsuario.cpf || '' %>">
-  </div>
-  <div class="form-row">
-    <label>Data de nascimento</label><br>
-    <input type="date" name="datanasc" value="<%= dadosUsuario.datanasc ? dadosUsuario.datanasc.toISOString().substr(0,10) : '' %>">
-  </div>
-  <div class="form-row">
-    <label>Nova senha (opcional)</label><br>
-    <input type="password" name="senha" placeholder="Deixe em branco para não alterar">
-  </div>
-  <div class="form-row">
-    <label>Foto (opcional)</label><br>
-    <input type="file" name="foto" accept="image/*">
-  </div>
-  <button type="submit">Salvar alterações</button>
-  <a href="/usuario" class="inline-cancel">Cancelar</a>
 </form>
 
 <%- include('rodape') %>

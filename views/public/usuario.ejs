@@ -1,74 +1,130 @@
 <%- include('cabecalho', { pageClass: 'page-usuario' }) %>
-<h2>Área do Usuário</h2>
-<% if (typeof dadosUsuario !== 'undefined' && dadosUsuario) { %>
-  <div class="user-banner">
-    <div class="user-banner-avatar-wrap">
-      <% if (dadosUsuario.foto) { %>
-        <img src="/usuarios/<%= dadosUsuario.foto %>" alt="Foto do usuário" class="user-banner-avatar">
-      <% } else { %>
-        <div class="user-banner-avatar-placeholder">
-          <%= dadosUsuario.nome ? dadosUsuario.nome.charAt(0).toUpperCase() : '?' %>
-        </div>
-      <% } %>
-    </div>
-    <div>
-      Bem-vindo, <strong><%= dadosUsuario.nome %></strong>! Aqui você acessa apenas conteúdos publicados pelo administrador.
-    </div>
+<% const user = (typeof dadosUsuario !== 'undefined' && dadosUsuario) ? dadosUsuario : null; %>
+<% const conteudosCountLocal = (typeof conteudosCount !== 'undefined' && Number.isFinite(conteudosCount)) ? conteudosCount : 0; %>
+<% const conteudosRecentesLocal = (typeof conteudosRecentes !== 'undefined' && conteudosRecentes) ? conteudosRecentes : []; %>
+<% const formatDate = (value) => { try { if (!value) return ''; const d = new Date(value); if (Number.isNaN(d.getTime())) return ''; return d.toLocaleDateString('pt-BR'); } catch (e) { return ''; } }; %>
+
+<header class="user-page-header">
+  <div>
+    <h2 class="user-page-title">Minha conta</h2>
+    <p class="user-page-subtitle">Seus dados e seus PDFs, organizados em um só lugar.</p>
   </div>
-<% } else { %>
-  <p>Bem-vindo. Aqui você acessa apenas conteúdos publicados pelo administrador.</p>
-<% } %>
+</header>
 
-<% if (typeof dadosUsuario !== 'undefined' && dadosUsuario) { %>
-
-
-  <section class="user-card">
-    <h3 class="user-card-title">Meus dados</h3>
-    <div class="user-card-top">
-      <% if (dadosUsuario.foto) { %>
-        <img src="/usuarios/<%= dadosUsuario.foto %>" alt="Foto do usuário" class="user-card-avatar">
+<% if (user) { %>
+  <section class="user-hero" aria-label="Resumo do usuário">
+    <div class="user-hero-avatar">
+      <% if (user.foto) { %>
+        <img src="/usuarios/<%= user.foto %>" alt="Foto do usuário" class="user-hero-avatar-img">
       <% } else { %>
-        <div class="user-card-avatar-placeholder">
-          <%= dadosUsuario.nome ? dadosUsuario.nome.charAt(0).toUpperCase() : '?' %>
+        <div class="user-hero-avatar-placeholder" aria-hidden="true">
+          <%= user.nome ? user.nome.trim().charAt(0).toUpperCase() : '?' %>
         </div>
       <% } %>
-      <div class="user-card-note">
-        Você pode editar seus dados e trocar sua foto de perfil.
+    </div>
+
+    <div class="user-hero-main">
+      <div class="user-hero-title">
+        Bem-vindo, <strong><%= user.nome %></strong>
+      </div>
+      <div class="user-hero-meta">
+        <span><%= user.email %></span>
+        <% if (user.telefone) { %>
+          <span class="user-hero-dot" aria-hidden="true">•</span>
+          <span><%= user.telefone %></span>
+        <% } %>
+      </div>
+      <div class="user-hero-hint">
+        Aqui você acessa apenas conteúdos publicados pelo administrador.
+      </div>
+      <div class="user-hero-actions">
+        <a class="user-btn primary" href="/usuario/editar">Editar meus dados</a>
+        <a class="user-btn" href="/conteudos">Meus PDFs</a>
       </div>
     </div>
-    <ul class="user-data-list">
-      <li><strong>Nome:</strong> <%= dadosUsuario.nome %></li>
-      <li><strong>E-mail:</strong> <%= dadosUsuario.email %></li>
-      <li><strong>Telefone:</strong> <%= dadosUsuario.telefone || 'não informado' %></li>
-      <li><strong>Endereço:</strong> <%= dadosUsuario.endereco || 'não informado' %></li>
-      <li><strong>CPF:</strong> <%= dadosUsuario.cpf || 'não informado' %></li>
-      <li><strong>Data de nascimento:</strong> <%= dadosUsuario.datanasc ? dadosUsuario.datanasc.toISOString().substr(0,10) : 'não informada' %></li>
-    </ul>
-    <div class="user-card-actions">
-      <a href="/usuario/editar">Editar meus dados e foto</a>
+
+    <div class="user-hero-stats" aria-label="Resumo de PDFs">
+      <div class="user-stat">
+        <div class="user-stat-label">PDFs enviados</div>
+        <div class="user-stat-value"><%= conteudosCountLocal %></div>
+      </div>
     </div>
   </section>
-<% } %>
 
-<% if (typeof lembretesProximos !== 'undefined' && lembretesProximos.length) { %>
-  <div class="user-reminder-box">
-    <strong>Você tem lembretes vencendo em até 3 dias:</strong>
-    <ul>
-      <% lembretesProximos.forEach(function(l){ %>
-        <li>
-          <%= l.conteudo %>
-          <% if (l.vencimento) { %>
-            - <%= l.vencimento.toISOString().substr(0,10) %>
-            <% if (agora && l.vencimento <= agora) { %>
-              <strong class="text-danger">(vencido)</strong>
-            <% } %>
-          <% } else { %>
-            - sem data
-          <% } %>
-        </li>
-      <% }) %>
-    </ul>
-    <a href="/lembretes">Ver todos os lembretes</a>
+  <div class="user-layout">
+    <section class="user-panel" aria-label="Meus dados">
+      <div class="user-panel-header">
+        <h3 class="user-panel-title">Meus dados</h3>
+        <a class="user-panel-link" href="/usuario/editar">Editar</a>
+      </div>
+
+      <dl class="user-data-grid">
+        <div class="user-data-item">
+          <dt>Nome</dt>
+          <dd><%= user.nome %></dd>
+        </div>
+        <div class="user-data-item">
+          <dt>E-mail</dt>
+          <dd><%= user.email %></dd>
+        </div>
+        <div class="user-data-item">
+          <dt>Telefone</dt>
+          <dd><%= user.telefone || 'não informado' %></dd>
+        </div>
+        <div class="user-data-item">
+          <dt>Endereço</dt>
+          <dd><%= user.endereco || 'não informado' %></dd>
+        </div>
+        <div class="user-data-item">
+          <dt>CPF</dt>
+          <dd><%= user.cpf || 'não informado' %></dd>
+        </div>
+        <div class="user-data-item">
+          <dt>Data de nascimento</dt>
+          <dd><%= formatDate(user.datanasc) || 'não informada' %></dd>
+        </div>
+      </dl>
+    </section>
+
+    <section class="user-panel" aria-label="Meus conteúdos em PDF">
+      <div class="user-panel-header">
+        <h3 class="user-panel-title">Meus conteúdos (PDF)</h3>
+        <a class="user-panel-link" href="/conteudos">Abrir</a>
+      </div>
+
+      <% if (!conteudosRecentesLocal.length) { %>
+        <p class="muted-text user-empty">Nenhum PDF enviado ainda. Envie seu primeiro conteúdo para começar.</p>
+      <% } else { %>
+        <ul class="user-pdf-list" aria-label="Últimos PDFs">
+          <% conteudosRecentesLocal.slice(0, 5).forEach(function(c){ %>
+            <li class="user-pdf-item">
+              <div class="user-pdf-title"><%= c.titulo %></div>
+              <div class="user-pdf-meta">
+                <% const created = formatDate(c.criadoEm); %>
+                <% if (created) { %><span><%= created %></span><% } %>
+                <% if (c.categoria) { %>
+                  <% if (created) { %><span class="user-hero-dot" aria-hidden="true">•</span><% } %>
+                  <span class="user-pill"><%= c.categoria %></span>
+                <% } %>
+              </div>
+            </li>
+          <% }) %>
+        </ul>
+
+        <% if (conteudosRecentesLocal.length > 5) { %>
+          <div class="muted-text user-more">E mais <%= conteudosRecentesLocal.length - 5 %> PDF(s)…</div>
+        <% } %>
+      <% } %>
+
+      <div class="user-panel-actions">
+        <a class="user-btn primary" href="/conteudos">Ver e organizar meus PDFs</a>
+      </div>
+    </section>
+  </div>
+<% } else { %>
+  <p class="muted-text">Sua sessão não está ativa. Faça login para acessar sua conta.</p>
+  <div class="user-panel-actions">
+    <a class="user-btn primary" href="/login">Entrar</a>
   </div>
 <% } %>
 

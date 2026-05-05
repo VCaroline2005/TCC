@@ -1,24 +1,48 @@
 import express from 'express';
 const router = express.Router();
 import multer from 'multer';
+import path from 'node:path'
+import fs from 'node:fs'
 const upload = multer({ dest: 'public/usuarios/' })
+
+function pdfOnlyFilter(req, file, cb) {
+    const isPdfMime = file.mimetype === 'application/pdf'
+    const isPdfExt = (file.originalname || '').toLowerCase().endsWith('.pdf')
+    if (isPdfMime || isPdfExt) return cb(null, true)
+    return cb(new Error('Apenas arquivos PDF são permitidos.'))
+}
+
+const conteudoStorage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        const usuarioId = req.session?.usuario?.id
+        if (!usuarioId) return cb(new Error('Usuário não autenticado.'))
+        const dir = path.join('public', 'uploads', 'conteudos', usuarioId)
+        fs.mkdir(dir, { recursive: true }, (err) => cb(err, dir))
+    },
+    filename: (req, file, cb) => {
+        const stamp = Date.now()
+        const rand = Math.round(Math.random() * 1e9)
+        cb(null, `${stamp}-${rand}.pdf`)
+    }
+})
+
+const conteudoUpload = multer({
+    storage: conteudoStorage,
+    limits: { fileSize: 25 * 1024 * 1024 },
+    fileFilter: pdfOnlyFilter
+})
+
 const quizUpload = multer({
     dest: 'public/uploads/quiz/',
     limits: { fileSize: 10 * 1024 * 1024 },
-    fileFilter: (req, file, cb) => {
-        const isPdfMime = file.mimetype === 'application/pdf'
-        const isPdfExt = (file.originalname || '').toLowerCase().endsWith('.pdf')
-        if (isPdfMime || isPdfExt) {
-            return cb(null, true)
-        }
-        return cb(new Error('Apenas arquivos PDF são permitidos.'))
-    }
+    fileFilter: pdfOnlyFilter
 })
 
 import { abrecadastro, cadastro, abrelogin, login, abreindex, abrehome,
          listarProcedimentos, listarMedicamentos, listarTerminologias,
-         fazerQuiz, responderQuiz, adicionarLembrete, listarLembretes,
-         abreusuario, sair, abreEditarLembrete, editarLembrete, deletarLembrete,
+         fazerQuiz, responderQuiz, listarConteudos, uploadConteudo,
+         downloadConteudo, abreEditarConteudo, editarConteudo, deletarConteudo,
+         abreusuario, sair,
          abreEditarUsuario, editarUsuario, receberQuizPdf,
          abreRecuperarSenha, recuperarSenha
  } from '../controllers/public.js';
@@ -72,12 +96,20 @@ router.post('/quiz/upload', requireLogin, (req, res, next) => {
     })
 }, receberQuizPdf)
 
-// lembretes
+// conteúdos (PDF)
 
-router.get('/lembretes', requireLogin, listarLembretes)
-router.post('/lembretes', requireLogin, adicionarLembrete)
-router.get('/lembretes/edt/:id', requireLogin, abreEditarLembrete)
-router.post('/lembretes/edt/:id', requireLogin, editarLembrete)
-router.get('/lembretes/del/:id', requireLogin, deletarLembrete)
+router.get('/conteudos', requireLogin, listarConteudos)
+router.post('/conteudos/upload', requireLogin, (req, res, next) => {
+    conteudoUpload.single('arquivo')(req, res, (err) => {
+        if (err) {
+            return res.redirect('/conteudos?erro=arquivo')
+        }
+        return next()
+    })
+}, uploadConteudo)
+router.get('/conteudos/dl/:id', requireLogin, downloadConteudo)
+router.get('/conteudos/edt/:id', requireLogin, abreEditarConteudo)
+router.post('/conteudos/edt/:id', requireLogin, editarConteudo)
+router.get('/conteudos/del/:id', requireLogin, deletarConteudo)
 
 export default router

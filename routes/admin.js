@@ -4,8 +4,41 @@ import express from 'express'
 const router = express.Router()
 //importação da biblioteca multer para baixar arquivos
 import multer from 'multer';
+import fs from 'node:fs'
 //configuração da pasta onde serão inseridos os arquivos baixados
 const upload = multer({ dest: 'public/fotos/' })
+const popsUploadDir = 'public/uploads/pops'
+try {
+    fs.mkdirSync(popsUploadDir, { recursive: true })
+} catch (err) {
+    // ignore
+}
+
+const tmpImportDir = '/tmp/ifstore-imports'
+try {
+    fs.mkdirSync(tmpImportDir, { recursive: true })
+} catch (err) {
+    // ignore (será tratado ao subir arquivo)
+}
+
+function pdfOnlyFilter(req, file, cb) {
+    const isPdfMime = file.mimetype === 'application/pdf'
+    const isPdfExt = (file.originalname || '').toLowerCase().endsWith('.pdf')
+    if (isPdfMime || isPdfExt) return cb(null, true)
+    return cb(new Error('Apenas arquivos PDF são permitidos.'))
+}
+
+const pdfUpload = multer({
+    dest: tmpImportDir,
+    limits: { fileSize: 25 * 1024 * 1024 },
+    fileFilter: pdfOnlyFilter
+})
+
+const popsPdfUpload = multer({
+    dest: popsUploadDir,
+    limits: { fileSize: 25 * 1024 * 1024 },
+    fileFilter: pdfOnlyFilter
+})
 
 //importação das funções de controllers
 import {    
@@ -28,6 +61,8 @@ import {
         despublicarprocedimento,
         abreedtprocedimento,
         edtprocedimento,
+        abreImportPopPdf,
+        importPopPdf,
         abreaddmedicamento,
         addmedicamento,
         listarmedicamento,
@@ -37,6 +72,10 @@ import {
         despublicarmedicamento,
         abreedtmedicamento,
         edtmedicamento,
+        abreimportmedicamento,
+        importmedicamento,
+        abreRevisarImportMedicamento,
+        confirmarImportMedicamento,
         abreaddterminologia,
         addterminologia,
         listarterminologia,
@@ -94,6 +133,17 @@ router.get('/admin/procedimento/unpub/:id', despublicarprocedimento)
 router.get('/admin/procedimento/edt/:id', abreedtprocedimento)
 router.post('/admin/procedimento/edt/:id', edtprocedimento)
 
+// POPs em PDF (importação rápida)
+router.get('/admin/procedimento/import-pop', abreImportPopPdf)
+router.post('/admin/procedimento/import-pop', (req, res, next) => {
+    popsPdfUpload.array('arquivos', 20)(req, res, (err) => {
+        if (err) {
+            return res.redirect('/admin/procedimento/import-pop?erro=Arquivo%20inv%C3%A1lido%20ou%20muito%20grande.')
+        }
+        return next()
+    })
+}, importPopPdf)
+
 // -------- medicamento --------
 router.get('/admin/medicamento/add', abreaddmedicamento)
 router.post('/admin/medicamento/add', upload.array('fotos',5), addmedicamento)
@@ -106,6 +156,17 @@ router.get('/admin/medicamento/pub/:id', publicarmedicamento)
 router.get('/admin/medicamento/unpub/:id', despublicarmedicamento)
 router.get('/admin/medicamento/edt/:id', abreedtmedicamento)
 router.post('/admin/medicamento/edt/:id', edtmedicamento)
+router.get('/admin/medicamento/import', abreimportmedicamento)
+router.post('/admin/medicamento/import', (req, res, next) => {
+    pdfUpload.single('arquivo')(req, res, (err) => {
+        if (err) {
+            return res.redirect('/admin/medicamento/import?erro=Arquivo%20inv%C3%A1lido%20ou%20muito%20grande.')
+        }
+        return next()
+    })
+}, importmedicamento)
+router.get('/admin/medicamento/import/revisar/:id', abreRevisarImportMedicamento)
+router.post('/admin/medicamento/import/confirmar/:id', confirmarImportMedicamento)
 
 // ---------- terminologia ----------
 router.get('/admin/terminologia/add', abreaddterminologia)

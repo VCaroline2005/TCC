@@ -1,0 +1,106 @@
+<%- include('cabecalho', { pageClass: 'page-conteudos' }) %>
+<h2>Conteúdos </h2>
+
+<% const erroLocal = (typeof erro !== 'undefined' && erro) ? erro : null; %>
+<% const sucessoLocal = (typeof sucesso !== 'undefined' && sucesso) ? sucesso : null; %>
+<% const editandoLocal = (typeof editando !== 'undefined' && editando); %>
+<% const conteudoEdicaoLocal = (typeof ConteudoEdicao !== 'undefined' && ConteudoEdicao) ? ConteudoEdicao : null; %>
+
+<% if (erroLocal === 'arquivo') { %>
+  <p class="form-error">Envie um arquivo PDF válido (até 25MB).</p>
+<% } else if (erroLocal === 'titulo') { %>
+  <p class="form-error">Informe um título para salvar.</p>
+<% } else if (erroLocal === 'salvar') { %>
+  <p class="form-error">Não foi possível salvar. Tente novamente.</p>
+<% } else if (erroLocal === 'nao-encontrado') { %>
+  <p class="form-error">Conteúdo não encontrado.</p>
+<% } %>
+
+<% if (sucessoLocal === 'upload') { %>
+  <p class="form-success">PDF enviado com sucesso.</p>
+<% } else if (sucessoLocal === 'editado') { %>
+  <p class="form-success">Conteúdo atualizado com sucesso.</p>
+<% } else if (sucessoLocal === 'excluido') { %>
+  <p class="form-success">Conteúdo excluído com sucesso.</p>
+<% } %>
+
+<% if (editandoLocal && conteudoEdicaoLocal) { %>
+  <form method="post" action="/conteudos/edt/<%= conteudoEdicaoLocal._id %>" class="conteudo-form">
+    <h3>Editar conteúdo</h3>
+    <label>Título</label>
+    <input type="text" name="titulo" value="<%= conteudoEdicaoLocal.titulo %>" required>
+    <label>Descrição </label>
+    <textarea name="descricao" rows="3" placeholder="Notas sobre este PDF"><%= conteudoEdicaoLocal.descricao || '' %></textarea>
+    <div class="conteudo-actions">
+      <input type="submit" value="Salvar" class="conteudo-btn">
+      <a href="/conteudos" class="conteudo-cancel">Cancelar</a>
+    </div>
+  </form>
+<% } else { %>
+  <form method="post" action="/conteudos/upload" enctype="multipart/form-data" class="conteudo-form">
+    <h3>Enviar novo PDF</h3>
+    <label>Arquivo (PDF)</label>
+    <input type="file" name="arquivo" accept="application/pdf,.pdf" required>
+    <label>Título </label>
+    <input type="text" name="titulo" placeholder="Se vazio, usa o nome do arquivo">
+    <label>Descrição</label>
+    <textarea name="descricao" rows="3" placeholder="Notas sobre este PDF"></textarea>
+    <div class="conteudo-actions">
+      <input type="submit" value="Enviar" class="conteudo-btn">
+    </div>
+  </form>
+<% } %>
+
+<% const categoriasLocal = (typeof categorias !== 'undefined' && categorias) ? categorias : []; %>
+<% const categoriaSel = (typeof categoriaSelecionada !== 'undefined' && categoriaSelecionada) ? categoriaSelecionada : ''; %>
+<% const qLocal = (typeof q !== 'undefined' && q) ? q : ''; %>
+
+<form method="get" action="/conteudos" class="conteudo-filter">
+  <input type="text" name="q" value="<%= qLocal %>" placeholder="Pesquisar por título, categoria ou nome do arquivo">
+  <select name="categoria">
+    <option value="">Todas as categorias</option>
+    <% categoriasLocal.forEach(function(cat){ %>
+      <option value="<%= cat %>" <%= (String(cat).toLowerCase() === String(categoriaSel).toLowerCase()) ? 'selected' : '' %>><%= cat %></option>
+    <% }) %>
+  </select>
+  <button type="submit" class="conteudo-link">Filtrar</button>
+  <a href="/conteudos" class="conteudo-link">Limpar</a>
+</form>
+
+<% const conteudosLocal = (typeof Conteudos !== 'undefined' && Conteudos) ? Conteudos : []; %>
+<% const formatDate = (d) => { try { return new Date(d).toLocaleString('pt-BR'); } catch (e) { return ''; } }; %>
+<% const formatSize = (n) => { const b = Number(n || 0); if (!b) return '-'; const kb = b/1024; if (kb < 1024) return kb.toFixed(1) + ' KB'; const mb = kb/1024; return mb.toFixed(1) + ' MB'; }; %>
+
+<% if (!conteudosLocal.length) { %>
+  <p class="muted">Nenhum PDF encontrado.</p>
+<% } else { %>
+  <div class="conteudo-list">
+    <% conteudosLocal.forEach(function(c){ %>
+      <div class="conteudo-item">
+        <div class="conteudo-main">
+          <div class="conteudo-title"><%= c.titulo %></div>
+          <div class="conteudo-meta">
+            <span><%= c.categoria ? c.categoria : 'Sem categoria' %></span>
+            <span>•</span>
+            <span><%= formatDate(c.criadoEm) %></span>
+            <span>•</span>
+            <span><%= c.arquivoOriginal %></span>
+            <span>•</span>
+            <span><%= formatSize(c.tamanho) %></span>
+          </div>
+          <% if (c.descricao) { %>
+            <div class="conteudo-desc"><%= c.descricao %></div>
+          <% } %>
+        </div>
+        <div class="conteudo-item-actions">
+          <a class="conteudo-link" href="/conteudos/dl/<%= c._id %>">Download</a>
+          <a class="conteudo-link" href="/conteudos/edt/<%= c._id %>">Editar</a>
+          <a class="conteudo-link danger" href="/conteudos/del/<%= c._id %>" onclick="return confirm('Tem certeza que deseja excluir este PDF?')">Excluir</a>
+        </div>
+      </div>
+    <% }) %>
+  </div>
+<% } %>
+
+<%- include('rodape') %>
+

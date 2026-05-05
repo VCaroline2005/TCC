@@ -70,7 +70,7 @@
           inOl = true;
         }
         closeListItem();
-        html += `<li class="proc-step-row"><div class="proc-step-col"><div class="proc-step">${escapeHtml(orderedMatch[2])}</div></div><div class="proc-just-col">`;
+        html += `<li class="proc-step-row" data-step="${escapeHtml(orderedMatch[1])}"><div class="proc-step-col"><div class="proc-step">${escapeHtml(orderedMatch[2])}</div></div><div class="proc-just-col">`;
         openLi = true;
         return;
       }
@@ -103,64 +103,115 @@
   }
 %>
 
-<section class="proc-hero">
-  <div>
-    <p class="proc-eyebrow">Biblioteca clínica</p>
-    <h2 class="proc-title">Procedimentos</h2>
-    <p class="proc-subtitle">Encontre protocolos, descrições e passo a passo em um só lugar.</p>
-  </div>
-  <form method="get" action="/procedimentos" class="proc-search">
-    <input
-      type="text"
-      name="pesquisar"
-      placeholder="Pesquisar por nome, descrição ou categoria"
-      value="<%= pesquisaAtual %>"
-    >
-    <button type="submit">Pesquisar</button>
-  </form>
-</section>
-
-<ul class="proc-list">
-  <% Procedimentos.forEach(function(p, idx){ %>
-    <li class="proc-card">
-      <button
-        type="button"
-        class="proc-toggle"
-        data-target="proc-<%= idx %>"
-        aria-expanded="false"
-        aria-controls="proc-<%= idx %>"
+<div class="proc-shell">
+  <section class="proc-hero">
+    <div>
+      <p class="proc-eyebrow">Biblioteca clínica</p>
+      <h2 class="proc-title">Procedimentos</h2>
+      <p class="proc-subtitle">Encontre protocolos, descrições e passo a passo em um só lugar.</p>
+    </div>
+    <form method="get" action="/procedimentos" class="proc-search" aria-label="Pesquisar procedimentos">
+      <input
+        type="text"
+        name="pesquisar"
+        placeholder="Pesquisar por nome, descrição ou categoria..."
+        value="<%= pesquisaAtual %>"
+        autocomplete="off"
       >
-        <span class="proc-meta">
-          <span><%= p.nome %></span>
-          <span class="proc-category"><%= p.categoria %></span>
-        </span>
-        <span class="proc-arrow">▾</span>
+      <button type="submit" aria-label="Pesquisar">
+        <span aria-hidden="true">⌕</span>
+        Pesquisar
       </button>
-      <div id="proc-<%= idx %>" class="proc-details">
-        <div class="proc-doc">
-          <%- formatProcedimento(p.descricao) %>
+    </form>
+  </section>
+
+  <ul class="proc-list">
+    <% Procedimentos.forEach(function(p, idx){ %>
+      <li class="proc-card">
+        <button
+          type="button"
+          class="proc-toggle"
+          data-target="proc-<%= idx %>"
+          aria-expanded="false"
+          aria-controls="proc-<%= idx %>"
+        >
+          <span class="proc-meta">
+            <span class="proc-ic" aria-hidden="true">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M6 3h12v18H6V3Z" stroke="currentColor" stroke-width="2"/>
+                <path d="M9 7h6M9 11h6M9 15h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+            </span>
+            <span class="proc-name"><%= p.nome %></span>
+            <span class="proc-category"><%= p.categoria %></span>
+          </span>
+          <span class="proc-arrow" aria-hidden="true">▾</span>
+        </button>
+        <div id="proc-<%= idx %>" class="proc-details">
+          <div class="proc-details-grid">
+            <section class="proc-block" aria-label="Descrição">
+              <h3 class="proc-block-title"><span aria-hidden="true">≡</span>Descrição</h3>
+              <div class="proc-doc">
+                <%- formatProcedimento(p.descricao) %>
+              </div>
+              <% if (p.fotos && p.fotos.length) { %>
+                <div class="proc-photos">
+                  <% p.fotos.forEach(function(foto){ %>
+                    <img src="/fotos/<%= foto %>" alt="Foto do procedimento">
+                  <% }) %>
+                </div>
+              <% } %>
+            </section>
+
+            <aside class="proc-block proc-side" aria-label="Pontos importantes">
+              <h3 class="proc-block-title"><span aria-hidden="true">🛡</span>Pontos importantes</h3>
+              <ul>
+                <li>Confirme identificação do paciente e técnica correta.</li>
+                <li>Observe alergias, contraindicações e intercorrências.</li>
+                <li>Registre o procedimento e acompanhe possíveis reações.</li>
+              </ul>
+              <% if (p.popPdfNome) { %>
+                <a class="proc-side-btn" href="/uploads/pops/<%= p.popPdfNome %>" target="_blank" rel="noopener">
+                  <span aria-hidden="true">📄</span>
+                  Ver protocolo completo
+                </a>
+              <% } %>
+            </aside>
+
+            <section class="proc-block" style="grid-column: 1 / -1;" aria-label="Passo a passo">
+              <h3 class="proc-block-title"><span aria-hidden="true">①</span>Passo a passo</h3>
+              <% if (p.passos && p.passos.length) { %>
+                <ol class="proc-steps-list">
+                  <% p.passos.forEach(function(passo, passoIdx){ %>
+                    <li data-step="<%= passoIdx + 1 %>"><%= passo %></li>
+                  <% }) %>
+                </ol>
+              <% } else { %>
+                <p class="proc-paragraph">Clique no protocolo acima para ver a descrição completa. Alguns procedimentos não possuem passo a passo separado.</p>
+              <% } %>
+              <% if (p.popPdfNome) { %>
+                <div class="proc-pdf">
+                  <a class="proc-pdf-link" href="/uploads/pops/<%= p.popPdfNome %>" target="_blank" rel="noopener">Abrir POP (PDF)</a>
+                  <% if (p.popPdfOriginal) { %>
+                    <span class="proc-pdf-name muted-text"><%= p.popPdfOriginal %></span>
+                  <% } %>
+                </div>
+              <% } %>
+            </section>
+          </div>
         </div>
-        <% if (p.passos && p.passos.length) { %>
-          <div class="proc-steps">
-            <strong>Passo a passo:</strong>
-            <ol>
-              <% p.passos.forEach(function(passo){ %>
-                <li><%= passo %></li>
-              <% }) %>
-            </ol>
-          </div>
-        <% } %>
-        <% if (p.fotos && p.fotos.length) { %>
-          <div class="proc-photos">
-            <% p.fotos.forEach(function(foto){ %>
-              <img src="/fotos/<%= foto %>" alt="Foto do procedimento">
-            <% }) %>
-          </div>
-        <% } %>
-      </div>
-    </li>
-  <% }) %>
-</ul>
+      </li>
+    <% }) %>
+  </ul>
+
+  <div class="proc-tip" role="note" aria-label="Dica">
+    <div class="proc-tip-ic" aria-hidden="true">💡</div>
+    <div>
+      <strong>Dica</strong><br>
+      Clique sobre um procedimento para visualizar o passo a passo completo e materiais complementares.
+    </div>
+  </div>
+</div>
 <script>
   document.querySelectorAll('.proc-toggle').forEach(function(btn){
     btn.addEventListener('click', function(){

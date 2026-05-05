@@ -3,10 +3,12 @@ import Procedimento from '../models/procedimento.js'
 import Medicamento from '../models/medicamento.js'
 import Terminologia from '../models/terminologia.js'
 import Quiz from '../models/quiz.js'
-import Lembrete from '../models/lembrete.js'
+import Conteudo from '../models/conteudo.js'
 import fs from 'node:fs/promises'
+import path from 'node:path'
 import pdfParse from 'pdf-parse'
 import { GoogleGenAI } from '@google/genai'
+import { formatTelefoneBR, normalizeTelefoneBR } from '../utils/telefone.js'
 
 export async function abrecadastro(req, res){
     res.render('cadastro')
@@ -16,6 +18,15 @@ export async function cadastro(req, res){
     try{
         const admin = req.body.espaco === 'admin';
         const foto = req.file ? req.file.filename : null;
+        let telefoneNormalizado = ''
+        try {
+            telefoneNormalizado = normalizeTelefoneBR(req.body.telefone)
+        } catch (e) {
+            if (e && e.code === 'telefone_invalido') {
+                return res.render('cadastro', { error: 'Telefone inválido. Use DDD + número (ex.: (11) 91234-5678).' })
+            }
+            throw e
+        }
 
         const novousuario = new usuario({
             nome: req.body.nome,
@@ -23,7 +34,7 @@ export async function cadastro(req, res){
             senha: req.body.senha,
             endereco: req.body.endereco,
             foto: foto,
-            telefone: req.body.telefone,
+            telefone: telefoneNormalizado,
             cpf: req.body.cpf,
             admin: admin
         })
@@ -164,20 +175,15 @@ export async function abrehome(req, res){
     const medicamentoCount = await Medicamento.countDocuments({ publicado: true })
     const termoCount = await Terminologia.countDocuments({ publicado: true })
     const quizCount = await Quiz.countDocuments({ publicado: true })
-    const agora = new Date()
-    const limite = new Date()
-    limite.setDate(limite.getDate() + 3)
-    const lembretesProximos = await Lembrete.find({
-        usuario: usuarioId,
-        vencimento: { $lte: limite }
-    }).sort({ vencimento: 1 })
+    const conteudosRecentes = await Conteudo.find({ usuario: usuarioId })
+        .sort({ criadoEm: -1, _id: -1 })
+        .limit(3)
     res.render('public/home.ejs', {
         procedimentoCount,
         medicamentoCount,
         termoCount,
         quizCount,
-        lembretesProximos,
-        agora
+        conteudosRecentes
     })
 }
 
@@ -190,25 +196,25 @@ export async function abreusuario(req, res){
     if (!dadosUsuario) {
         return res.redirect('/login')
     }
+    if (dadosUsuario.telefone) {
+        dadosUsuario.telefone = formatTelefoneBR(dadosUsuario.telefone)
+    }
     const procedimentoCount = await Procedimento.countDocuments({ publicado: true })
     const medicamentoCount = await Medicamento.countDocuments({ publicado: true })
     const termoCount = await Terminologia.countDocuments({ publicado: true })
     const quizCount = await Quiz.countDocuments({ publicado: true })
-    const agora = new Date()
-    const limite = new Date()
-    limite.setDate(limite.getDate() + 3)
-    const lembretesProximos = await Lembrete.find({
-        usuario: usuarioId,
-        vencimento: { $lte: limite }
-    }).sort({ vencimento: 1 })
+    const conteudosCount = await Conteudo.countDocuments({ usuario: usuarioId })
+    const conteudosRecentes = await Conteudo.find({ usuario: usuarioId })
+        .sort({ criadoEm: -1, _id: -1 })
+        .limit(5)
     res.render('public/usuario.ejs', {
         dadosUsuario,
         procedimentoCount,
         medicamentoCount,
         termoCount,
         quizCount,
-        lembretesProximos,
-        agora
+        conteudosCount,
+        conteudosRecentes
     })
 }
 
@@ -219,6 +225,9 @@ export async function abreEditarUsuario(req, res){
     const dadosUsuario = await usuario.findById(req.session.usuario.id)
     if (!dadosUsuario) {
         return res.redirect('/login')
+    }
+    if (dadosUsuario.telefone) {
+        dadosUsuario.telefone = formatTelefoneBR(dadosUsuario.telefone)
     }
     res.render('public/usuario-editar.ejs', {
         dadosUsuario,
@@ -235,11 +244,20 @@ export async function editarUsuario(req, res){
         if (!dadosUsuario) {
             return res.redirect('/login')
         }
+        let telefoneNormalizado = ''
+        try {
+            telefoneNormalizado = normalizeTelefoneBR(req.body.telefone)
+        } catch (e) {
+            if (e && e.code === 'telefone_invalido') {
+                return res.redirect('/usuario/editar?erro=telefone')
+            }
+            throw e
+        }
         const atualizacao = {
             nome: req.body.nome,
             email: req.body.email,
             endereco: req.body.endereco,
-            telefone: req.body.telefone,
+            telefone: telefoneNormalizado,
             cpf: req.body.cpf,
             datanasc: req.body.datanasc
         }
@@ -326,7 +344,16 @@ export async function listarMedicamentos(req,res){
 
 export async function listarTerminologias(req,res){
     const pesquisar = (req.query.pesquisar || '').trim()
+    const categoria = (req.query.categoria || '').trim()
     const filtro = { publicado: true }
+
+    function escapeRegExp(texto) {
+        return String(texto || '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+    }
+
+    if (categoria) {
+        filtro.categoria = new RegExp(`^${escapeRegExp(categoria)}$`, 'i')
+    }
 
     if (pesquisar) {
         const busca = new RegExp(pesquisar, 'i')
@@ -337,10 +364,28 @@ export async function listarTerminologias(req,res){
         ]
     }
 
-    const termos = await Terminologia.find(filtro)
+    const termos = await Terminologia.find(filtro).sort({ termo: 1 })
+
+    const categorias = await Terminologia.distinct('categoria', { publicado: true, categoria: { $nin: [null, ''] } })
+    categorias.sort((a, b) => a.localeCompare(b, 'pt-BR'))
+
+    const totalTermos = await Terminologia.countDocuments({ publicado: true })
+    const totalCategorias = categorias.length
+
+    const ultimaAtualizacao = await Terminologia.findOne({ publicado: true, publicadoEm: { $ne: null } })
+        .sort({ publicadoEm: -1, _id: -1 })
+        .select({ publicadoEm: 1 })
+        .lean()
+    const atualizadoEm = ultimaAtualizacao?.publicadoEm ? new Date(ultimaAtualizacao.publicadoEm).toLocaleDateString('pt-BR') : undefined
+
     res.render('public/terminologias.ejs',{
         Termos:termos,
-        pesquisar
+        pesquisar,
+        categorias,
+        categoriaSelecionada: categoria,
+        totalTermos,
+        totalCategorias,
+        atualizadoEm
     })
 }
 
@@ -366,6 +411,31 @@ function extrairJsonDoTexto(texto) {
     } catch (err) {
         return null
     }
+}
+
+function sleep(ms) {
+    return new Promise((resolve) => setTimeout(resolve, ms))
+}
+
+function extrairDetalhesErroGemini(err) {
+    const mensagem = String(err?.message || err || '')
+    const payload = extrairJsonDoTexto(mensagem)
+    const code = payload?.error?.code
+    const status = payload?.error?.status
+    const apiMessage = payload?.error?.message
+    return {
+        httpCode: typeof code === 'number' ? code : undefined,
+        status: typeof status === 'string' ? status : undefined,
+        message: typeof apiMessage === 'string' ? apiMessage : undefined
+    }
+}
+
+function isErroAltaDemandaGemini(err) {
+    const detalhes = extrairDetalhesErroGemini(err)
+    if (detalhes.httpCode === 503) return true
+    if (detalhes.status === 'UNAVAILABLE') return true
+    const msg = String(err?.message || '')
+    return msg.includes('"code":503') || msg.includes('"status":"UNAVAILABLE"')
 }
 
 function normalizarPerguntas(payload) {
@@ -435,15 +505,28 @@ async function gerarQuizComGemini(textoBase) {
     ].join('\n')
 
     let resposta
-    try {
-        resposta = await geminiClient.models.generateContent({
-            model: modelo,
-            contents: prompt
-        })
-    } catch (err) {
-        const erro = new Error(`Gemini API erro: ${err?.message || err}`)
-        erro.code = 'api'
-        throw erro
+    const delays = [500, 1500, 3000]
+    for (let tentativa = 0; tentativa < delays.length; tentativa += 1) {
+        try {
+            resposta = await geminiClient.models.generateContent({
+                model: modelo,
+                contents: prompt
+            })
+            break
+        } catch (err) {
+            const altaDemanda = isErroAltaDemandaGemini(err)
+            if (altaDemanda && tentativa < delays.length - 1) {
+                await sleep(delays[tentativa])
+                continue
+            }
+            const detalhes = extrairDetalhesErroGemini(err)
+            const erro = new Error(`Gemini API erro: ${err?.message || err}`, { cause: err })
+            erro.code = 'api'
+            if (detalhes.httpCode) erro.apiHttpCode = detalhes.httpCode
+            if (detalhes.status) erro.apiStatus = detalhes.status
+            if (detalhes.message) erro.apiMessage = detalhes.message
+            throw erro
+        }
     }
 
     const textoResposta = typeof resposta?.text === 'string' ? resposta.text : ''
@@ -491,99 +574,171 @@ export async function fazerQuiz(req,res){
 }
 
 
-export async function adicionarLembrete(req,res){
-    try{
-        const usuarioId = req.session?.usuario?.id
-        if (!usuarioId) {
-            return res.redirect('/login')
-        }
-        const conteudo = (req.body.conteudo || '').trim()
-        if(!conteudo){
-            return res.redirect('/lembretes?erro=conteudo')
-        }
-        await Lembrete.create({
-            usuario: usuarioId,
-            conteudo,
-            vencimento: req.body.vencimento || null
-        })
-        return res.redirect('/lembretes')
-    }catch(err){
-        console.error(err)
-        return res.redirect('/lembretes?erro=salvar')
-    }
-}
-
-export async function listarLembretes(req,res){
+export async function listarConteudos(req, res) {
     const usuarioId = req.session?.usuario?.id
-    if (!usuarioId) {
-        return res.redirect('/login')
+    if (!usuarioId) return res.redirect('/login')
+
+    const categoria = (req.query.categoria || '').trim()
+    const q = (req.query.q || '').trim()
+    const filtro = { usuario: usuarioId }
+
+    if (categoria) {
+        filtro.categoria = new RegExp(`^${categoria}$`, 'i')
     }
-    const lembretes = await Lembrete.find({ usuario: usuarioId })
-        .sort({ vencimento: 1, _id: 1 })
-    res.render('public/lembretes.ejs',{
-        Lembretes:lembretes,
-        erro:req.query.erro,
+    if (q) {
+        const busca = new RegExp(q, 'i')
+        filtro.$or = [
+            { titulo: busca },
+            { categoria: busca },
+            { descricao: busca },
+            { arquivoOriginal: busca }
+        ]
+    }
+
+    const conteudos = await Conteudo.find(filtro).sort({ criadoEm: -1, _id: -1 })
+    const categorias = await Conteudo.distinct('categoria', {
+        usuario: usuarioId,
+        categoria: { $nin: [null, ''] }
+    })
+    categorias.sort((a, b) => String(a).localeCompare(String(b), 'pt-BR'))
+
+    res.render('public/conteudos.ejs', {
+        Conteudos: conteudos,
+        categorias,
+        categoriaSelecionada: categoria,
+        q,
+        erro: req.query.erro,
+        sucesso: req.query.sucesso,
         editando: false,
-        LembreteEdicao: null
+        ConteudoEdicao: null
     })
 }
 
-export async function abreEditarLembrete(req,res){
-    const usuarioId = req.session?.usuario?.id
-    if (!usuarioId) {
-        return res.redirect('/login')
-    }
-    const lembretes = await Lembrete.find({ usuario: usuarioId })
-        .sort({ vencimento: 1, _id: 1 })
-    const lembrete = await Lembrete.findOne({ _id: req.params.id, usuario: usuarioId })
-    if (!lembrete) {
-        return res.redirect('/lembretes')
-    }
-    res.render('public/lembretes.ejs',{
-        Lembretes:lembretes,
-        erro:req.query.erro,
-        editando: true,
-        LembreteEdicao: lembrete
-    })
-}
-
-export async function editarLembrete(req,res){
-    try{
+export async function uploadConteudo(req, res) {
+    try {
         const usuarioId = req.session?.usuario?.id
-        if (!usuarioId) {
-            return res.redirect('/login')
+        if (!usuarioId) return res.redirect('/login')
+        if (!req.file) return res.redirect('/conteudos?erro=arquivo')
+
+        const tituloRaw = (req.body.titulo || '').trim()
+        const categoria = (req.body.categoria || '').trim()
+        const descricao = (req.body.descricao || '').trim()
+
+        const nomeBase = String(req.file.originalname || 'PDF')
+            .replace(/\.pdf$/i, '')
+            .trim()
+        const titulo = tituloRaw || nomeBase || 'PDF sem título'
+
+        await Conteudo.create({
+            usuario: usuarioId,
+            titulo,
+            categoria: categoria || null,
+            descricao: descricao || null,
+            arquivoNome: req.file.filename,
+            arquivoOriginal: req.file.originalname,
+            mimeType: req.file.mimetype,
+            tamanho: req.file.size
+        })
+        return res.redirect('/conteudos?sucesso=upload')
+    } catch (err) {
+        console.error(err)
+        if (req.file && req.session?.usuario?.id) {
+            const caminho = path.join(process.cwd(), 'public', 'uploads', 'conteudos', req.session.usuario.id, req.file.filename)
+            try {
+                await fs.unlink(caminho)
+            } catch (e) {
+                // ignora
+            }
         }
-        const conteudo = (req.body.conteudo || '').trim()
-        if(!conteudo){
-            return res.redirect(`/lembretes/edt/${req.params.id}?erro=conteudo`)
-        }
-        const atualizado = await Lembrete.findOneAndUpdate({
+        return res.redirect('/conteudos?erro=salvar')
+    }
+}
+
+export async function abreEditarConteudo(req, res) {
+    const usuarioId = req.session?.usuario?.id
+    if (!usuarioId) return res.redirect('/login')
+
+    const conteudos = await Conteudo.find({ usuario: usuarioId }).sort({ criadoEm: -1, _id: -1 })
+    const conteudo = await Conteudo.findOne({ _id: req.params.id, usuario: usuarioId })
+    if (!conteudo) return res.redirect('/conteudos')
+
+    const categorias = await Conteudo.distinct('categoria', {
+        usuario: usuarioId,
+        categoria: { $nin: [null, ''] }
+    })
+    categorias.sort((a, b) => String(a).localeCompare(String(b), 'pt-BR'))
+
+    return res.render('public/conteudos.ejs', {
+        Conteudos: conteudos,
+        categorias,
+        categoriaSelecionada: '',
+        q: '',
+        erro: req.query.erro,
+        sucesso: null,
+        editando: true,
+        ConteudoEdicao: conteudo
+    })
+}
+
+export async function editarConteudo(req, res) {
+    try {
+        const usuarioId = req.session?.usuario?.id
+        if (!usuarioId) return res.redirect('/login')
+
+        const titulo = (req.body.titulo || '').trim()
+        if (!titulo) return res.redirect(`/conteudos/edt/${req.params.id}?erro=titulo`)
+
+        const categoria = (req.body.categoria || '').trim()
+        const descricao = (req.body.descricao || '').trim()
+
+        const atualizado = await Conteudo.findOneAndUpdate({
             _id: req.params.id,
             usuario: usuarioId
         }, {
-            conteudo,
-            vencimento: req.body.vencimento || null
+            titulo,
+            categoria: categoria || null,
+            descricao: descricao || null
         })
-        if (!atualizado) {
-            return res.redirect('/lembretes')
-        }
-        return res.redirect('/lembretes')
-    }catch(err){
+        if (!atualizado) return res.redirect('/conteudos')
+        return res.redirect('/conteudos?sucesso=editado')
+    } catch (err) {
         console.error(err)
-        return res.redirect(`/lembretes/edt/${req.params.id}?erro=salvar`)
+        return res.redirect(`/conteudos/edt/${req.params.id}?erro=salvar`)
     }
 }
 
-export async function deletarLembrete(req,res){
+export async function downloadConteudo(req, res) {
     const usuarioId = req.session?.usuario?.id
-    if (!usuarioId) {
-        return res.redirect('/login')
-    }
-    await Lembrete.findOneAndDelete({
-        _id: req.params.id,
-        usuario: usuarioId
+    if (!usuarioId) return res.redirect('/login')
+
+    const conteudo = await Conteudo.findOne({ _id: req.params.id, usuario: usuarioId })
+    if (!conteudo) return res.redirect('/conteudos?erro=nao-encontrado')
+
+    const caminho = path.join(process.cwd(), 'public', 'uploads', 'conteudos', usuarioId, conteudo.arquivoNome)
+    return res.download(caminho, conteudo.arquivoOriginal, (err) => {
+        if (err) {
+            console.error(err)
+            try {
+                if (!res.headersSent) return res.redirect('/conteudos?erro=arquivo')
+            } catch (e) {}
+        }
     })
-    res.redirect('/lembretes')
+}
+
+export async function deletarConteudo(req, res) {
+    const usuarioId = req.session?.usuario?.id
+    if (!usuarioId) return res.redirect('/login')
+
+    const conteudo = await Conteudo.findOneAndDelete({ _id: req.params.id, usuario: usuarioId })
+    if (conteudo) {
+        const caminho = path.join(process.cwd(), 'public', 'uploads', 'conteudos', usuarioId, conteudo.arquivoNome)
+        try {
+            await fs.unlink(caminho)
+        } catch (err) {
+            // ignora se já não existir
+        }
+    }
+    return res.redirect('/conteudos?sucesso=excluido')
 }
 
 export async function responderQuiz(req,res){
@@ -709,7 +864,8 @@ export async function receberQuizPdf(req, res) {
             return res.redirect('/quiz?upload=gerar')
         }
         if (err?.code === 'api') {
-            return res.redirect('/quiz?upload=api')
+            const altaDemanda = err?.apiHttpCode === 503 || err?.apiStatus === 'UNAVAILABLE' || isErroAltaDemandaGemini(err)
+            return res.redirect(altaDemanda ? '/quiz?upload=indisponivel' : '/quiz?upload=api')
         }
         return res.redirect('/quiz?upload=erro')
     } finally {

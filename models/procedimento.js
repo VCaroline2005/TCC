@@ -6,6 +6,10 @@ const ProcedimentoSchema = conexao.Schema({
     categoria: {type:String},
     passos: [{type:String}],
     fotos: [{type:String}],
+    popPdfNome: { type: String },
+    popPdfOriginal: { type: String },
+    popPdfMimeType: { type: String },
+    popPdfTamanho: { type: Number },
     publicado: {type:Boolean, default:false},
     publicadoEm: {type:Date},
 })

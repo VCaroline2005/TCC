@@ -1,0 +1,44 @@
+<%-include('../cabecalho.ejs')%>
+<section class="col-12 col-md-10">
+    <div class="card my-4">
+        <h5 class="card-header">Importar Medicamentos (PDF)</h5>
+        <div class="card-body">
+            <% if (erro) { %>
+                <div class="alert alert-danger" role="alert">
+                    <%= erro %>
+                </div>
+            <% } %>
+
+            <% if (resultado) { %>
+                <div class="alert alert-success" role="alert">
+                    Importação concluída: <%= resultado.inseridos %> inseridos, <%= resultado.atualizados %> atualizados, <%= resultado.ignorados %> ignorados.
+                </div>
+            <% } %>
+
+            <p class="text-muted">
+                O PDF precisa ter um padrão consistente. Os formatos que funcionam melhor são:
+                (1) linhas com rótulos (ex.: "Nome Comercial: ...", "Via: ...") ou
+                (2) tabela com colunas separadas por espaços.
+            </p>
+
+            <form method="post" enctype="multipart/form-data">
+                <div class="mb-3">
+                    <label for="arquivo" class="form-label">Arquivo PDF</label>
+                    <input type="file" name="arquivo" id="arquivo" accept="application/pdf,.pdf" required class="form-control">
+                </div>
+
+                <div class="mb-3 form-check">
+                    <input class="form-check-input" type="checkbox" value="1" id="atualizar" name="atualizar" checked>
+                    <label class="form-check-label" for="atualizar">
+                        Atualizar se já existir (por Nome Comercial)
+                    </label>
+                </div>
+
+                <div class="mb-3">
+                    <input type="submit" value="Importar" class="form-control">
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+<%-include('../rodape.ejs')%>

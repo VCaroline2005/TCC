@@ -29,8 +29,10 @@
     <div class="upload-msg error">O PDF enviado não contém texto suficiente para gerar perguntas.</div>
   <% } else if (statusUpload === 'gerar') { %>
     <div class="upload-msg error">Não foi possível gerar perguntas com este PDF.</div>
+  <% } else if (statusUpload === 'indisponivel') { %>
+    <div class="upload-msg error">A IA está temporariamente indisponível (alta demanda). Tente novamente em alguns minutos.</div>
   <% } else if (statusUpload === 'api') { %>
-    <div class="upload-msg error">Erro ao chamar a API. Verifique sua chave e tente novamente.</div>
+    <div class="upload-msg error">Falha ao gerar com IA. Tente novamente mais tarde.</div>
   <% } else if (statusUpload === 'sem-chave') { %>
     <div class="upload-msg error">A chave da API não está configurada no servidor.</div>
   <% } else if (statusUpload === 'erro') { %>

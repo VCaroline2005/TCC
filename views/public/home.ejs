@@ -1,75 +1,224 @@
 <%- include('cabecalho', { pageClass: 'page-home' }) %>
 
-<section class="home-hero">
-  <h2>Seu apoio rápido na prática de enfermagem</h2>
-  <p>Consulte conteúdos essenciais, revise protocolos, teste conhecimentos e organize sua rotina em um só lugar.</p>
-</section>
+<% const usuarioLocal = (typeof usuario !== 'undefined' && usuario) ? usuario : null; %>
+<% const procedimentoTotal = (typeof procedimentoCount !== 'undefined' && procedimentoCount) ? procedimentoCount : 0; %>
+<% const medicamentoTotal = (typeof medicamentoCount !== 'undefined' && medicamentoCount) ? medicamentoCount : 0; %>
+<% const termoTotal = (typeof termoCount !== 'undefined' && termoCount) ? termoCount : 0; %>
+<% const quizTotal = (typeof quizCount !== 'undefined' && quizCount) ? quizCount : 0; %>
+<% const conteudosLocal = (typeof conteudosRecentes !== 'undefined' && conteudosRecentes) ? conteudosRecentes : []; %>
+<% const conteudosCount = conteudosLocal.length; %>
+<% const formatDate = (data) => { try { return new Date(data).toLocaleDateString('pt-BR'); } catch (e) { return ''; } }; %>
 
-<% const lembretesCount = (typeof lembretesProximos !== 'undefined' && lembretesProximos) ? lembretesProximos.length : 0; %>
-<% if (lembretesCount > 0) { %>
-  <div class="toast" id="toast-lembretes" role="status" aria-live="polite">
-    <div>
-      <h4>Lembretes vencendo</h4>
-      <p>Você tem <%= lembretesCount %> lembrete(s) vencendo em até 3 dias.</p>
-    </div>
-    <button type="button" onclick="document.getElementById('toast-lembretes').style.display='none'">×</button>
-  </div>
-  <script>
-    setTimeout(function () {
-      var toast = document.getElementById('toast-lembretes');
-      if (toast) toast.style.display = 'none';
-    }, 7000);
-  </script>
-<% } %>
-
-<section class="home-section">
-  <h3 class="section-title">Conteúdos e fotos</h3>
-  <p class="muted section-subtitle">Acesse rapidamente os principais módulos com prévias visuais.</p>
-  <div class="content-grid">
-    <a class="content-card" href="/procedimentos">
-      <img src="/site/img/procedimento.png" alt="Procedimentos">
-      <div class="content-text">Procedimentos</div>
-    </a>
-    <a class="content-card" href="/medicamentos">
-      <img src="/site/img/medicamento.png" alt="Medicamentos">
-      <div class="content-text">Medicamentos</div>
-    </a>
-    <a class="content-card" href="/terminologias">
-      <img src="/site/img/terminologia.png" alt="Terminologias">
-      <div class="content-text">Terminologias</div>
-    </a>
-    <a class="content-card" href="/quiz">
-      <img src="/site/img/quiz.png" alt="Quiz">
-      <div class="content-text">Quiz</div>
-    </a>
-  </div>
-</section>
-
-<section class="home-section">
-  <h3 class="section-title">Próximos lembretes</h3>
-  <p class="muted section-subtitle">Veja o que vence nos próximos dias.</p>
-  <% const formatDate = (data) => { try { return new Date(data).toLocaleDateString('pt-BR'); } catch (e) { return ''; } }; %>
-  <% if (lembretesCount === 0) { %>
-    <p class="muted no-margin">Nenhum lembrete por enquanto. Crie um para não perder prazos.</p>
-  <% } else { %>
-    <div class="summary-grid">
-      <% lembretesProximos.slice(0, 3).forEach(function(lembrete) { %>
-        <div class="summary-card">
-          <h4><%= formatDate(lembrete.vencimento) %></h4>
-          <div class="summary-text"><%= lembrete.conteudo %></div>
+<div class="home-shell">
+  <div class="home-main">
+    <section class="home-panel" aria-label="Resumo inicial">
+      <div class="hero">
+        <div>
+          <h2 class="hero-title">
+            Tudo que você precisa<br>
+            para estudar <span class="accent">Enfermagem</span>,<br>
+            em um só lugar.
+          </h2>
+          <p class="hero-subtitle">
+            Acesse procedimentos, medicamentos, terminologias e organize seus estudos de forma prática e eficiente.
+          </p>
+          <div class="hero-actions">
+            <a class="btn-primary" href="/procedimentos">Começar agora</a>
+            <a class="btn-secondary" href="/conteudos">Explorar conteúdos</a>
+          </div>
         </div>
-      <% }) %>
-    </div>
-    <div class="mt-8">
-      <a href="/lembretes" class="muted home-reminders-link">Ver todos os lembretes →</a>
-    </div>
-  <% } %>
-</section>
+        <img class="hero-art" src="/site/img/hero-illustration.svg" alt="">
+      </div>
 
-<section class="mini-banner">
-  <h4>Atualize seus estudos hoje</h4>
-  <p>Reforce o conteúdo com um quiz rápido e registre o que precisa revisar.</p>
-</section>
+      <form class="searchbar" id="homeSearchForm" method="get" action="#">
+        <div class="search-field">
+          <span class="search-icon" aria-hidden="true">⌕</span>
+          <input
+            class="search-input"
+            type="text"
+            name="q"
+            placeholder="Buscar por procedimentos, medicamentos ou terminologias..."
+            autocomplete="off"
+          >
+        </div>
+        <select class="search-select" name="scope" aria-label="Categoria">
+          <option value="procedimentos">Procedimentos</option>
+          <option value="medicamentos">Medicamentos</option>
+          <option value="terminologias">Terminologias</option>
+        </select>
+        <button class="search-submit" type="submit">Buscar</button>
+      </form>
+
+      <div class="module-grid" aria-label="Atalhos principais">
+        <a class="module-card" href="/procedimentos">
+          <div class="module-icon" aria-hidden="true">📋</div>
+          <h3 class="module-title">Procedimentos</h3>
+          <p class="module-desc">Passo a passo de procedimentos e cuidados essenciais.</p>
+          <div class="module-link">Acessar →</div>
+        </a>
+        <a class="module-card" href="/medicamentos">
+          <div class="module-icon" aria-hidden="true">💊</div>
+          <h3 class="module-title">Medicamentos</h3>
+          <p class="module-desc">Informações de classes, vias, diluições e indicações.</p>
+          <div class="module-link">Acessar →</div>
+        </a>
+        <a class="module-card" href="/terminologias">
+          <div class="module-icon" aria-hidden="true">📚</div>
+          <h3 class="module-title">Terminologias</h3>
+          <p class="module-desc">Dicionário de termos técnicos organizado para revisão.</p>
+          <div class="module-link">Acessar →</div>
+        </a>
+      </div>
+
+      <div class="feature-strip" aria-label="Recursos">
+        <div class="feature">
+          <div class="feature-ic" aria-hidden="true">🎓</div>
+          <div>
+            <h4>Organização</h4>
+            <p>Organize seus PDFs e materiais por categorias.</p>
+          </div>
+        </div>
+        <div class="feature">
+          <div class="feature-ic" aria-hidden="true">☁</div>
+          <div>
+            <h4>Upload de PDF</h4>
+            <p>Envie seus materiais e tenha tudo acessível.</p>
+          </div>
+        </div>
+        <div class="feature">
+          <div class="feature-ic" aria-hidden="true">❓</div>
+          <div>
+            <h4>Quiz interativo</h4>
+            <p>Teste seus conhecimentos e acompanhe seu progresso.</p>
+          </div>
+        </div>
+        <div class="feature">
+          <div class="feature-ic" aria-hidden="true">📈</div>
+          <div>
+            <h4>Seu progresso</h4>
+            <p>Continue evoluindo com revisões rápidas e práticas.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="cta" role="region" aria-label="Chamada para ação">
+        <strong>Sua plataforma completa para aprender, praticar e evoluir na Enfermagem.</strong>
+        <a class="cta-btn" href="/usuario">Minha conta</a>
+      </div>
+    </section>
+  </div>
+
+  <aside class="home-aside" aria-label="Prévias">
+    <section class="preview" aria-label="Medicamentos (prévia)">
+      <div class="preview-header">
+        <h3 class="preview-title">Medicamentos</h3>
+        <div class="preview-search" aria-hidden="true">
+          <span style="opacity:.55;font-weight:900;">⌕</span>
+          <input type="text" value="" placeholder="Buscar..." disabled>
+        </div>
+      </div>
+      <div class="preview-pills">
+        <span class="pill is-on">Todos</span>
+        <span class="pill">Via</span>
+        <span class="pill">Classe</span>
+        <span class="pill">Ordenar</span>
+      </div>
+      <div class="preview-list">
+        <div class="preview-item">
+          <div>
+            <h5>Dipirona</h5>
+            <p>Diluição: 500mg/mL<br>Indicação: dor e febre</p>
+          </div>
+          <a class="preview-more" href="/medicamentos">Ver mais</a>
+        </div>
+        <div class="preview-item">
+          <div>
+            <h5>Midazolam</h5>
+            <p>Diluição: 5mg/mL<br>Indicação: sedação</p>
+          </div>
+          <a class="preview-more" href="/medicamentos">Ver mais</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="preview" aria-label="Procedimentos (prévia)">
+      <div class="preview-header">
+        <h3 class="preview-title">Procedimentos</h3>
+        <div class="preview-search" aria-hidden="true">
+          <span style="opacity:.55;font-weight:900;">⌕</span>
+          <input type="text" value="" placeholder="Buscar..." disabled>
+        </div>
+      </div>
+      <div class="preview-list">
+        <div class="preview-item" style="grid-template-columns: 1fr;">
+          <div>
+            <h5>Higienização das mãos</h5>
+            <p>Molhe as mãos, aplique sabão e friccione as palmas, dorso e entre os dedos.</p>
+          </div>
+          <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;opacity:.8;">
+            <span class="pill">1</span><span class="pill">2</span><span class="pill">3</span><span class="pill">4</span><span class="pill">5</span>
+          </div>
+          <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap;">
+            <a class="preview-more" href="/procedimentos">Abrir</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="preview" aria-label="Minha conta (prévia)">
+      <div class="preview-header">
+        <h3 class="preview-title">Minha conta</h3>
+        <span class="pill is-on"><%= conteudosCount %> PDFs</span>
+      </div>
+      <div class="account-box">
+        <div class="avatar" aria-hidden="true"><%= (usuarioLocal && usuarioLocal.nome) ? usuarioLocal.nome.trim().slice(0, 1).toUpperCase() : 'A' %></div>
+        <div>
+          <p class="account-name"><%= (usuarioLocal && usuarioLocal.nome) ? usuarioLocal.nome : 'Aluno(a)' %></p>
+          <p class="account-email"><%= (usuarioLocal && usuarioLocal.email) ? usuarioLocal.email : '' %></p>
+        </div>
+        <div class="account-actions">
+          <a class="tiny-link primary" href="/conteudos">Meus materiais</a>
+          <a class="tiny-link" href="/quiz">Quiz</a>
+          <a class="tiny-link" href="/usuario">Editar</a>
+        </div>
+      </div>
+
+      <% if (conteudosCount > 0) { %>
+        <div style="margin-top:12px;display:grid;gap:10px;">
+          <% conteudosLocal.slice(0, 2).forEach(function(c) { %>
+            <div class="preview-item" style="grid-template-columns: 1fr;">
+              <div>
+                <h5><%= c.titulo %></h5>
+                <p>Enviado em <%= formatDate(c.criadoEm) %><% if (c.categoria) { %> • <%= c.categoria %><% } %></p>
+              </div>
+            </div>
+          <% }) %>
+        </div>
+      <% } %>
+
+      <div style="margin-top:12px;">
+        <a class="preview-more" href="/usuario">Abrir conta</a>
+      </div>
+    </section>
+  </aside>
+</div>
+
+<script>
+  (function () {
+    const form = document.getElementById('homeSearchForm');
+    if (!form) return;
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      const q = (form.querySelector('input[name="q"]')?.value || '').trim();
+      const scope = form.querySelector('select[name="scope"]')?.value || 'procedimentos';
+      const base = '/' + scope;
+      const params = new URLSearchParams();
+      if (q) params.set('pesquisar', q);
+      const url = params.toString() ? (base + '?' + params.toString()) : base;
+      window.location.href = url;
+    });
+  })();
+</script>
 
 
 <%- include('rodape') %>

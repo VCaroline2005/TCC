@@ -1,0 +1,504 @@
+/* Medicamentos – layout inspired by the provided reference */
+
+body.public-page.page-medicamentos {
+  background:
+    radial-gradient(900px 520px at 50% 0%, rgba(255, 245, 245, 0.85) 0%, rgba(255, 245, 245, 0) 60%),
+    radial-gradient(700px 520px at 10% 60%, rgba(227, 27, 27, 0.10) 0%, rgba(227, 27, 27, 0) 70%),
+    radial-gradient(700px 520px at 92% 20%, rgba(227, 27, 27, 0.08) 0%, rgba(227, 27, 27, 0) 70%),
+    #f6f7fb;
+}
+
+.public-page.page-medicamentos main {
+  max-width: none;
+  margin: 0;
+  padding: 18px 16px 28px;
+  background: transparent;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+/* App-like header variant (used only on medicamentos) */
+.public-page.page-medicamentos .site-header--app {
+  background: linear-gradient(90deg, #d01414 0%, #7a1408 72%, #1a0605 120%);
+  padding: 16px;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.18);
+  text-align: left;
+}
+
+.public-page.page-medicamentos .app-header {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 18px;
+  align-items: center;
+}
+
+.public-page.page-medicamentos .app-brand {
+  display: inline-flex;
+  gap: 12px;
+  align-items: center;
+  text-decoration: none;
+  color: #fff;
+}
+
+.public-page.page-medicamentos .app-brand img {
+  height: 44px;
+  width: auto;
+  display: block;
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.35));
+}
+
+.public-page.page-medicamentos .app-brand strong {
+  font-weight: 950;
+  font-size: 18px;
+  letter-spacing: -0.02em;
+}
+
+.public-page.page-medicamentos .app-nav {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.public-page.page-medicamentos .app-nav a {
+  position: relative;
+  color: rgba(255, 255, 255, 0.92);
+  text-decoration: none;
+  font-weight: 900;
+  padding: 10px 10px;
+  border-radius: 999px;
+  font-size: 14px;
+  transition: background 0.15s ease;
+}
+
+.public-page.page-medicamentos .app-nav a:hover {
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.public-page.page-medicamentos .app-nav a.is-active {
+  color: #fff;
+}
+
+.public-page.page-medicamentos .app-nav a.is-active::after {
+  content: "";
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: -10px;
+  height: 3px;
+  border-radius: 999px;
+  background: #fff;
+  opacity: 0.95;
+}
+
+.public-page.page-medicamentos .app-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.public-page.page-medicamentos .app-iconbtn {
+  width: 42px;
+  height: 42px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.30);
+  background: rgba(255, 255, 255, 0.10);
+  color: #fff;
+  display: grid;
+  place-items: center;
+  cursor: default;
+  position: relative;
+}
+
+.public-page.page-medicamentos .app-ic {
+  line-height: 1;
+}
+
+.public-page.page-medicamentos .app-badge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  min-width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  background: #fff;
+  color: #b30d0d;
+  display: grid;
+  place-items: center;
+  font-size: 11px;
+  font-weight: 950;
+  border: 1px solid rgba(255, 255, 255, 0.55);
+}
+
+.public-page.page-medicamentos .user-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.30);
+  background: rgba(255, 255, 255, 0.10);
+  color: #fff;
+  font-weight: 900;
+  text-decoration: none;
+}
+
+.public-page.page-medicamentos .user-dot {
+  width: 26px;
+  height: 26px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.22);
+  display: grid;
+  place-items: center;
+  font-weight: 950;
+}
+
+/* Content card (shell) */
+.public-page.page-medicamentos .med-shell {
+  max-width: 1280px;
+  margin: 0 auto;
+  background: #fff;
+  border-radius: 18px;
+  border: 1px solid rgba(17, 24, 39, 0.06);
+  box-shadow: 0 22px 44px rgba(17, 24, 39, 0.10);
+  padding: 22px;
+}
+
+.public-page.page-medicamentos .med-hero {
+  display: grid;
+  gap: 14px;
+}
+
+.public-page.page-medicamentos .med-eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 1.8px;
+  font-size: 12px;
+  font-weight: 900;
+  color: #b30d0d;
+  margin: 0 0 6px;
+}
+
+.public-page.page-medicamentos .med-title {
+  margin: 0 0 6px;
+  font-size: 36px;
+  letter-spacing: -0.02em;
+  color: #111827;
+}
+
+.public-page.page-medicamentos .med-subtitle {
+  margin: 0;
+  color: rgba(17, 24, 39, 0.66);
+  font-size: 15px;
+  font-weight: 650;
+}
+
+.public-page.page-medicamentos .med-search {
+  display: grid;
+  grid-template-columns: 1fr 190px 240px;
+  gap: 14px;
+  align-items: center;
+  margin-top: 8px;
+}
+
+.public-page.page-medicamentos .med-input {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-radius: 14px;
+  border: 1px solid rgba(17, 24, 39, 0.12);
+  background: #fff;
+  padding: 12px 14px;
+}
+
+.public-page.page-medicamentos .med-input span {
+  color: rgba(17, 24, 39, 0.50);
+  font-weight: 950;
+}
+
+.public-page.page-medicamentos .med-input input {
+  border: none;
+  outline: none;
+  width: 100%;
+  font-weight: 800;
+  font-size: 14px;
+}
+
+.public-page.page-medicamentos .med-btn {
+  border-radius: 14px;
+  padding: 14px 16px;
+  font-weight: 950;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  box-shadow: 0 16px 26px rgba(227, 27, 27, 0.22);
+  background: linear-gradient(90deg, #d01414 0%, #b30d0d 70%, #7a1408 110%);
+  border: 1px solid transparent;
+  color: #fff;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+.public-page.page-medicamentos .med-btn:hover {
+  transform: translateY(-1px);
+}
+
+.public-page.page-medicamentos .med-select {
+  border-radius: 14px;
+  padding: 12px 14px;
+  border: 1px solid rgba(17, 24, 39, 0.12);
+  background: #fff;
+  font-weight: 900;
+  color: rgba(17, 24, 39, 0.82);
+}
+
+/* Summary strip */
+.public-page.page-medicamentos .med-summary {
+  margin-top: 16px;
+  border-radius: 16px;
+  border: 1px solid rgba(17, 24, 39, 0.06);
+  background: linear-gradient(90deg, rgba(227, 27, 27, 0.06), rgba(17, 24, 39, 0.01));
+  padding: 14px 16px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.public-page.page-medicamentos .sum-item {
+  display: grid;
+  grid-template-columns: 46px 1fr;
+  gap: 10px;
+  align-items: center;
+}
+
+.public-page.page-medicamentos .sum-ic {
+  width: 46px;
+  height: 46px;
+  border-radius: 16px;
+  background: rgba(227, 27, 27, 0.10);
+  border: 1px solid rgba(227, 27, 27, 0.18);
+  display: grid;
+  place-items: center;
+  color: #e31b1b;
+  font-weight: 950;
+}
+
+.public-page.page-medicamentos .sum-item strong {
+  font-size: 18px;
+  font-weight: 950;
+  color: #111827;
+}
+
+.public-page.page-medicamentos .sum-item span {
+  font-size: 12px;
+  font-weight: 800;
+  color: rgba(17, 24, 39, 0.62);
+}
+
+/* Table */
+.public-page.page-medicamentos .med-table-wrap {
+  margin-top: 16px;
+  border-radius: 16px;
+  border: 1px solid rgba(17, 24, 39, 0.08);
+  overflow: hidden;
+  background: #fff;
+}
+
+.public-page.page-medicamentos table.med-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 0;
+  font-size: 13px;
+}
+
+.public-page.page-medicamentos .med-table th,
+.public-page.page-medicamentos .med-table td {
+  border: none;
+  padding: 12px 14px;
+  text-align: left;
+  vertical-align: top;
+}
+
+.public-page.page-medicamentos .med-table thead th {
+  background: rgba(227, 27, 27, 0.06);
+  color: #b30d0d;
+  font-weight: 950;
+  font-size: 12px;
+  letter-spacing: 0.02em;
+}
+
+.public-page.page-medicamentos .med-table tbody tr {
+  border-top: 1px solid rgba(17, 24, 39, 0.06);
+}
+
+.public-page.page-medicamentos .med-preline {
+  white-space: pre-line;
+}
+
+.public-page.page-medicamentos .badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-weight: 950;
+  font-size: 11px;
+  background: rgba(227, 27, 27, 0.10);
+  border: 1px solid rgba(227, 27, 27, 0.18);
+  color: #b30d0d;
+}
+
+.public-page.page-medicamentos .badge.gray {
+  background: rgba(17, 24, 39, 0.05);
+  border-color: rgba(17, 24, 39, 0.10);
+  color: rgba(17, 24, 39, 0.72);
+}
+
+.public-page.page-medicamentos .med-actions {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.public-page.page-medicamentos .details-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(227, 27, 27, 0.28);
+  background: #fff;
+  color: #b30d0d;
+  font-weight: 950;
+  cursor: pointer;
+}
+
+.public-page.page-medicamentos .details-btn:hover {
+  background: rgba(227, 27, 27, 0.06);
+}
+
+.public-page.page-medicamentos .details-row {
+  display: none;
+  background: rgba(17, 24, 39, 0.01);
+}
+
+.public-page.page-medicamentos .details-row.is-open {
+  display: table-row;
+}
+
+.public-page.page-medicamentos .details-cell {
+  padding: 14px 14px 18px;
+}
+
+.public-page.page-medicamentos .details-box {
+  border-radius: 16px;
+  border: 1px solid rgba(17, 24, 39, 0.08);
+  background: #fff;
+  padding: 12px;
+  display: grid;
+  gap: 10px;
+}
+
+.public-page.page-medicamentos .details-box h4 {
+  margin: 0;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgba(17, 24, 39, 0.60);
+}
+
+.public-page.page-medicamentos .details-box p {
+  margin: 0;
+  color: rgba(17, 24, 39, 0.78);
+  font-weight: 650;
+  line-height: 1.5;
+}
+
+/* Pagination */
+.public-page.page-medicamentos .med-footerbar {
+  padding: 12px 14px;
+  border-top: 1px solid rgba(17, 24, 39, 0.06);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  color: rgba(17, 24, 39, 0.62);
+  font-weight: 800;
+  font-size: 12px;
+}
+
+.public-page.page-medicamentos .pager {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.public-page.page-medicamentos .pagebtn {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  border: 1px solid rgba(17, 24, 39, 0.10);
+  background: #fff;
+  font-weight: 950;
+  cursor: pointer;
+}
+
+.public-page.page-medicamentos .pagebtn.is-on {
+  background: #b30d0d;
+  border-color: #b30d0d;
+  color: #fff;
+}
+
+/* Tip */
+.public-page.page-medicamentos .med-tip {
+  margin-top: 16px;
+  border-radius: 18px;
+  border: 1px solid rgba(17, 24, 39, 0.06);
+  background: linear-gradient(90deg, rgba(227, 27, 27, 0.06), rgba(17, 24, 39, 0.01));
+  padding: 16px;
+  display: grid;
+  grid-template-columns: 56px 1fr auto;
+  gap: 12px;
+  align-items: center;
+  color: rgba(17, 24, 39, 0.75);
+  font-weight: 650;
+}
+
+.public-page.page-medicamentos .med-tip-ic {
+  width: 56px;
+  height: 56px;
+  border-radius: 18px;
+  display: grid;
+  place-items: center;
+  background: rgba(227, 27, 27, 0.10);
+  border: 1px solid rgba(227, 27, 27, 0.18);
+  color: #e31b1b;
+  font-size: 20px;
+}
+
+.public-page.page-medicamentos .med-tip-art {
+  opacity: 0.35;
+  font-size: 34px;
+  line-height: 1;
+}
+
+@media (max-width: 1040px) {
+  .public-page.page-medicamentos .app-header {
+    grid-template-columns: 1fr;
+    justify-items: start;
+  }
+
+  .public-page.page-medicamentos .app-nav {
+    justify-content: flex-start;
+  }
+
+  .public-page.page-medicamentos .med-search {
+    grid-template-columns: 1fr;
+  }
+
+  .public-page.page-medicamentos .med-summary {
+    grid-template-columns: 1fr;
+  }
+}
