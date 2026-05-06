@@ -1,98 +1,105 @@
 <%- include('cabecalho', { pageClass: 'page-quiz' }) %>
 
-<% const perguntasLista = (typeof Perguntas !== 'undefined' && Perguntas) ? Perguntas : []; %>
-<% const sistemasLista = (typeof sistemas !== 'undefined' && sistemas) ? sistemas : []; %>
-<% const sistemaAtual = (typeof sistemaSelecionado !== 'undefined' && sistemaSelecionado) ? sistemaSelecionado : ''; %>
-<% const statusUpload = (typeof uploadStatus !== 'undefined' && uploadStatus) ? uploadStatus : ''; %>
-<% const totalNovas = (typeof uploadCount !== 'undefined' && uploadCount) ? uploadCount : 0; %>
-<% const aiOk = (typeof aiEnabled !== 'undefined') ? aiEnabled : false; %>
-<% const mockModeEnabled = (typeof mockMode !== 'undefined') ? mockMode : false; %>
-
-<h2>Quiz por sistema</h2>
-
-<section class="upload-box" aria-label="Envio de PDF para gerar quiz">
-  <h3>Gerar quiz a partir de PDF</h3>
-  <p class="upload-note">Envie um PDF para gerar questões automaticamente.</p>
-  <form method="post" action="/quiz/upload" enctype="multipart/form-data">
-    <input type="file" name="arquivo" accept=".pdf,application/pdf" required <%= aiOk ? '' : 'disabled' %>>
-    <div class="upload-actions">
-      <button type="submit" <%= aiOk ? '' : 'disabled' %>>Enviar PDF</button>
+<div class="quiz-page">
+  <section class="proc-hero">
+    <div class="quiz-hero-text">
+      <p class="proc-eyebrow">Biblioteca clínica</p>
+      <h2 class="proc-title">Quiz</h2>
+      <p class="proc-subtitle">Gere quizzes automaticamente a partir dos seus materiais ou responda as questões já criadas.</p>
     </div>
-  </form>
-  <% if (!aiOk) { %>
-    <div class="upload-msg error">Configuração necessária: defina a variável GEMINI_API_KEY no servidor.</div>
-  <% } else if (mockModeEnabled) { %>
-    <div class="upload-msg success">Modo teste ativo: as perguntas serão geradas localmente (sem IA).</div>
-  <% } else if (statusUpload === 'ok') { %>
-    <div class="upload-msg success">Quiz criado com sucesso. <%= totalNovas %> questão(ões) adicionada(s).</div>
-  <% } else if (statusUpload === 'pdf-vazio') { %>
-    <div class="upload-msg error">O PDF enviado não contém texto suficiente para gerar perguntas.</div>
-  <% } else if (statusUpload === 'gerar') { %>
-    <div class="upload-msg error">Não foi possível gerar perguntas com este PDF.</div>
-  <% } else if (statusUpload === 'indisponivel') { %>
-    <div class="upload-msg error">A IA está temporariamente indisponível (alta demanda). Tente novamente em alguns minutos.</div>
-  <% } else if (statusUpload === 'api') { %>
-    <div class="upload-msg error">Falha ao gerar com IA. Tente novamente mais tarde.</div>
-  <% } else if (statusUpload === 'sem-chave') { %>
-    <div class="upload-msg error">A chave da API não está configurada no servidor.</div>
-  <% } else if (statusUpload === 'erro') { %>
-    <div class="upload-msg error">Não foi possível enviar o PDF. Tente novamente.</div>
-  <% } %>
-</section>
 
-<form method="get" action="/quiz" class="filter-form quiz-filter-form">
-  <label for="sistema" class="filter-label">Filtrar por sistema</label>
-  <select name="sistema" id="sistema" class="filter-select filter-select-compact">
-    <option value="">Todos</option>
-    <% if (sistemasLista.length) { %>
-      <% sistemasLista.forEach(function(s){ %>
-        <option value="<%= s %>" <%= (sistemaAtual === s) ? 'selected' : '' %>><%= s %></option>
-      <% }) %>
-    <% } %>
-  </select>
-  <button type="submit" class="filter-btn">Aplicar</button>
-</form>
+    <div class="quiz-upload-panel">
+      <div id="upload" class="upload-box">
+        <h3>Gerar quiz a partir de PDF</h3>
+        <p class="upload-note">Envie um PDF para criar um conjunto de questões automaticamente com base no conteúdo do arquivo.</p>
+        <form method="post" action="/quiz/upload" enctype="multipart/form-data">
+          <input type="file" class="input" name="arquivo" accept="application/pdf">
+          <div class="upload-actions">
+            <button class="btn">Gerar quiz a partir do PDF</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
 
-<% if(perguntasLista.length){ %>
-  <form method="post" action="/quiz/responder">
-    <%
-      const grupos = {};
-      perguntasLista.forEach(function(p){
-        const sistema = (p.categoria && p.categoria.trim()) ? p.categoria.trim() : 'Sem sistema';
-        if (!grupos[sistema]) grupos[sistema] = [];
-        grupos[sistema].push(p);
-      });
-      const sistemasOrdenados = Object.keys(grupos).sort(function(a,b){ return a.localeCompare(b, 'pt-BR'); });
-      let contador = 1;
-    %>
-    <% sistemasOrdenados.forEach(function(sistema){ %>
-      <section class="quiz-group">
-        <h3><%= sistema %></h3>
-        <% grupos[sistema].forEach(function(p){ %>
+  <section class="quiz-list card">
+    <div class="quiz-list-header">
+      <div>
+        <h2>Meus quizzes</h2>
+        <p>Visualize, filtre e responda aos quizzes que você já criou.</p>
+      </div>
+      <% if (!perguntasAdmin.length && !perguntasIA.length) { %>
+        <a class="btn btn-secondary" href="#upload">Gerar meu primeiro quiz</a>
+      <% } %>
+    </div>
+
+    <form class="quiz-filter-bar" method="get" action="/quiz">
+      <div class="quiz-filter-field">
+        <label for="sistema">Filtrar por sistema</label>
+        <select name="sistema" id="sistema" class="input">
+          <option value="">Todos os sistemas</option>
+          <% sistemas.forEach(function(s){ %>
+            <option value="<%= s %>" <%= sistemaSelecionado === s ? 'selected' : '' %>><%= s %></option>
+          <% }) %>
+        </select>
+      </div>
+      <button class="btn">Aplicar filtros</button>
+    </form>
+
+    <% if (perguntasAdmin.length) { %>
+      <form method="post" action="/quiz/responder" class="quiz-form">
+        <% perguntasAdmin.forEach(function(p, index){ %>
           <div class="quiz-card">
-            <p class="quiz-question"><%= contador %>. <%= p.pergunta %></p>
-            <input type="hidden" name="perguntas[]" value="<%= p._id %>">
-            <% if (p.opcoes && p.opcoes.length) { %>
-              <% p.opcoes.forEach(function(opt, optIdx){ %>
+            <p class="quiz-question"><%= index + 1 %>. <%= p.pergunta %></p>
+            <div class="options-grid">
+              <% p.opcoes.forEach(function(opt, optIndex){ %>
                 <label class="quiz-option">
-                  <input type="radio" name="respostas[<%= p._id %>]" value="<%= optIdx %>" <%= optIdx === 0 ? 'required' : '' %>>
-                  <%= opt %>
+                  <input type="radio" name="respostas[<%= p._id %>]" value="<%= optIndex %>">
+                  <span><%= opt %></span>
                 </label>
               <% }) %>
-            <% } else { %>
-              <p>Sem opções cadastradas para esta questão.</p>
-            <% } %>
+            </div>
           </div>
-          <% contador += 1; %>
         <% }) %>
-      </section>
-    <% }) %>
 
-    <div class="quiz-actions">
-      <button type="submit">Enviar respostas</button>
+        <div class="quiz-actions">
+          <button class="btn">Enviar respostas</button>
+        </div>
+      </form>
+    <% } else { %>
+      <div class="quiz-empty-state">
+        <p>Nenhuma pergunta encontrada.</p>
+      </div>
+    <% } %>
+  </section>
+
+  <section class="quiz-ia card">
+    <div class="quiz-list-header">
+      <div>
+        <h2>Quiz gerado por PDF</h2>
+        <p>Aqui ficam os quizzes criados automaticamente a partir de PDFs enviados.</p>
+      </div>
     </div>
-  </form>
-<% } else { %>
-  <p>Não há questões cadastradas ainda.</p>
-<% } %>
+
+    <% if (perguntasIA.length) { %>
+      <% perguntasIA.forEach(function(p, index){ %>
+        <div class="quiz-card quiz-card-ia">
+          <p class="quiz-question"><%= index + 1 %>. <%= p.pergunta %></p>
+          <div class="options-grid">
+            <% p.opcoes.forEach(function(opt){ %>
+              <div class="quiz-option disabled">
+                <span><%= opt %></span>
+              </div>
+            <% }) %>
+          </div>
+        </div>
+      <% }) %>
+    <% } else { %>
+      <div class="quiz-empty-state">
+        <p>Nenhum quiz gerado ainda</p>
+      </div>
+    <% } %>
+  </section>
+</div>
+
 <%- include('rodape') %>

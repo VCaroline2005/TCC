@@ -555,6 +555,8 @@ export async function fazerQuiz(req,res){
     }
 
     const perguntas = await Quiz.find(filtro).sort({ categoria: 1, _id: 1 })
+    const perguntasAdmin = perguntas.filter((q) => q.tipo !== 'ia')
+    const perguntasIA = perguntas.filter((q) => q.tipo === 'ia')
     const sistemas = await Quiz.distinct('categoria', {
         publicado: true,
         usuario: usuarioId,
@@ -563,7 +565,8 @@ export async function fazerQuiz(req,res){
     sistemas.sort((a, b) => a.localeCompare(b, 'pt-BR'))
 
     res.render('public/quiz.ejs',{
-        Perguntas:perguntas,
+        perguntasAdmin,
+        perguntasIA,
         sistemas,
         sistemaSelecionado: sistema,
         uploadStatus,
@@ -747,9 +750,7 @@ export async function responderQuiz(req,res){
         return res.redirect('/login')
     }
     const respostas = req.body.respostas || {}
-    const ids = Array.isArray(req.body.perguntas)
-        ? req.body.perguntas
-        : (req.body.perguntas ? [req.body.perguntas] : [])
+    const ids = Object.keys(respostas).filter((key) => String(key || '').trim())
 
     if (ids.length === 0) {
         return res.render('public/quiz-result.ejs',{
@@ -852,6 +853,7 @@ export async function receberQuizPdf(req, res) {
             opcoes: p.opcoes,
             correta: p.correta,
             categoria: p.categoria,
+            tipo: 'ia',
             publicado: true,
             publicadoEm: agora
         }))
