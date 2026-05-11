@@ -8,114 +8,91 @@
 </head>
 <body class="landing-page">
   <% const usuarioLocal = (typeof usuario !== 'undefined' && usuario) ? usuario : null; %>
+
   <header class="topbar">
     <div class="topbar-inner">
-      <h1 class="brand"><img src="/site/img/logo.png" alt="Logo"></h1>
+      <a class="brand" href="/">
+        <img src="/site/img/logo.png" alt="Portal Enfermagem">
+      </a>
+
       <nav class="auth">
         <% if (usuarioLocal) { %>
           <a href="/usuario">Minha Conta</a>
+          <a href="/sair">Sair</a>
         <% } else { %>
           <a href="/login">Entrar</a>
           <a href="/cadastro">Cadastre-se</a>
         <% } %>
       </nav>
-      <div class="topbar-controls">
-        <button type="button" class="topbar-btn" onclick="history.back()">Voltar</button>
-        <% if (usuarioLocal) { %>
-          <a class="topbar-btn" href="/sair">Sair</a>
-        <% } else { %>
-          <a class="topbar-btn" href="/login">Entrar</a>
-        <% } %>
-
-      </div>
     </div>
   </header>
 
-  
-  <main class="container">
-    <% if (!usuarioLocal) { %>
-      <section class="guest-hero">
-        <h2>Seu apoio rápido na prática de enfermagem</h2>
-        <p>Veja conteúdos introdutórios e exemplos visuais. Para acessar todos os módulos, faça login.</p>
-        <a class="guest-cta" href="/login">Entrar e acessar tudo</a>
-      </section>
+  <main class="landing-main">
+    <section class="landing-hero">
+      <div class="hero-copy">
+        <span class="hero-eyebrow">Portal Enfermagem</span>
+        <h1>Seu apoio rápido na prática de enfermagem</h1>
+        <p>Conteúdos, protocolos, medicamentos e terminologias reunidos em um só lugar para estudar e consultar com agilidade.</p>
+        <div class="hero-actions">
+          <% if (usuarioLocal) { %>
+            <a class="hero-cta" href="/usuario">Abrir minha conta</a>
+            <a class="hero-secondary" href="/procedimentos">Ver procedimentos</a>
+          <% } else { %>
+            <a class="hero-cta" href="/login">Entrar</a>
+            <a class="hero-secondary" href="/cadastro">Cadastre-se grátis</a>
+          <% } %>
+        </div>
+      </div>
 
-      <section class="guest-grid" aria-label="Prévia de conteúdos">
-        <div class="guest-card">
+      <div class="hero-visual">
+        <img src="/site/img/hero-illustration.svg" alt="Imagem de enfermagem">
+      </div>
+    </section>
+
+    <% if (!usuarioLocal) { %>
+      <section class="landing-grid" aria-label="Prévia de conteúdos">
+        <div class="preview-card">
           <img src="/site/img/protocolo.png" alt="Prévia de procedimentos">
-          <p>Protocolos essenciais em poucos cliques</p>
+          <strong>Protocolos essenciais</strong>
+          <p>Encontre os principais procedimentos em poucos cliques.</p>
         </div>
-        <div class="guest-card">
+        <div class="preview-card">
           <img src="/site/img/med.png" alt="Prévia de medicamentos">
-          <p>Medicamentos organizados por classe</p>
+          <strong>Medicamentos organizados</strong>
+          <p>Consulte classes e bulas em um único lugar.</p>
         </div>
-        <div class="guest-card">
+        <div class="preview-card">
           <img src="/site/img/termo.png" alt="Prévia de terminologias">
-          <p>Termos e definições para revisão rápida</p>
+          <strong>Terminologias rápidas</strong>
+          <p>Revisão de termos e definições para estudo e prática.</p>
         </div>
       </section>
     <% } else { %>
-      <section class="hero">
-        <h2>Seu apoio rápido na prática de enfermagem</h2>
-        <p>Consulte conteúdos essenciais, revise protocolos, teste conhecimentos e organize sua rotina em um só lugar.</p>
-      </section>
-
-      <section class="section">
-        <h3>Conteúdos e fotos</h3>
-        <p class="muted">Acesse rapidamente os principais módulos com prévias visuais.</p>
-        <div class="content-grid">
-          <a class="content-card" href="/procedimentos">
-            <img src="/site/img/product09.png" alt="Procedimentos">
-            <div class="content-text">Procedimentos</div>
-          </a>
-          <a class="content-card" href="/medicamentos">
-            <img src="/site/img/shop01.png" alt="Medicamentos">
-            <div class="content-text">Medicamentos</div>
-          </a>
-          <a class="content-card" href="/terminologias">
-            <img src="/site/img/shop02.png" alt="Terminologias">
-            <div class="content-text">Terminologias</div>
-          </a>
-          <a class="content-card" href="/quiz">
-            <img src="/site/img/shop03.png" alt="Quiz">
-            <div class="content-text">Quiz</div>
-          </a>
-          <a class="content-card" href="/conteudos">
-            <img src="/site/img/acessorio02.png" alt="Conteúdos">
-            <div class="content-text">Conteúdos</div>
-          </a>
-        </div>
-      </section>
-
-      <section class="grid" aria-label="Resumo">
-        <article class="card">
-          <h3>Procedimentos</h3>
-          <div class="value"><%= procedimentoCount %></div>
-        </article>
-        <article class="card">
-          <h3>Medicamentos</h3>
-          <div class="value"><%= medicamentoCount %></div>
-        </article>
-        <article class="card">
-          <h3>Terminologias</h3>
-          <div class="value"><%= termoCount %></div>
-        </article>
-      </section>
-
-      <section class="section">
-        <h3>Acessos rápidos</h3>
-        <p class="muted">Abra direto o recurso que você precisa no momento.</p>
-        <div class="links">
-          <a href="/procedimentos">Consultar procedimentos</a>
-          <a href="/medicamentos">Consultar medicamentos</a>
-          <a href="/terminologias">Ver terminologias</a>
-          <a href="/quiz">Responder quiz</a>
-          <a href="/conteudos">Meus conteúdos (PDF)</a>
-        </div>
+      <section class="landing-grid" aria-label="Módulos rápidos">
+        <a class="module-card" href="/procedimentos">
+          <img src="/site/img/protocolo.png" alt="Procedimentos">
+          <span>Procedimentos</span>
+        </a>
+        <a class="module-card" href="/medicamentos">
+          <img src="/site/img/med.png" alt="Medicamentos">
+          <span>Medicamentos</span>
+        </a>
+        <a class="module-card" href="/terminologias">
+          <img src="/site/img/termo.png" alt="Terminologias">
+          <span>Terminologias</span>
+        </a>
+        <a class="module-card" href="/quiz">
+          <img src="/site/img/quiz.png" alt="Quiz">
+          <span>Quiz</span>
+        </a>
+        <a class="module-card" href="/conteudos">
+          <img src="/site/img/procedimento.png" alt="Conteúdos">
+          <span>Conteúdos</span>
+        </a>
       </section>
     <% } %>
 
-    <div class="footer">Portal Enfermagem</div>
+    <footer class="landing-footer">Portal Enfermagem</footer>
   </main>
 </body>
 </html>
