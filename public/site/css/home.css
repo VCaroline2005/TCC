@@ -68,7 +68,7 @@ body.public-page.page-home main {
   font-weight: 700;
   font-style: italic;
   font-size: 13px;
-  color: #e31b1b;
+  color: var(--brand-400);
 }
 
 .public-page.page-home .home-nav {
@@ -92,11 +92,11 @@ body.public-page.page-home main {
 
 .public-page.page-home .home-nav-link:hover {
   background: rgba(227, 27, 27, 0.08);
-  color: #b30d0d;
+  color: var(--brand-650);
 }
 
 .public-page.page-home .home-nav-link.is-active {
-  color: #e31b1b;
+  color: var(--brand-400);
 }
 
 .public-page.page-home .home-nav-link.is-active::after {
@@ -107,7 +107,7 @@ body.public-page.page-home main {
   bottom: -8px;
   height: 3px;
   border-radius: 999px;
-  background: #e31b1b;
+  background: var(--brand-400);
 }
 
 .public-page.page-home .home-actions {
@@ -157,17 +157,17 @@ body.public-page.page-home main {
   justify-content: center;
   padding: 10px 16px;
   border-radius: 999px;
-  background: #e31b1b;
+  background: var(--brand-400);
   color: #fff;
   text-decoration: none;
   font-weight: 900;
-  border: 1px solid #e31b1b;
+  border: 1px solid var(--brand-400);
   transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
 }
 
 .public-page.page-home .home-action-btn:hover {
-  background: #b30d0d;
-  border-color: #b30d0d;
+  background: var(--brand-650);
+  border-color: var(--brand-650);
   transform: translateY(-1px);
   box-shadow: 0 14px 22px rgba(227, 27, 27, 0.22);
 }
@@ -227,7 +227,7 @@ body.public-page.page-home main {
 }
 
 .public-page.page-home .hero-title .accent {
-  color: #e31b1b;
+  color: var(--brand-400);
 }
 
 .public-page.page-home .hero-subtitle {
@@ -259,15 +259,15 @@ body.public-page.page-home main {
 }
 
 .public-page.page-home .btn-primary {
-  background: #e31b1b;
+  background: var(--brand-400);
   color: #fff;
-  border-color: #e31b1b;
+  border-color: var(--brand-400);
   box-shadow: 0 12px 18px rgba(227, 27, 27, 0.20);
 }
 
 .public-page.page-home .btn-primary:hover {
-  background: #b30d0d;
-  border-color: #b30d0d;
+  background: var(--brand-650);
+  border-color: var(--brand-650);
   transform: translateY(-1px);
 }
 
@@ -390,7 +390,7 @@ body.public-page.page-home main {
   background: rgba(227, 27, 27, 0.10);
   display: grid;
   place-items: center;
-  color: #e31b1b;
+  color: var(--brand-400);
 }
 
 .public-page.page-home .module-title {
@@ -409,7 +409,7 @@ body.public-page.page-home main {
 .public-page.page-home .module-link {
   margin-top: 6px;
   font-weight: 950;
-  color: #e31b1b;
+  color: var(--brand-400);
 }
 
 /* Feature strip */
@@ -441,7 +441,7 @@ body.public-page.page-home main {
   place-items: center;
   background: #fff;
   border: 1px solid rgba(17, 24, 39, 0.07);
-  color: #e31b1b;
+  color: var(--brand-400);
 }
 
 .public-page.page-home .feature h4 {
@@ -464,7 +464,7 @@ body.public-page.page-home main {
   margin-top: 18px;
   border-radius: 18px;
   padding: 18px 18px;
-  background: linear-gradient(90deg, #d01414 0%, #7a1408 70%, #1a0605 110%);
+  background: linear-gradient(90deg, var(--brand-500) 0%, var(--brand-650) 70%, var(--brand-900) 110%);
   color: #fff;
   display: flex;
   align-items: center;
@@ -534,7 +534,7 @@ body.public-page.page-home main {
   display: grid;
   place-items: center;
   background: rgba(227, 27, 27, 0.10);
-  color: #e31b1b;
+  color: var(--brand-400);
   font-weight: 900;
 }
 
@@ -586,7 +586,7 @@ body.public-page.page-home main {
 .public-page.page-home .preview-link {
   margin-top: 12px;
   display: inline-block;
-  color: #e31b1b;
+  color: var(--brand-400);
   font-weight: 950;
   text-decoration: none;
 }
@@ -615,7 +615,7 @@ body.public-page.page-home main {
   background: rgba(227, 27, 27, 0.10);
   display: grid;
   place-items: center;
-  color: #e31b1b;
+  color: var(--brand-400);
   font-weight: 950;
 }
 
@@ -656,7 +656,7 @@ body.public-page.page-home main {
 
 .public-page.page-home .tiny-link.primary {
   border-color: rgba(227, 27, 27, 0.25);
-  color: #b30d0d;
+  color: var(--brand-650);
   background: rgba(227, 27, 27, 0.06);
 }
 
@@ -701,7 +701,6 @@ body.public-page.page-home main {
   .public-page.page-home .feature-strip {
     grid-template-columns: 1fr;
   }
-}  color: #111827;
 }
 
 .public-page.page-home .module-desc {
@@ -714,7 +713,7 @@ body.public-page.page-home main {
 .public-page.page-home .module-link {
   margin-top: 6px;
   font-weight: 950;
-  color: #e31b1b;
+  color: var(--brand-400);
 }
 
 /* Feature strip */
@@ -746,7 +745,7 @@ body.public-page.page-home main {
   place-items: center;
   background: #fff;
   border: 1px solid rgba(17, 24, 39, 0.07);
-  color: #e31b1b;
+  color: var(--brand-400);
 }
 
 .public-page.page-home .feature h4 {
@@ -769,7 +768,7 @@ body.public-page.page-home main {
   margin-top: 18px;
   border-radius: 18px;
   padding: 18px 18px;
-  background: linear-gradient(90deg, #d01414 0%, #7a1408 70%, #1a0605 110%);
+  background: linear-gradient(90deg, var(--brand-500) 0%, var(--brand-650) 70%, var(--brand-900) 110%);
   color: #fff;
   display: flex;
   align-items: center;
@@ -870,7 +869,7 @@ body.public-page.page-home main {
 .public-page.page-home .pill.is-on {
   background: rgba(227, 27, 27, 0.10);
   border-color: rgba(227, 27, 27, 0.25);
-  color: #b30d0d;
+  color: var(--brand-650);
 }
 
 .public-page.page-home .preview-list {
@@ -894,7 +893,7 @@ body.public-page.page-home main {
   margin: 0;
   font-size: 13px;
   font-weight: 950;
-  color: #e31b1b;
+  color: var(--brand-400);
 }
 
 .public-page.page-home .preview-item p {
@@ -909,7 +908,7 @@ body.public-page.page-home main {
   padding: 8px 10px;
   border-radius: 10px;
   border: 1px solid rgba(227, 27, 27, 0.28);
-  background: #e31b1b;
+  background: var(--brand-400);
   color: #fff;
   font-weight: 950;
   font-size: 11px;
@@ -934,7 +933,7 @@ body.public-page.page-home main {
   background: rgba(227, 27, 27, 0.12);
   display: grid;
   place-items: center;
-  color: #b30d0d;
+  color: var(--brand-650);
   font-weight: 950;
 }
 
@@ -975,7 +974,7 @@ body.public-page.page-home main {
 
 .public-page.page-home .tiny-link.primary {
   border-color: rgba(227, 27, 27, 0.25);
-  color: #b30d0d;
+  color: var(--brand-650);
   background: rgba(227, 27, 27, 0.06);
 }
 

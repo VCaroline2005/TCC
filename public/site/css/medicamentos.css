@@ -19,7 +19,7 @@ body.public-page.page-medicamentos {
 
 /* App-like header variant (used only on medicamentos) */
 .public-page.page-medicamentos .site-header--app {
-  background: linear-gradient(90deg, #d01414 0%, #7a1408 72%, #1a0605 120%);
+  background: linear-gradient(90deg, var(--brand-500) 0%, var(--brand-650) 72%, var(--brand-900) 120%);
   padding: 16px;
   box-shadow: 0 12px 24px rgba(0, 0, 0, 0.18);
   text-align: left;
@@ -125,7 +125,7 @@ body.public-page.page-medicamentos {
   height: 18px;
   border-radius: 999px;
   background: #fff;
-  color: #b30d0d;
+  color: var(--brand-650);
   display: grid;
   place-items: center;
   font-size: 11px;
@@ -177,7 +177,7 @@ body.public-page.page-medicamentos {
   letter-spacing: 1.8px;
   font-size: 12px;
   font-weight: 900;
-  color: #b30d0d;
+  color: var(--brand-650);
   margin: 0 0 6px;
 }
 
@@ -235,7 +235,7 @@ body.public-page.page-medicamentos {
   justify-content: center;
   gap: 10px;
   box-shadow: 0 16px 26px rgba(227, 27, 27, 0.22);
-  background: linear-gradient(90deg, #d01414 0%, #b30d0d 70%, #7a1408 110%);
+  background: linear-gradient(90deg, var(--brand-500) 0%, var(--brand-650) 70%, var(--brand-650) 110%);
   border: 1px solid transparent;
   color: #fff;
   cursor: pointer;
@@ -282,7 +282,7 @@ body.public-page.page-medicamentos {
   border: 1px solid rgba(227, 27, 27, 0.18);
   display: grid;
   place-items: center;
-  color: #e31b1b;
+  color: var(--brand-400);
   font-weight: 950;
 }
 
@@ -324,7 +324,7 @@ body.public-page.page-medicamentos {
 
 .public-page.page-medicamentos .med-table thead th {
   background: rgba(227, 27, 27, 0.06);
-  color: #b30d0d;
+  color: var(--brand-650);
   font-weight: 950;
   font-size: 12px;
   letter-spacing: 0.02em;
@@ -347,7 +347,7 @@ body.public-page.page-medicamentos {
   font-size: 11px;
   background: rgba(227, 27, 27, 0.10);
   border: 1px solid rgba(227, 27, 27, 0.18);
-  color: #b30d0d;
+  color: var(--brand-650);
 }
 
 .public-page.page-medicamentos .badge.gray {
@@ -369,7 +369,7 @@ body.public-page.page-medicamentos {
   border-radius: 12px;
   border: 1px solid rgba(227, 27, 27, 0.28);
   background: #fff;
-  color: #b30d0d;
+  color: var(--brand-650);
   font-weight: 950;
   cursor: pointer;
 }
@@ -446,8 +446,8 @@ body.public-page.page-medicamentos {
 }
 
 .public-page.page-medicamentos .pagebtn.is-on {
-  background: #b30d0d;
-  border-color: #b30d0d;
+  background: var(--brand-650);
+  border-color: var(--brand-650);
   color: #fff;
 }
 
@@ -474,7 +474,7 @@ body.public-page.page-medicamentos {
   place-items: center;
   background: rgba(227, 27, 27, 0.10);
   border: 1px solid rgba(227, 27, 27, 0.18);
-  color: #e31b1b;
+  color: var(--brand-400);
   font-size: 20px;
 }
 

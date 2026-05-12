@@ -92,7 +92,7 @@ body.auth-page.login-page::after {
   place-items: center;
   background: rgba(227, 27, 27, 0.10);
   border: 1px solid rgba(227, 27, 27, 0.18);
-  color: #e31b1b;
+  color: var(--brand-400);
 }
 
 .auth-page.login-page .login-title {
@@ -104,7 +104,7 @@ body.auth-page.login-page::after {
 }
 
 .auth-page.login-page .login-title .accent {
-  color: #e31b1b;
+  color: var(--brand-400);
 }
 
 .auth-page.login-page .login-lead {
@@ -170,7 +170,7 @@ body.auth-page.login-page::after {
 }
 
 .auth-page.login-page .field-action:hover {
-  color: rgba(227, 27, 27, 0.95);
+  color: var(--brand-400);
 }
 
 .auth-page.login-page .login-meta {
@@ -194,12 +194,12 @@ body.auth-page.login-page::after {
 .auth-page.login-page .remember input {
   width: 18px;
   height: 18px;
-  accent-color: #e31b1b;
+  accent-color: var(--brand-400);
 }
 
 .auth-page.login-page .forgot {
   text-decoration: none;
-  color: #e31b1b;
+  color: var(--brand-400);
   font-weight: 900;
   font-size: 13px;
 }
@@ -211,7 +211,7 @@ body.auth-page.login-page::after {
 .auth-page.login-page .btn-submit {
   margin-top: 16px;
   border-radius: 12px;
-  background: linear-gradient(90deg, #d01414 0%, #b30d0d 70%, #7a1408 110%);
+  background: var(--brand-gradient-strong);
   box-shadow: 0 14px 26px rgba(227, 27, 27, 0.22);
   font-weight: 950;
   letter-spacing: -0.01em;
@@ -254,7 +254,7 @@ body.auth-page.login-page::after {
 }
 
 .auth-page.login-page .signup-box a {
-  color: #e31b1b;
+  color: var(--brand-400);
   font-weight: 950;
   text-decoration: none;
 }
@@ -284,4 +284,3 @@ body.auth-page.login-page::after {
     padding: 26px 18px 20px;
   }
 }
-

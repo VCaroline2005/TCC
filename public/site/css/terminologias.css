@@ -19,7 +19,7 @@ body.public-page.page-terminologias {
 
 /* App-like header variant (used only on terminologias) */
 .public-page.page-terminologias .site-header--app {
-  background: linear-gradient(90deg, #d01414 0%, #7a1408 72%, #1a0605 120%);
+  background: linear-gradient(90deg, var(--brand-500) 0%, var(--brand-650) 72%, var(--brand-900) 120%);
   padding: 16px;
   box-shadow: 0 12px 24px rgba(0, 0, 0, 0.18);
   text-align: left;
@@ -125,7 +125,7 @@ body.public-page.page-terminologias {
   height: 18px;
   border-radius: 999px;
   background: #fff;
-  color: #b30d0d;
+  color: var(--brand-650);
   display: grid;
   place-items: center;
   font-size: 11px;
@@ -177,7 +177,7 @@ body.public-page.page-terminologias {
   letter-spacing: 1.8px;
   font-size: 12px;
   font-weight: 900;
-  color: #b30d0d;
+  color: var(--brand-650);
   margin: 0 0 6px;
 }
 
@@ -235,7 +235,7 @@ body.public-page.page-terminologias {
   justify-content: center;
   gap: 10px;
   box-shadow: 0 16px 26px rgba(227, 27, 27, 0.22);
-  background: linear-gradient(90deg, #d01414 0%, #b30d0d 70%, #7a1408 110%);
+  background: linear-gradient(90deg, var(--brand-500) 0%, var(--brand-650) 70%, var(--brand-650) 110%);
   border: 1px solid transparent;
   color: #fff;
   cursor: pointer;
@@ -275,8 +275,8 @@ body.public-page.page-terminologias {
 }
 
 .public-page.page-terminologias .alpha-btn.is-on {
-  background: #b30d0d;
-  border-color: #b30d0d;
+  background: var(--brand-650);
+  border-color: var(--brand-650);
   color: #fff;
 }
 
@@ -307,7 +307,7 @@ body.public-page.page-terminologias {
   border: 1px solid rgba(227, 27, 27, 0.18);
   display: grid;
   place-items: center;
-  color: #e31b1b;
+  color: var(--brand-400);
   font-weight: 950;
 }
 
@@ -336,7 +336,7 @@ body.public-page.page-terminologias {
   margin: 14px 0 10px;
   font-size: 22px;
   letter-spacing: -0.02em;
-  color: #b30d0d;
+  color: var(--brand-650);
   border-bottom: 1px solid rgba(17, 24, 39, 0.08);
   padding-bottom: 10px;
 }
@@ -375,7 +375,7 @@ body.public-page.page-terminologias {
   border-radius: 999px;
   background: rgba(227, 27, 27, 0.10);
   border: 1px solid rgba(227, 27, 27, 0.18);
-  color: #b30d0d;
+  color: var(--brand-650);
   display: grid;
   place-items: center;
   font-weight: 950;
@@ -388,7 +388,7 @@ body.public-page.page-terminologias {
 }
 
 .public-page.page-terminologias .term-line strong {
-  color: #b30d0d;
+  color: var(--brand-650);
   font-weight: 950;
 }
 
@@ -400,7 +400,7 @@ body.public-page.page-terminologias {
   background: #fff;
   display: grid;
   place-items: center;
-  color: #b30d0d;
+  color: var(--brand-650);
   font-weight: 950;
   transition: transform 0.15s ease;
 }
@@ -459,7 +459,7 @@ body.public-page.page-terminologias {
 .public-page.page-terminologias .quick a.is-on {
   border-color: rgba(227, 27, 27, 0.28);
   background: rgba(227, 27, 27, 0.06);
-  color: #b30d0d;
+  color: var(--brand-650);
 }
 
 .public-page.page-terminologias .quick-more {
@@ -469,7 +469,7 @@ body.public-page.page-terminologias {
   gap: 8px;
   font-weight: 950;
   text-decoration: none;
-  color: #b30d0d;
+  color: var(--brand-650);
 }
 
 .public-page.page-terminologias .quick-more:hover {

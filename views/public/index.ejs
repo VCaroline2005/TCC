@@ -15,82 +15,108 @@
         <img src="/site/img/logo.png" alt="Portal Enfermagem">
       </a>
 
-      <nav class="auth">
-        <% if (usuarioLocal) { %>
-          <a href="/usuario">Minha Conta</a>
-          <a href="/sair">Sair</a>
-        <% } else { %>
-          <a href="/login">Entrar</a>
-          <a href="/cadastro">Cadastre-se</a>
-        <% } %>
+      <nav class="topbar-nav" aria-label="Menu">
+        <a class="topbar-link is-active" href="/">Início</a>
+        <a class="topbar-link" href="#sobre">Sobre</a>
+        <a class="topbar-link" href="#contato">Contato</a>
       </nav>
+
+      <div class="topbar-actions" aria-label="Ações">
+        <button type="button" class="topbar-btn" onclick="history.back()">Voltar</button>
+        <% if (usuarioLocal) { %>
+          <a class="topbar-btn topbar-btn--primary" href="/home">Minha conta</a>
+        <% } else { %>
+          <a class="topbar-btn topbar-btn--primary" href="/login">Entrar</a>
+        <% } %>
+      </div>
     </div>
   </header>
 
   <main class="landing-main">
     <section class="landing-hero">
       <div class="hero-copy">
-        <span class="hero-eyebrow">Portal Enfermagem</span>
-        <h1>Seu apoio rápido na prática de enfermagem</h1>
-        <p>Conteúdos, protocolos, medicamentos e terminologias reunidos em um só lugar para estudar e consultar com agilidade.</p>
+        <span class="hero-eyebrow">Conhecimento que salva vidas</span>
+        <h1>Seu apoio rápido na prática de <span class="hero-accent">enfermagem</span></h1>
+        <p>Acesse protocolos, medicamentos, terminologias e quizzes para estudar, revisar e aplicar com mais segurança no dia a dia.</p>
         <div class="hero-actions">
           <% if (usuarioLocal) { %>
-            <a class="hero-cta" href="/usuario">Abrir minha conta</a>
-            <a class="hero-secondary" href="/procedimentos">Ver procedimentos</a>
+            <a class="hero-cta" href="/home">Entrar e acessar tudo</a>
+            <a class="hero-secondary" href="/procedimentos">Ver protocolos</a>
           <% } else { %>
-            <a class="hero-cta" href="/login">Entrar</a>
-            <a class="hero-secondary" href="/cadastro">Cadastre-se grátis</a>
+            <a class="hero-cta" href="/login">Entrar e acessar tudo</a>
+            <a class="hero-secondary" href="/cadastro">Criar conta grátis</a>
           <% } %>
         </div>
       </div>
 
       <div class="hero-visual">
-        <img src="/site/img/hero-illustration.svg" alt="Imagem de enfermagem">
+        <img src="/site/img/esteto.png" alt="Imagem de enfermagem">
       </div>
     </section>
 
-    <% if (!usuarioLocal) { %>
-      <section class="landing-grid" aria-label="Prévia de conteúdos">
-        <div class="preview-card">
-          <img src="/site/img/protocolo.png" alt="Prévia de procedimentos">
-          <strong>Protocolos essenciais</strong>
-          <p>Encontre os principais procedimentos em poucos cliques.</p>
+    <section class="landing-grid" aria-label="Acessos rápidos">
+      <a class="feature-card" href="/procedimentos">
+        <div class="feature-media">
+          <img src="/site/img/protocolo.png" alt="Protocolos">
         </div>
-        <div class="preview-card">
-          <img src="/site/img/med.png" alt="Prévia de medicamentos">
-          <strong>Medicamentos organizados</strong>
-          <p>Consulte classes e bulas em um único lugar.</p>
+        <div class="feature-body">
+          <h3>Protocolos essenciais<br><span class="feature-accent">em poucos cliques</span></h3>
+          <p>Acesse protocolos atualizados para guiar suas condutas com segurança.</p>
+          <span class="feature-link">Acessar protocolos</span>
         </div>
-        <div class="preview-card">
-          <img src="/site/img/termo.png" alt="Prévia de terminologias">
-          <strong>Terminologias rápidas</strong>
-          <p>Revisão de termos e definições para estudo e prática.</p>
-        </div>
-      </section>
-    <% } else { %>
-      <section class="landing-grid" aria-label="Módulos rápidos">
-        <a class="module-card" href="/procedimentos">
-          <img src="/site/img/protocolo.png" alt="Procedimentos">
-          <span>Procedimentos</span>
-        </a>
-        <a class="module-card" href="/medicamentos">
+      </a>
+
+      <a class="feature-card" href="/medicamentos">
+        <div class="feature-media">
           <img src="/site/img/med.png" alt="Medicamentos">
-          <span>Medicamentos</span>
-        </a>
-        <a class="module-card" href="/terminologias">
-          <img src="/site/img/termo.png" alt="Terminologias">
-          <span>Terminologias</span>
-        </a>
-        <a class="module-card" href="/quiz">
-          <img src="/site/img/quiz.png" alt="Quiz">
-          <span>Quiz</span>
-        </a>
-        <a class="module-card" href="/conteudos">
-          <img src="/site/img/procedimento.png" alt="Conteúdos">
-          <span>Conteúdos</span>
-        </a>
-      </section>
-    <% } %>
+        </div>
+        <div class="feature-body">
+          <h3>Medicamentos<br><span class="feature-accent">organizados por classe</span></h3>
+          <p>Consulte medicamentos, vias de administração e diluições de forma rápida e prática.</p>
+          <span class="feature-link">Ver medicamentos</span>
+        </div>
+      </a>
+
+      <a class="feature-card" href="/terminologias">
+        <div class="feature-media">
+          <img src="/site/img/termo.png" alt="Termos e definições">
+        </div>
+        <div class="feature-body">
+          <h3>Termos e definições<br><span class="feature-accent">para revisão rápida</span></h3>
+          <p>Glossário completo de terminologias para revisar e fixar o conhecimento.</p>
+          <span class="feature-link">Consultar termos</span>
+        </div>
+      </a>
+    </section>
+
+    <section class="landing-metrics" aria-label="Diferenciais">
+      <div class="metric">
+        <strong>Conteúdo confiável</strong>
+        <span>Fontes e materiais selecionados por profissionais.</span>
+      </div>
+      <div class="metric">
+        <strong>Acesso rápido</strong>
+        <span>Informações essenciais em segundos.</span>
+      </div>
+      <div class="metric">
+        <strong>Estude no seu ritmo</strong>
+        <span>Revise quando e onde quiser.</span>
+      </div>
+      <div class="metric">
+        <strong>Foco na prática</strong>
+        <span>Aplicação direta no cuidado ao paciente.</span>
+      </div>
+    </section>
+
+    <section class="landing-about" id="sobre" aria-label="Sobre">
+      <h2>Sobre o Portal Enfermagem</h2>
+      <p>Um espaço para estudar com agilidade: procedimentos, medicamentos, terminologias e quizzes em um só lugar.</p>
+    </section>
+
+    <section class="landing-contact" id="contato" aria-label="Contato">
+      <h2>Contato</h2>
+      <p class="landing-contact-text">Precisa de ajuda ou quer enviar sugestões? Fale com a gente pelo suporte do sistema.</p>
+    </section>
 
     <footer class="landing-footer">Portal Enfermagem</footer>
   </main>

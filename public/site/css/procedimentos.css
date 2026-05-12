@@ -19,7 +19,7 @@ body.public-page.page-procedimentos {
 
 /* App-like header variant (used only on procedimentos) */
 .public-page.page-procedimentos .site-header--app {
-  background: linear-gradient(90deg, #d01414 0%, #7a1408 72%, #1a0605 120%);
+  background: linear-gradient(90deg, var(--brand-500) 0%, var(--brand-650) 72%, var(--brand-900) 120%);
   padding: 16px;
   box-shadow: 0 12px 24px rgba(0, 0, 0, 0.18);
   text-align: left;
@@ -125,7 +125,7 @@ body.public-page.page-procedimentos {
   height: 18px;
   border-radius: 999px;
   background: #fff;
-  color: #b30d0d;
+  color: var(--brand-650);
   display: grid;
   place-items: center;
   font-size: 11px;
@@ -179,7 +179,7 @@ body.public-page.page-procedimentos {
 }
 
 .public-page.page-procedimentos .proc-eyebrow {
-  color: #b30d0d;
+  color: var(--brand-650);
 }
 
 .public-page.page-procedimentos .proc-title {
@@ -212,7 +212,7 @@ body.public-page.page-procedimentos {
   justify-content: center;
   gap: 10px;
   box-shadow: 0 16px 26px rgba(227, 27, 27, 0.22);
-  background: linear-gradient(90deg, #d01414 0%, #b30d0d 70%, #7a1408 110%);
+  background: linear-gradient(90deg, var(--brand-500) 0%, var(--brand-650) 70%, var(--brand-650) 110%);
   border-color: transparent;
 }
 
@@ -252,7 +252,7 @@ body.public-page.page-procedimentos {
   border: 1px solid rgba(227, 27, 27, 0.18);
   display: grid;
   place-items: center;
-  color: #e31b1b;
+  color: var(--brand-400);
   flex: 0 0 auto;
 }
 
@@ -265,7 +265,7 @@ body.public-page.page-procedimentos {
 .public-page.page-procedimentos .proc-category {
   background: rgba(227, 27, 27, 0.10);
   border: 1px solid rgba(227, 27, 27, 0.18);
-  color: #b30d0d;
+  color: var(--brand-650);
   text-transform: uppercase;
   letter-spacing: 0.06em;
 }
@@ -319,7 +319,7 @@ body.public-page.page-procedimentos {
   place-items: center;
   background: rgba(227, 27, 27, 0.10);
   border: 1px solid rgba(227, 27, 27, 0.18);
-  color: #e31b1b;
+  color: var(--brand-400);
 }
 
 .public-page.page-procedimentos .proc-doc {
@@ -354,7 +354,7 @@ body.public-page.page-procedimentos {
   width: 26px;
   height: 26px;
   border-radius: 999px;
-  background: #b30d0d;
+  background: var(--brand-650);
   color: #fff;
   display: grid;
   place-items: center;
@@ -392,7 +392,7 @@ body.public-page.page-procedimentos {
   text-decoration: none;
   font-weight: 950;
   border: 1px solid rgba(227, 27, 27, 0.25);
-  color: #b30d0d;
+  color: var(--brand-650);
   background: rgba(255, 255, 255, 0.75);
 }
 
@@ -422,7 +422,7 @@ body.public-page.page-procedimentos {
   place-items: center;
   background: rgba(227, 27, 27, 0.10);
   border: 1px solid rgba(227, 27, 27, 0.18);
-  color: #e31b1b;
+  color: var(--brand-400);
 }
 
 @media (max-width: 980px) {
