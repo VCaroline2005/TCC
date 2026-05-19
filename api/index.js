@@ -5,7 +5,7 @@ import session from 'express-session';
 //inicializa a aplicação usando a bibliotea express
 const app = express();
 //cria uma variável com o número da porta
-const port = 3000;
+const port = parseInt(process.env.PORT || '3001', 10);
 
 //configura o node para usar ejs como view (visão)
 app.set('view engine', 'ejs');
@@ -45,4 +45,9 @@ app.get('/admin/quiz/edt/:id', abreedtquiz);
 app.post('/admin/quiz/edt/:id', edtquiz);
 
 //faz a aplicação ficar escurando a porta cadastrada
-app.listen(3001);
+const server = app.listen(port, () => {
+    console.log(`Servidor rodando em http://localhost:${port}`)
+});
+server.on('error', (err) => {
+    console.error('Erro ao iniciar servidor:', err?.code || err?.message || err)
+})
