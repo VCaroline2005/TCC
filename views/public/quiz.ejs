@@ -1,14 +1,39 @@
 <%- include('cabecalho', { pageClass: 'page-quiz' }) %>
+<% const perguntasAdminLocal = (typeof perguntasAdmin !== 'undefined' && perguntasAdmin) ? perguntasAdmin : []; %>
+<% const perguntasIALocal = (typeof perguntasIA !== 'undefined' && perguntasIA) ? perguntasIA : []; %>
+<% const sistemasLocal = (typeof sistemas !== 'undefined' && sistemas) ? sistemas : []; %>
+<% const sistemaSelecionadoLocal = (typeof sistemaSelecionado !== 'undefined' && sistemaSelecionado) ? sistemaSelecionado : ''; %>
 
 <div class="quiz-page">
-  <section class="proc-hero">
-    <div class="quiz-hero-text">
-      <p class="proc-eyebrow">Biblioteca clínica</p>
-      <h2 class="proc-title">Quiz</h2>
-      <p class="proc-subtitle">Gere quizzes automaticamente a partir dos seus materiais ou responda as questões já criadas.</p>
+  <section class="page-hero">
+    <div>
+      <p class="page-eyebrow">Biblioteca clínica</p>
+      <h2>Quiz</h2>
+      <p>Gere quizzes automaticamente a partir dos seus materiais ou responda as questões já criadas.</p>
     </div>
 
-    <div class="quiz-upload-panel">
+    <div class="page-hero-stat">
+      <strong><%= perguntasAdminLocal.length + perguntasIALocal.length %></strong>
+      <span>questões</span>
+    </div>
+  </section>
+
+  <section class="quiz-summary" aria-label="Resumo">
+    <div class="sum-item">
+      <div class="sum-ic" aria-hidden="true">❓</div>
+      <div><strong><%= perguntasAdminLocal.length + perguntasIALocal.length %></strong><br><span>Total de questões</span></div>
+    </div>
+    <div class="sum-item">
+      <div class="sum-ic" aria-hidden="true">📋</div>
+      <div><strong><%= perguntasAdminLocal.length %></strong><br><span>Questões criadas</span></div>
+    </div>
+    <div class="sum-item">
+      <div class="sum-ic" aria-hidden="true">🤖</div>
+      <div><strong><%= perguntasIALocal.length %></strong><br><span>Geradas por PDF</span></div>
+    </div>
+  </section>
+
+  <section class="app-card quiz-upload-panel">
       <div id="upload" class="upload-box">
         <h3>Gerar quiz a partir de PDF</h3>
         <p class="upload-note">Envie um PDF para criar um conjunto de questões automaticamente com base no conteúdo do arquivo.</p>
@@ -19,16 +44,15 @@
           </div>
         </form>
       </div>
-    </div>
   </section>
 
-  <section class="quiz-list card">
+  <section class="app-card quiz-list">
     <div class="quiz-list-header">
       <div>
         <h2>Meus quizzes</h2>
         <p>Visualize, filtre e responda aos quizzes que você já criou.</p>
       </div>
-      <% if (!perguntasAdmin.length && !perguntasIA.length) { %>
+      <% if (!perguntasAdminLocal.length && !perguntasIALocal.length) { %>
         <a class="btn btn-secondary" href="#upload">Gerar meu primeiro quiz</a>
       <% } %>
     </div>
@@ -38,18 +62,18 @@
         <label for="sistema">Filtrar por sistema</label>
         <select name="sistema" id="sistema" class="input">
           <option value="">Todos os sistemas</option>
-          <% sistemas.forEach(function(s){ %>
-            <option value="<%= s %>" <%= sistemaSelecionado === s ? 'selected' : '' %>><%= s %></option>
+          <% sistemasLocal.forEach(function(s){ %>
+            <option value="<%= s %>" <%= sistemaSelecionadoLocal === s ? 'selected' : '' %>><%= s %></option>
           <% }) %>
         </select>
       </div>
       <button class="btn">Aplicar filtros</button>
     </form>
 
-    <% if (perguntasAdmin.length) { %>
+    <% if (perguntasAdminLocal.length) { %>
       <form method="post" action="/quiz/responder" class="quiz-form">
-        <% perguntasAdmin.forEach(function(p, index){ %>
-          <div class="quiz-card">
+        <% perguntasAdminLocal.forEach(function(p, index){ %>
+          <div class="app-card quiz-card">
             <p class="quiz-question"><%= index + 1 %>. <%= p.pergunta %></p>
             <div class="options-grid">
               <% p.opcoes.forEach(function(opt, optIndex){ %>
@@ -67,13 +91,11 @@
         </div>
       </form>
     <% } else { %>
-      <div class="quiz-empty-state">
-        <p>Nenhuma pergunta encontrada.</p>
-      </div>
+      <div class="app-empty">Nenhuma pergunta encontrada.</div>
     <% } %>
   </section>
 
-  <section class="quiz-ia card">
+  <section class="app-card quiz-ia">
     <div class="quiz-list-header">
       <div>
         <h2>Quiz gerado por PDF</h2>
@@ -81,9 +103,9 @@
       </div>
     </div>
 
-    <% if (perguntasIA.length) { %>
-      <% perguntasIA.forEach(function(p, index){ %>
-        <div class="quiz-card quiz-card-ia">
+    <% if (perguntasIALocal.length) { %>
+      <% perguntasIALocal.forEach(function(p, index){ %>
+        <div class="app-card quiz-card quiz-card-ia">
           <p class="quiz-question"><%= index + 1 %>. <%= p.pergunta %></p>
           <div class="options-grid">
             <% p.opcoes.forEach(function(opt){ %>
@@ -95,9 +117,7 @@
         </div>
       <% }) %>
     <% } else { %>
-      <div class="quiz-empty-state">
-        <p>Nenhum quiz gerado ainda</p>
-      </div>
+      <div class="app-empty">Nenhum quiz gerado ainda.</div>
     <% } %>
   </section>
 </div>

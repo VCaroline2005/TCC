@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title || 'Portal Enfermagem' %></title>
+  <link rel="stylesheet" href="/site/css/pages.css">
+  <% if (Array.isArray(extraCss)) { extraCss.forEach(function(css) { %>
+    <link rel="stylesheet" href="<%= css %>">
+  <% }) } %>
+  <% if (Array.isArray(extraJs)) { extraJs.forEach(function(js) { %>
+    <script src="<%= js %>" defer></script>
+  <% }) } %>
+</head>
+<body class="auth-page <%= pageClass || '' %>">
+  <header class="auth-topbar">
+    <div class="bar-inner">
+      <div class="brand">
+        <a href="/"><img class="logo" src="/site/img/logo.png" alt="Portal Enfermagem"></a>
+        <div class="brand-meta">
+          <h1>Portal Enfermagem</h1>
+          <p class="brand-subtitle"><%= subtitle || 'Seu manual de enfermagem completo' %></p>
+        </div>
+      </div>
+      <div class="nav-controls">
+        <button type="button" class="nav-btn" onclick="history.back()">Voltar</button>
+        <% if (navLink && navLink.href && navLink.label) { %>
+          <a class="nav-btn" href="<%= navLink.href %>"><%= navLink.label %></a>
+        <% } %>
+        <button type="button" class="nav-btn" onclick="history.forward()">Avançar</button>
+      </div>
+    </div>
+  </header>
+  <main class="auth-main">

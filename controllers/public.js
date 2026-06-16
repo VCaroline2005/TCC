@@ -5,10 +5,10 @@ import Terminologia from '../models/terminologia.js'
 import Quiz from '../models/quiz.js'
 import Conteudo from '../models/conteudo.js'
 import fs from 'node:fs/promises'
-import path from 'node:path'
 import pdfParse from 'pdf-parse'
 import { GoogleGenAI } from '@google/genai'
 import { formatTelefoneBR, normalizeTelefoneBR } from '../utils/telefone.js'
+import { uploadPath } from '../utils/uploadPaths.js'
 
 export async function abrecadastro(req, res){
     res.render('cadastro')
@@ -646,7 +646,7 @@ export async function uploadConteudo(req, res) {
     } catch (err) {
         console.error(err)
         if (req.file && req.session?.usuario?.id) {
-            const caminho = path.join(process.cwd(), 'public', 'uploads', 'conteudos', req.session.usuario.id, req.file.filename)
+            const caminho = uploadPath('uploads', 'conteudos', req.session.usuario.id, req.file.filename)
             try {
                 await fs.unlink(caminho)
             } catch (e) {
@@ -717,7 +717,7 @@ export async function downloadConteudo(req, res) {
     const conteudo = await Conteudo.findOne({ _id: req.params.id, usuario: usuarioId })
     if (!conteudo) return res.redirect('/conteudos?erro=nao-encontrado')
 
-    const caminho = path.join(process.cwd(), 'public', 'uploads', 'conteudos', usuarioId, conteudo.arquivoNome)
+    const caminho = uploadPath('uploads', 'conteudos', usuarioId, conteudo.arquivoNome)
     return res.download(caminho, conteudo.arquivoOriginal, (err) => {
         if (err) {
             console.error(err)
@@ -734,7 +734,7 @@ export async function deletarConteudo(req, res) {
 
     const conteudo = await Conteudo.findOneAndDelete({ _id: req.params.id, usuario: usuarioId })
     if (conteudo) {
-        const caminho = path.join(process.cwd(), 'public', 'uploads', 'conteudos', usuarioId, conteudo.arquivoNome)
+        const caminho = uploadPath('uploads', 'conteudos', usuarioId, conteudo.arquivoNome)
         try {
             await fs.unlink(caminho)
         } catch (err) {

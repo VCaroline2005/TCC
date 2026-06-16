@@ -1,10 +1,41 @@
 <%- include('cabecalho', { pageClass: 'page-conteudos' }) %>
-<h2>Conteúdos </h2>
-
 <% const erroLocal = (typeof erro !== 'undefined' && erro) ? erro : null; %>
 <% const sucessoLocal = (typeof sucesso !== 'undefined' && sucesso) ? sucesso : null; %>
 <% const editandoLocal = (typeof editando !== 'undefined' && editando); %>
 <% const conteudoEdicaoLocal = (typeof ConteudoEdicao !== 'undefined' && ConteudoEdicao) ? ConteudoEdicao : null; %>
+<% const categoriasLocal = (typeof categorias !== 'undefined' && categorias) ? categorias : []; %>
+<% const categoriaSel = (typeof categoriaSelecionada !== 'undefined' && categoriaSelecionada) ? categoriaSelecionada : ''; %>
+<% const qLocal = (typeof q !== 'undefined' && q) ? q : ''; %>
+<% const conteudosLocal = (typeof Conteudos !== 'undefined' && Conteudos) ? Conteudos : []; %>
+<% const formatDate = (d) => { try { return new Date(d).toLocaleString('pt-BR'); } catch (e) { return ''; } }; %>
+<% const formatSize = (n) => { const b = Number(n || 0); if (!b) return '-'; const kb = b/1024; if (kb < 1024) return kb.toFixed(1) + ' KB'; const mb = kb/1024; return mb.toFixed(1) + ' MB'; }; %>
+
+<section class="page-hero">
+  <div>
+    <p class="page-eyebrow">Biblioteca pessoal</p>
+    <h2>Conteúdos</h2>
+    <p>Organize PDFs, apostilas e materiais de estudo em um só lugar.</p>
+  </div>
+  <div class="page-hero-stat">
+    <strong><%= conteudosLocal.length %></strong>
+    <span>PDF(s)</span>
+  </div>
+</section>
+
+<section class="conteudo-summary" aria-label="Resumo">
+  <div class="sum-item">
+    <div class="sum-ic" aria-hidden="true">📚</div>
+    <div><strong><%= conteudosLocal.length %></strong><br><span>PDFs enviados</span></div>
+  </div>
+  <div class="sum-item">
+    <div class="sum-ic" aria-hidden="true">📁</div>
+    <div><strong><%= categoriasLocal.length %></strong><br><span>Categorias</span></div>
+  </div>
+  <div class="sum-item">
+    <div class="sum-ic" aria-hidden="true">📄</div>
+    <div><strong>Organizados</strong><br><span>em um só lugar</span></div>
+  </div>
+</section>
 
 <% if (erroLocal === 'arquivo') { %>
   <p class="form-error">Envie um arquivo PDF válido (até 25MB).</p>
@@ -25,7 +56,7 @@
 <% } %>
 
 <% if (editandoLocal && conteudoEdicaoLocal) { %>
-  <form method="post" action="/conteudos/edt/<%= conteudoEdicaoLocal._id %>" class="conteudo-form">
+  <form method="post" action="/conteudos/edt/<%= conteudoEdicaoLocal._id %>" class="app-card conteudo-form">
     <h3>Editar conteúdo</h3>
     <label>Título</label>
     <input type="text" name="titulo" value="<%= conteudoEdicaoLocal.titulo %>" required>
@@ -37,7 +68,7 @@
     </div>
   </form>
 <% } else { %>
-  <form method="post" action="/conteudos/upload" enctype="multipart/form-data" class="conteudo-form">
+  <form method="post" action="/conteudos/upload" enctype="multipart/form-data" class="app-card conteudo-form">
     <h3>Enviar novo PDF</h3>
     <label>Arquivo (PDF)</label>
     <input type="file" name="arquivo" accept="application/pdf,.pdf" required>
@@ -51,11 +82,7 @@
   </form>
 <% } %>
 
-<% const categoriasLocal = (typeof categorias !== 'undefined' && categorias) ? categorias : []; %>
-<% const categoriaSel = (typeof categoriaSelecionada !== 'undefined' && categoriaSelecionada) ? categoriaSelecionada : ''; %>
-<% const qLocal = (typeof q !== 'undefined' && q) ? q : ''; %>
-
-<form method="get" action="/conteudos" class="conteudo-filter">
+<form method="get" action="/conteudos" class="app-card conteudo-filter">
   <input type="text" name="q" value="<%= qLocal %>" placeholder="Pesquisar por título, categoria ou nome do arquivo">
   <select name="categoria">
     <option value="">Todas as categorias</option>
@@ -67,16 +94,12 @@
   <a href="/conteudos" class="conteudo-link">Limpar</a>
 </form>
 
-<% const conteudosLocal = (typeof Conteudos !== 'undefined' && Conteudos) ? Conteudos : []; %>
-<% const formatDate = (d) => { try { return new Date(d).toLocaleString('pt-BR'); } catch (e) { return ''; } }; %>
-<% const formatSize = (n) => { const b = Number(n || 0); if (!b) return '-'; const kb = b/1024; if (kb < 1024) return kb.toFixed(1) + ' KB'; const mb = kb/1024; return mb.toFixed(1) + ' MB'; }; %>
-
 <% if (!conteudosLocal.length) { %>
-  <p class="muted">Nenhum PDF encontrado.</p>
+  <div class="app-empty">Nenhum PDF encontrado.</div>
 <% } else { %>
   <div class="conteudo-list">
     <% conteudosLocal.forEach(function(c){ %>
-      <div class="conteudo-item">
+      <div class="app-card conteudo-item">
         <div class="conteudo-main">
           <div class="conteudo-title"><%= c.titulo %></div>
           <div class="conteudo-meta">
@@ -103,4 +126,3 @@
 <% } %>
 
 <%- include('rodape') %>
-

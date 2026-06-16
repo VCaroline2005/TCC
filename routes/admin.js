@@ -5,14 +5,10 @@ const router = express.Router()
 //importação da biblioteca multer para baixar arquivos
 import multer from 'multer';
 import fs from 'node:fs'
+import { ensureUploadPath } from '../utils/uploadPaths.js'
 //configuração da pasta onde serão inseridos os arquivos baixados
-const upload = multer({ dest: 'public/fotos/' })
-const popsUploadDir = 'public/uploads/pops'
-try {
-    fs.mkdirSync(popsUploadDir, { recursive: true })
-} catch (err) {
-    // ignore
-}
+const upload = multer({ dest: ensureUploadPath('fotos') })
+const popsUploadDir = ensureUploadPath('uploads', 'pops')
 
 const tmpImportDir = '/tmp/ifstore-imports'
 try {

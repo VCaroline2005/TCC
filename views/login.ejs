@@ -1,128 +1,100 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login - Portal Enfermagem</title>
-  <link rel="stylesheet" href="/site/css/pages.css">
-  <link rel="stylesheet" href="/site/css/login.css">
-  <script src="/site/js/login.js" defer></script>
-</head>
-<body class="auth-page login-page">
+<%- include('public/auth-cabecalho', {
+  pageClass: 'login-page',
+  title: 'Login - Portal Enfermagem',
+  extraCss: ['/site/css/login.css'],
+  extraJs: ['/site/js/login.js'],
+  navLink: { href: '/cadastro', label: 'Cadastre-se' },
+  subtitle: 'Faça login em sua conta para acessar seus conteúdos'
+}) %>
 
-    <header class="auth-topbar">
-      <div class="bar-inner">
-        <div class="brand">
-          <a href="/"><img class="logo" src="/site/img/logo.png" alt="Portal Enfermagem"></a>
-          <div class="brand-meta">
-            <h1>Portal Enfermagem</h1>
-            <p class="brand-subtitle">Seu manual de enfermagem completo</p>
-          </div>
-        </div>
-        <div class="nav-controls">
-          <button type="button" class="nav-btn" onclick="history.back()">Voltar</button>
-          <a class="nav-btn" href="/sair">Sair</a>
-          <button type="button" class="nav-btn" onclick="history.forward()">Avançar</button>
-        </div>
-      </div>
-    </header>
+<div class="login-container">
+  <div class="login-badge" aria-hidden="true">
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 21s-7-4.6-9.6-9.1C.7 8.9 2.6 6 6 6c2 0 3.2 1.1 4 2 0 0 1.8-2 4.8-2 3.4 0 5.3 2.9 3.6 5.9C19 16.4 12 21 12 21Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+      <path d="M12 9v6M9 12h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    </svg>
+  </div>
+  <h2 class="login-title">Bem-vindo ao seu <span class="accent">Manual</span></h2>
+  <p class="login-lead">Faça login em sua conta para ter acesso a conteúdos exclusivos e organizar seus estudos.</p>
 
-    <main class="auth-main">
-    <div class="login-container">
-    <div class="login-badge" aria-hidden="true">
-      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M12 21s-7-4.6-9.6-9.1C.7 8.9 2.6 6 6 6c2 0 3.2 1.1 4 2 0 0 1.8-2 4.8-2 3.4 0 5.3 2.9 3.6 5.9C19 16.4 12 21 12 21Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
-        <path d="M12 9v6M9 12h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-      </svg>
-    </div>
-    <h2 class="login-title">Bem-vindo ao seu <span class="accent">Manual</span></h2>
-    <p class="login-lead">Faça login em sua conta para ter acesso a conteúdos exclusivos e organizar seus estudos.</p>
+  <% if (typeof error !== 'undefined' && error) { %>
+    <div class="auth-alert error"><%= error %></div>
+  <% } %>
+  <% if (typeof cadastro !== 'undefined' && cadastro === 'ok') { %>
+    <div class="auth-alert warn">Cadastro realizado com sucesso. Faça login.</div>
+  <% } %>
+  <% if (typeof senha !== 'undefined' && senha === 'ok') { %>
+    <div class="auth-alert success">Senha atualizada. Faça login.</div>
+  <% } %>
 
-    <% if (typeof error !== 'undefined' && error) { %>
-      <div class="auth-alert error"><%= error %></div>
-    <% } %>
-    <% if (typeof cadastro !== 'undefined' && cadastro === 'ok') { %>
-      <div class="auth-alert warn">Cadastro realizado com sucesso. Faça login.</div>
-    <% } %>
-    <% if (typeof senha !== 'undefined' && senha === 'ok') { %>
-      <div class="auth-alert success">Senha atualizada. Faça login.</div>
-    <% } %>
-
-    <form action="/login" method="POST">
-
-      <!-- Campo para o nome de usuário -->
-      <div class="field">
-        <label for="email">E-mail</label>
-        <div class="field-row">
-          <span class="field-icon" aria-hidden="true">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M4 6h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2Z" stroke="currentColor" stroke-width="2"/>
-              <path d="m22 8-10 7L2 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </span>
-          <input class="field-input" type="email" id="email" name="email" placeholder="caroline@gmail.com" required>
-          <span aria-hidden="true"></span>
-        </div>
-      </div>
-
-      <!-- Campo para a senha -->
-      <div class="field">
-        <label for="password">Senha</label>
-        <div class="field-row">
-          <span class="field-icon" aria-hidden="true">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M7 11V8a5 5 0 0 1 10 0v3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-              <path d="M6 11h12a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2Z" stroke="currentColor" stroke-width="2"/>
-            </svg>
-          </span>
-          <input class="field-input" type="password" id="password" name="password" placeholder="••••••••" required>
-          <button class="field-action" type="button" data-toggle-password="#password" aria-label="Mostrar senha">
-            <svg class="eye-open" width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
-              <path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" stroke="currentColor" stroke-width="2"/>
-            </svg>
-          </button>
-        </div>
-      </div>
-
-      <div class="login-meta">
-        <label class="remember">
-          <input type="checkbox" name="remember" value="1">
-          Lembrar-me
-        </label>
-        <a class="forgot" href="/recuperar-senha">Esqueceu a senha?</a>
-      </div>
-
-      <!-- Botão de login -->
-      <button type="submit" class="btn-submit">Entrar</button>
-
-      <!-- Links de recuperação de senha e criação de conta -->
-      <div class="sep" aria-hidden="true">ou</div>
-
-      <div class="signup-box">
-        <span aria-hidden="true">
+  <form action="/login" method="POST">
+    <div class="field">
+      <label for="email">E-mail</label>
+      <div class="field-row">
+        <span class="field-icon" aria-hidden="true">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-            <path d="M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z" stroke="currentColor" stroke-width="2"/>
-            <path d="M19 8v6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-            <path d="M22 11h-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <path d="M4 6h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2Z" stroke="currentColor" stroke-width="2"/>
+            <path d="m22 8-10 7L2 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </span>
-        <span>Ainda não tem uma conta? <a href="/cadastro">Cadastre-se aqui</a></span>
+        <input class="field-input" type="email" id="email" name="email" placeholder="caroline@gmail.com" required>
+        <span aria-hidden="true"></span>
       </div>
+    </div>
 
-      <div class="secure-note" aria-label="Segurança">
-        <span aria-hidden="true">
+    <div class="field">
+      <label for="password">Senha</label>
+      <div class="field-row">
+        <span class="field-icon" aria-hidden="true">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z" stroke="#e31b1b" stroke-width="2" stroke-linejoin="round"/>
-            <path d="M9 12l2 2 4-4" stroke="#e31b1b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M7 11V8a5 5 0 0 1 10 0v3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <path d="M6 11h12a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2Z" stroke="currentColor" stroke-width="2"/>
           </svg>
         </span>
-        <div><strong>Seus dados estão protegidos</strong><br><span>Ambiente seguro e confiável</span></div>
+        <input class="field-input" type="password" id="password" name="password" placeholder="••••••••" required>
+        <button class="field-action" type="button" data-toggle-password="#password" aria-label="Mostrar senha">
+          <svg class="eye-open" width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+            <path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" stroke="currentColor" stroke-width="2"/>
+          </svg>
+        </button>
       </div>
-    </form>
     </div>
-    </main>
 
-</body>
-</html>
+    <div class="login-meta">
+      <label class="remember">
+        <input type="checkbox" name="remember" value="1">
+        Lembrar-me
+      </label>
+      <a class="forgot" href="/recuperar-senha">Esqueceu a senha?</a>
+    </div>
+
+    <button type="submit" class="btn-submit">Entrar</button>
+
+    <div class="sep" aria-hidden="true">ou</div>
+
+    <div class="signup-box">
+      <span aria-hidden="true">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <path d="M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z" stroke="currentColor" stroke-width="2"/>
+          <path d="M19 8v6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <path d="M22 11h-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </span>
+      <span>Ainda não tem uma conta? <a href="/cadastro">Cadastre-se aqui</a></span>
+    </div>
+
+    <div class="secure-note" aria-label="Segurança">
+      <span aria-hidden="true">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z" stroke="#e31b1b" stroke-width="2" stroke-linejoin="round"/>
+          <path d="M9 12l2 2 4-4" stroke="#e31b1b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </span>
+      <div><strong>Seus dados estão protegidos</strong><br><span>Ambiente seguro e confiável</span></div>
+    </div>
+  </form>
+</div>
+
+

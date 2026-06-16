@@ -1,39 +1,108 @@
 <%- include('cabecalho', { pageClass: 'page-quiz-result' }) %>
-<h2>Resultado do Quiz</h2>
+<% const percentual = (total && total > 0) ? Math.round((corretas / total) * 100) : 0; %>
+
+<section class="page-hero">
+  <div>
+    <p class="page-eyebrow">Resultado do Quiz</p>
+    <h2>Seu desempenho</h2>
+    <p>Confira seu resultado detalhado e as questões que errou.</p>
+  </div>
+  <div class="page-hero-stat">
+    <strong><%= percentual %>%</strong>
+    <span>de acertos</span>
+  </div>
+</section>
 
 <% if (total > 0) { %>
-  <% const percentual = total ? Math.round((corretas / total) * 100) : 0; %>
-  <p>Total de questões: <strong><%= total %></strong></p>
-  <p>Acertos: <strong><%= corretas %></strong></p>
-  <p>Erros: <strong><%= erradas %></strong></p>
+  <section class="result-summary" aria-label="Resumo do resultado">
+    <div class="sum-item">
+      <div class="sum-ic" aria-hidden="true">✅</div>
+      <div><strong><%= corretas %></strong><br><span>Acertos</span></div>
+    </div>
+    <div class="sum-item">
+      <div class="sum-ic" aria-hidden="true">❌</div>
+      <div><strong><%= erradas %></strong><br><span>Erros</span></div>
+    </div>
+    <div class="sum-item">
+      <div class="sum-ic" aria-hidden="true">❓</div>
+      <div><strong><%= total %></strong><br><span>Total de questões</span></div>
+    </div>
+  </section>
+
+  <section class="app-card result-details">
+    <h3>Análise do resultado</h3>
+    <div class="result-score">
+      <div class="score-circle">
+        <div class="score-value"><%= percentual %>%</div>
+      </div>
+      <div class="score-info">
+        <p><strong><%= corretas %></strong> de <strong><%= total %></strong> questões respondidas corretamente</p>
+        <% if (percentual >= 70) { %>
+          <p class="score-feedback positive">Excelente desempenho! 🎉</p>
+        <% } else if (percentual >= 50) { %>
+          <p class="score-feedback neutral">Bom desempenho. Continue estudando! 📚</p>
+        <% } else { %>
+          <p class="score-feedback negative">Continue estudando para melhorar! 💪</p>
+        <% } %>
+      </div>
+    </div>
+  </section>
 
   <% if (sistemas && sistemas.length) { %>
-    <h3>Resultado por sistema</h3>
-    <ul>
-      <% sistemas.forEach(function(s){ %>
-        <li><strong><%= s.nome %></strong>: <%= s.corretas %> acertos, <%= s.erradas %> erros (de <%= s.total %>)</li>
-      <% }) %>
-    </ul>
+    <section class="app-card result-by-system">
+      <h3>Resultado por sistema</h3>
+      <div class="system-results">
+        <% sistemas.forEach(function(s){ %>
+          <div class="system-item">
+            <div class="system-header">
+              <h4><%= s.nome %></h4>
+              <span class="system-score"><%= Math.round((s.corretas / s.total) * 100) %>%</span>
+            </div>
+            <div class="system-progress">
+              <div class="progress-bar">
+                <div class="progress-fill" style="width: <%= Math.round((s.corretas / s.total) * 100) %>%"></div>
+              </div>
+              <p class="system-detail"><%= s.corretas %> acertos, <%= s.erradas %> erros (de <%= s.total %>)</p>
+            </div>
+          </div>
+        <% }) %>
+      </div>
+    </section>
   <% } %>
 
   <% if (typeof errosDetalhes !== 'undefined' && errosDetalhes.length) { %>
-    <h3>Questões erradas</h3>
-    <ul>
-      <% errosDetalhes.forEach(function(e){ %>
-        <li>
-          <strong><%= e.pergunta %></strong><br>
-          Sua resposta: <%= e.escolhaTexto %><br>
-          Correta: <%= e.corretaTexto %>
-        </li>
-      <% }) %>
-    </ul>
+    <section class="app-card result-errors">
+      <h3>Questões erradas</h3>
+      <div class="error-list">
+        <% errosDetalhes.forEach(function(e, idx){ %>
+          <div class="error-item">
+            <div class="error-number">Questão <%= idx + 1 %></div>
+            <div class="error-question">
+              <p class="error-label">Pergunta:</p>
+              <p><strong><%= e.pergunta %></strong></p>
+            </div>
+            <div class="error-response">
+              <p class="error-label error-wrong">Sua resposta:</p>
+              <p><%= e.escolhaTexto %></p>
+            </div>
+            <div class="error-response">
+              <p class="error-label error-correct">Resposta correta:</p>
+              <p><strong><%= e.corretaTexto %></strong></p>
+            </div>
+          </div>
+        <% }) %>
+      </div>
+    </section>
   <% } %>
 
-  <h3>Pontuação</h3>
-  <p><strong><%= corretas %></strong> de <strong><%= total %></strong> (<strong><%= percentual %>%</strong>)</p>
+  <section class="result-actions">
+    <a href="/quiz" class="btn primary">Fazer outro quiz</a>
+    <a href="/home" class="btn secondary">Voltar para Home</a>
+  </section>
 <% } else { %>
-  <p>Nenhuma resposta foi enviada.</p>
+  <section class="app-card result-empty">
+    <p>Nenhuma resposta foi enviada.</p>
+    <a href="/quiz" class="btn">Voltar para Quiz</a>
+  </section>
 <% } %>
-
-<a href="/quiz">Fazer novamente</a>
 <%- include('rodape') %>

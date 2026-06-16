@@ -61,10 +61,13 @@
         </div>
       </div>
     </header>
-  <% } else if (pageClassLocal && (pageClassLocal.includes('page-procedimentos') || pageClassLocal.includes('page-medicamentos') || pageClassLocal.includes('page-terminologias'))) { %>
+  <% } else if (pageClassLocal && (pageClassLocal.includes('page-procedimentos') || pageClassLocal.includes('page-terminologias') || pageClassLocal.includes('page-medicamentos') || pageClassLocal.includes('page-quiz') || pageClassLocal.includes('page-conteudos') || pageClassLocal.includes('page-quiz-result') || pageClassLocal.includes('page-usuario') || pageClassLocal.includes('page-usuario-editar'))) { %>
     <% const isProcedPage = pageClassLocal.includes('page-procedimentos'); %>
-    <% const isMedicPage = pageClassLocal.includes('page-medicamentos'); %>
     <% const isTermPage = pageClassLocal.includes('page-terminologias'); %>
+    <% const isMedPage = pageClassLocal.includes('page-medicamentos'); %>
+    <% const isQuizPage = pageClassLocal.includes('page-quiz') || pageClassLocal.includes('page-quiz-result'); %>
+    <% const isConteudosPage = pageClassLocal.includes('page-conteudos'); %>
+    <% const isUsuarioPage = pageClassLocal.includes('page-usuario') || pageClassLocal.includes('page-usuario-editar'); %>
     <header class="site-header site-header--app">
       <div class="app-header">
         <a class="app-brand" href="<%= usuarioLocal ? '/home' : '/' %>">
@@ -75,18 +78,17 @@
         <nav class="app-nav" aria-label="Menu">
           <a href="/home">Home</a>
           <a class="<%= isProcedPage ? 'is-active' : '' %>" href="/procedimentos">Procedimentos</a>
-          <a class="<%= isMedicPage ? 'is-active' : '' %>" href="/medicamentos">Medicamentos</a>
+          <a class="<%= isMedPage ? 'is-active' : '' %>" href="/medicamentos">Medicamentos</a>
           <a class="<%= isTermPage ? 'is-active' : '' %>" href="/terminologias">Terminologias</a>
-          <a href="/quiz">Quiz</a>
+          <a class="<%= isQuizPage ? 'is-active' : '' %>" href="/quiz">Quiz</a>
           <% if (usuarioLocal) { %>
-            <a href="/conteudos">Conteúdos</a>
-            <a href="/usuario">Minha Conta</a>
+            <a class="<%= isConteudosPage ? 'is-active' : '' %>" href="/conteudos">Conteúdos</a>
+            <a class="<%= isUsuarioPage ? 'is-active' : '' %>" href="/usuario">Minha Conta</a>
           <% } %>
         </nav>
 
         <div class="app-actions" aria-label="Ações">
           <div class="app-iconbtn" aria-hidden="true"><span class="app-ic">⌕</span></div>
-          <div class="app-iconbtn" aria-hidden="true"><span class="app-ic">🔔</span><span class="app-badge">3</span></div>
           <% if (usuarioLocal) { %>
             <a class="user-pill" href="/usuario" aria-label="Minha conta">
               <span class="user-dot" aria-hidden="true"><%= usuarioLocal.nome ? usuarioLocal.nome.trim().slice(0, 1).toUpperCase() : 'U' %></span>

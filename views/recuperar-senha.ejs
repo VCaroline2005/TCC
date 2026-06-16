@@ -1,76 +1,58 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Recuperar Senha - Portal Enfermagem</title>
-  <link rel="stylesheet" href="/site/css/pages.css">
-</head>
-<body class="auth-page recover-page">
+<%- include('public/auth-cabecalho', {
+  pageClass: 'recover-page',
+  title: 'Recuperar Senha - Portal Enfermagem',
+  navLink: { href: '/login', label: 'Login' },
+  subtitle: 'Informe seu e-mail e escolha uma nova senha',
+  extraCss: [],
+  extraJs: []
+}) %>
 
-  <header class="auth-topbar">
-    <div class="bar-inner">
-      <div class="brand">
-        <a href="/"><img class="logo" src="/site/img/logo.png" alt="Portal Enfermagem"></a>
-        <h1>Portal Enfermagem</h1>
-      </div>
-      <div class="nav-controls">
-        <button type="button" class="nav-btn" onclick="history.back()">Voltar</button>
-        <a class="nav-btn" href="login">Login</a>
-        <button type="button" class="nav-btn" onclick="history.forward()">Avançar</button>
-      </div>
-    </div>
-  </header>
+<div class="login-container">
+  <h2>Recuperar senha</h2>
+  <p>Informe seu e-mail e escolha uma nova senha.</p>
 
-  <main class="auth-main">
-    <div class="login-container">
-      <h2>Recuperar senha</h2>
-      <p>Informe seu e-mail e escolha uma nova senha.</p>
-
-      <% if (typeof error !== 'undefined' && error) { %>
-        <div class="auth-alert error">
-          <% if (error === 'campos') { %>
-            Preencha todos os campos.
-          <% } else if (error === 'confirmar') { %>
-            As senhas não coincidem.
-          <% } else if (error === 'tamanho') { %>
-            A senha deve ter pelo menos 6 caracteres.
-          <% } else if (error === 'nao-encontrado') { %>
-            E-mail não encontrado.
-          <% } else { %>
-            Erro ao recuperar senha.
-          <% } %>
-        </div>
+  <% if (typeof error !== 'undefined' && error) { %>
+    <div class="auth-alert error">
+      <% if (error === 'campos') { %>
+        Preencha todos os campos.
+      <% } else if (error === 'confirmar') { %>
+        As senhas não coincidem.
+      <% } else if (error === 'tamanho') { %>
+        A senha deve ter pelo menos 6 caracteres.
+      <% } else if (error === 'nao-encontrado') { %>
+        E-mail não encontrado.
+      <% } else { %>
+        Erro ao recuperar senha.
       <% } %>
-
-      <% if (typeof sucesso !== 'undefined' && sucesso) { %>
-        <div class="auth-alert success">Senha atualizada. Você já pode fazer login.</div>
-      <% } %>
-
-      <form action="recuperar-senha" method="POST">
-        <div class="input-group">
-          <label for="email">E-mail</label>
-          <input type="email" id="email" name="email" placeholder="Digite seu e-mail" required>
-        </div>
-
-        <div class="input-group">
-          <label for="senha">Nova senha</label>
-          <input type="password" id="senha" name="senha" placeholder="Digite a nova senha" minlength="6" required>
-        </div>
-
-        <div class="input-group">
-          <label for="confirmar">Confirmar nova senha</label>
-          <input type="password" id="confirmar" name="confirmar" placeholder="Confirme a nova senha" minlength="6" required>
-        </div>
-
-        <button type="submit" class="btn-submit">Atualizar senha</button>
-
-        <div class="footer">
-          <a href="login">Voltar ao login</a>
-        </div>
-      </form>
     </div>
-  </main>
+  <% } %>
 
-</body>
-</html>
+  <% if (typeof sucesso !== 'undefined' && sucesso) { %>
+    <div class="auth-alert success">
+      Senha atualizada. Você já pode fazer login.
+    </div>
+  <% } %>
+
+  <form action="/recuperar-senha" method="POST">
+    <div class="input-group">
+      <label for="email">E-mail</label>
+      <input type="email" id="email" name="email" placeholder="Digite seu e-mail" required>
+    </div>
+
+    <div class="input-group">
+      <label for="senha">Nova senha</label>
+      <input type="password" id="senha" name="senha" placeholder="Digite a nova senha" minlength="6" required>
+    </div>
+
+    <div class="input-group">
+      <label for="confirmar">Confirmar nova senha</label>
+      <input type="password" id="confirmar" name="confirmar" placeholder="Confirme a nova senha" minlength="6" required>
+    </div>
+
+    <button type="submit" class="btn-submit">Atualizar senha</button>
+
+    <div class="footer">
+      <a href="/login">Voltar ao login</a>
+    </div>
+  </form>
+</div>

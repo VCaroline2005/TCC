@@ -1,9 +1,10 @@
 import express from 'express';
 const router = express.Router();
 import multer from 'multer';
-import path from 'node:path'
 import fs from 'node:fs'
-const upload = multer({ dest: 'public/usuarios/' })
+import { ensureUploadPath, uploadPath } from '../utils/uploadPaths.js'
+
+const upload = multer({ dest: ensureUploadPath('usuarios') })
 
 function pdfOnlyFilter(req, file, cb) {
     const isPdfMime = file.mimetype === 'application/pdf'
@@ -16,7 +17,7 @@ const conteudoStorage = multer.diskStorage({
     destination: (req, file, cb) => {
         const usuarioId = req.session?.usuario?.id
         if (!usuarioId) return cb(new Error('Usuário não autenticado.'))
-        const dir = path.join('public', 'uploads', 'conteudos', usuarioId)
+        const dir = uploadPath('uploads', 'conteudos', usuarioId)
         fs.mkdir(dir, { recursive: true }, (err) => cb(err, dir))
     },
     filename: (req, file, cb) => {
@@ -33,7 +34,7 @@ const conteudoUpload = multer({
 })
 
 const quizUpload = multer({
-    dest: 'public/uploads/quiz/',
+    dest: ensureUploadPath('uploads', 'quiz'),
     limits: { fileSize: 10 * 1024 * 1024 },
     fileFilter: pdfOnlyFilter
 })

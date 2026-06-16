@@ -1,34 +1,64 @@
 <%-include('../cabecalho.ejs')%>
+
 <section class="col-12 col-md-10">
     <div class="card my-4">
         <h5 class="card-header">Adicionar Medicamento</h5>
+
         <div class="card-body">
             <form method="post" enctype="multipart/form-data">
+
                 <div class="mb-3">
                     <label for="principioAtivo" class="form-label">Princípio Ativo</label>
                     <input type="text" name="principioAtivo" id="principioAtivo" required class="form-control">
                 </div>
+
                 <div class="mb-3">
                     <label for="nomeComercial" class="form-label">Nome Comercial</label>
                     <input type="text" name="nomeComercial" id="nomeComercial" required class="form-control">
                 </div>
+
                 <div class="mb-3">
                     <label for="classe" class="form-label">Classe</label>
                     <input type="text" name="classe" id="classe" class="form-control">
                 </div>
+
                 <div class="mb-3">
                     <label for="via" class="form-label">Via de Administração</label>
-                    <textarea name="via" id="via" class="form-control" rows="3" placeholder="Ex.: IV&#10;IM&#10;VO"></textarea>
+                    <textarea
+                        name="via"
+                        id="via"
+                        class="form-control"
+                        rows="3"
+                        placeholder="Ex.: IV&#10;IM&#10;VO"></textarea>
                 </div>
+
                 <div class="mb-3">
                     <label for="diluicao" class="form-label">Diluição</label>
-                    <textarea name="diluicao" id="diluicao" class="form-control" rows="3" placeholder="Ex.: 0,9% SF&#10;Glicose 5%"></textarea>
+                    <textarea
+                        name="diluicao"
+                        id="diluicao"
+                        class="form-control"
+                        rows="3"
+                        placeholder="Ex.: SF 0,9%&#10;Glicose 5%"></textarea>
                 </div>
+
                 <div class="mb-3">
-                    <input type="submit" value="Adicionar" class="form-control">
+                    <label for="detalhes" class="form-label">Detalhes</label>
+                    <textarea
+                        name="detalhes"
+                        id="detalhes"
+                        class="form-control"
+                        rows="8"
+                        placeholder="Informe indicações, contraindicações, efeitos adversos, cuidados de enfermagem, observações e outras informações importantes."></textarea>
                 </div>
+
+                <div class="mb-3">
+                    <input type="submit" value="Adicionar" class="form-control btn btn-primary">
+                </div>
+
             </form>
         </div>
     </div>
 </section>
+
 <%-include('../rodape.ejs')%>

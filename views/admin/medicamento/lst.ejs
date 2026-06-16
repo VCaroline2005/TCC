@@ -29,7 +29,7 @@
                     <%Medicamentos.forEach(function(m){%>
                     <tr>
                         <td><%=m._id%></td>
-                        <td><%=m.principioAtivo || m.descricao || '-'%></td>
+                        <td><%=m.principioAtivo || '-'%></td>
                         <td><%=m.nomeComercial || m.nome || '-'%></td>
                         <td><%=m.classe || m.fabricante || '-'%></td>
                         <td><%=m.via%></td>

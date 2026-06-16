@@ -8,52 +8,42 @@
 <% const atualizadoEm = (new Date()).toLocaleDateString('pt-BR'); %>
 
 <div class="med-shell">
-  <header class="med-hero">
+  <section class="page-hero med-page-hero">
     <div>
-      <p class="med-eyebrow">Biblioteca clínica</p>
-      <h2 class="med-title">Medicamentos</h2>
-      <p class="med-subtitle">Consulte informações completas sobre princípios ativos, classes, vias e diluições.</p>
+      <p class="page-eyebrow"></p>
+      <h2>Medicamentos</h2>
+      <p>Consulte informações completas sobre princípios ativos, classes, vias e diluições.</p>
     </div>
-
-    <form method="get" action="/medicamentos" class="med-search" aria-label="Pesquisar medicamentos">
-      <div class="med-input">
-        <span aria-hidden="true">⌕</span>
-        <input
-          type="text"
-          name="pesquisar"
-          placeholder="Pesquisar por princípio ativo, nome comercial, classe, via ou diluição..."
-          value="<%= pesquisaAtual %>"
-          autocomplete="off"
-        >
-      </div>
-      <button type="submit" class="med-btn">
-        <span aria-hidden="true">⌕</span>
-        Pesquisar
-      </button>
-      <select name="classe" class="med-select" aria-label="Filtrar por classe">
-        <option value="">Todas as classes</option>
-        <% classesDisponiveis.forEach(function(c){ %>
-          <option value="<%= c %>" <%= classeAtual === c ? 'selected' : '' %>><%= c %></option>
-        <% }) %>
-      </select>
-    </form>
-  </header>
-
-  <section class="med-summary" aria-label="Resumo">
-    <div class="sum-item">
-      <div class="sum-ic" aria-hidden="true">💊</div>
-      <div><strong><%= totalMedicamentos %></strong><br><span>Medicamentos cadastrados</span></div>
-    </div>
-    <div class="sum-item">
-      <div class="sum-ic" aria-hidden="true">🛡</div>
-      <div><strong><%= totalClasses %></strong><br><span>Classes terapêuticas</span></div>
-    </div>
-    <div class="sum-item">
-      <div class="sum-ic" aria-hidden="true">🗓</div>
-      <div><strong>Atualizado em</strong><br><span><%= atualizadoEm %></span></div>
+    <div class="page-hero-stat">
+      <strong><%= totalMedicamentos %></strong>
+      <span>medicamentos</span>
     </div>
   </section>
 
+  <form method="get" action="/medicamentos" class="app-card med-search" aria-label="Pesquisar medicamentos">
+    <div class="med-input">
+      <span aria-hidden="true">⌕</span>
+      <input
+        type="text"
+        name="pesquisar"
+        placeholder="Pesquisar por princípio ativo, nome comercial, classe, via ou diluição..."
+        value="<%= pesquisaAtual %>"
+        autocomplete="off"
+      >
+    </div>
+    <button type="submit" class="med-btn">
+      <span aria-hidden="true">⌕</span>
+      Pesquisar
+    </button>
+    <select name="classe" class="med-select" aria-label="Filtrar por classe">
+      <option value="">Todas as classes</option>
+      <% classesDisponiveis.forEach(function(c){ %>
+        <option value="<%= c %>" <%= classeAtual === c ? 'selected' : '' %>><%= c %></option>
+      <% }) %>
+    </select>
+  </form>
+
+  
   <% if (!medicamentosLocal || medicamentosLocal.length === 0) { %>
     <p style="margin-top:14px;">Nenhum medicamento encontrado para o filtro informado.</p>
   <% } else { %>
@@ -71,15 +61,16 @@
         </thead>
         <tbody id="medTbody">
           <% medicamentosLocal.forEach(function(m, idx){ %>
-            <% const principioAtivo = m.principioAtivo || m.descricao || '-'; %>
-            <% const nomeComercial = m.nomeComercial || m.nome || '-'; %>
-            <% const classe = m.classe || m.fabricante || '-'; %>
-            <% const via = m.via || '-'; %>
-            <% const diluicao = m.diluicao || m.dosagem || '-'; %>
-            <% const detalhe = m.descricao || ''; %>
+           <% const principioAtivo = m.principioAtivo || '-'; %>
+           <% const nomeComercial = m.nomeComercial || '-'; %>
+           <% const classe = m.classe || '-'; %>
+           <% const via = m.via || '-'; %>
+           <% const diluicao = m.diluicao || '-'; %>
+           <% const detalhe = m.detalhes || ''; %>   
             <tr class="med-row" data-idx="<%= idx %>">
               <td><%= principioAtivo %></td>
               <td><%= nomeComercial %></td>
+     
               <td><span class="badge"><%= classe %></span></td>
               <td class="med-preline"><span class="badge gray"><%= via %></span></td>
               <td class="med-preline"><%= diluicao %></td>
@@ -105,16 +96,11 @@
           <% }) %>
         </tbody>
       </table>
-      <div class="med-footerbar">
-        <span id="medRange">Mostrando 1 a <%= Math.min(8, totalMedicamentos) %> de <%= totalMedicamentos %> medicamentos</span>
-        <div class="pager" id="medPager" aria-label="Paginação"></div>
-      </div>
+     
     </div>
   <% } %>
 
-  <div class="med-tip" role="note" aria-label="Dica">
-    <div class="med-tip-ic" aria-hidden="true">💡</div>
-    <div>
+  
       <strong>Dica</strong><br>
       Clique em “Ver detalhes” para visualizar informações completas e observações do medicamento.
     </div>

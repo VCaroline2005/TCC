@@ -2,6 +2,7 @@ import 'dotenv/config'
 //importa a biblioteca express
 import express from 'express';
 import session from 'express-session';
+import { uploadPublicRoot } from '../utils/uploadPaths.js'
 //inicializa a aplicação usando a bibliotea express
 const app = express();
 //cria uma variável com o número da porta
@@ -12,7 +13,7 @@ app.set('view engine', 'ejs');
 //configura o node para receber dados dos formulários
 app.use(express.urlencoded({ extended: true }));
 //configura a pasta de arquivos estáticos (fotos, vídeos ...)
-app.use(express.static('../public'));
+app.use(express.static(uploadPublicRoot));
 //sessões (mantém login entre páginas)
 app.set('trust proxy', 1)
 app.use(session({

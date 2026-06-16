@@ -1,171 +1,130 @@
-<!DOCTYPE html>
-<html lang="pt-br">
+<%- include('public/auth-cabecalho', {
+  pageClass: 'signup-page',
+  title: 'Cadastro - Portal Enfermagem',
+  extraJs: ['/site/js/telefone.js'],
+  navLink: { href: '/login', label: 'Login' },
+  subtitle: 'Preencha os dados e crie sua conta'
+}) %>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastro - Portal Enfermagem</title>
-    <link rel="stylesheet" href="/site/css/pages.css">
-    <script src="/site/js/telefone.js" defer></script>
-</head>
+<div class="signup-container">
+  <h2>Preencha os dados abaixo para se cadastrar</h2>
+  <% if (typeof error !== 'undefined' && error) { %>
+    <div class="error-message spaced"><%= error %></div>
+  <% } %>
 
-<body class="signup-page">
+  <form id="signup-form" method="post" action="/cadastro" enctype="multipart/form-data">
+    <input type="hidden" name="espaco" value="usuario">
 
-    <header class="signup-header">
-        <div class="header-inner">
-            <div class="brand-block">
-                <img class="logo" src="/site/img/logo.png" alt="Portal Enfermagem">
-                <h1>Cadastro de Usuário</h1>
-            </div>
-            <div class="nav-controls">
-                <button type="button" class="nav-btn" onclick="history.back()">Voltar</button>
-                <a class="nav-btn" href="/login">Sair</a>
-
-            </div>
-        </div>
-    </header>
-
-    <div class="signup-container">
-        <h2>Preencha os dados abaixo para se cadastrar</h2>
-        <% if (typeof error !== 'undefined' && error) { %>
-            <div class="error-message spaced"><%= error %></div>
-        <% } %>
-
-        <form id="signup-form" method="post" action="/cadastro" enctype="multipart/form-data">
-            <input type="hidden" name="espaco" value="usuario">
-            <div class="form-group">
-                <label for="name">Nome Completo</label>
-                <input type="text" id="name" name="nome" placeholder="Seu nome completo">
-                <div id="name-error" class="error-message"></div>
-            </div>
-
-            <div class="form-group">
-                <label for="email">E-mail</label>
-                <input type="email" id="email" name="email" placeholder="Seu e-mail">
-                <div id="email-error" class="error-message"></div>
-            </div>
-
-            <div class="form-group">
-                <label for="telefone">Telefone</label>
-                <input type="text" name="telefone" id="telefone" placeholder="Seu telefone">
-                <div id="telefone-error" class="error-message"></div>
-            </div>
-
-            <div class="form-group">
-                <label for="foto">Foto</label>
-                <input type="file" name="foto" id="foto" placeholder="Adione uma foto">
-                <div id="foto-error" class="error-message"></div>
-            </div>
-
-            <div class="form-group">
-                <label for="password">Senha</label>
-                <input type="password" id="password" name="senha" placeholder="Crie uma senha">
-                <div id="password-error" class="error-message"></div>
-            </div>
-
-            <div class="form-group">
-                <label for="confirm-password">Confirmar Senha</label>
-                <input type="password" id="confirm-password" name="confirm-password" placeholder="Confirme sua senha">
-                <div id="confirm-password-error" class="error-message"></div>
-            </div>
-
-            <button type="submit">Cadastrar</button>
-            <p class="auth-helper">
-                Já tem conta? <a href="/login">Entrar</a>
-            </p>
-
-            <div id="form-success" class="success-message"></div>
-        </form>
+    <div class="form-group">
+      <label for="name">Nome Completo</label>
+      <input type="text" id="name" name="nome" placeholder="Seu nome completo">
+      <div id="name-error" class="error-message"></div>
     </div>
 
-    <script>
-        document.getElementById('signup-form').addEventListener('submit', function (event) {
-            event.preventDefault();
+    <div class="form-group">
+      <label for="email">E-mail</label>
+      <input type="email" id="email" name="email" placeholder="Seu e-mail">
+      <div id="email-error" class="error-message"></div>
+    </div>
 
-            // Limpar mensagens de erro e sucesso
-            clearMessages();
+    <div class="form-group">
+      <label for="telefone">Telefone</label>
+      <input type="text" name="telefone" id="telefone" placeholder="Seu telefone">
+      <div id="telefone-error" class="error-message"></div>
+    </div>
 
-            // Obter os valores dos campos
-            const name = document.getElementById('name').value;
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            const confirmPassword = document.getElementById('confirm-password').value;
+    <div class="form-group">
+      <label for="foto">Foto</label>
+      <input type="file" name="foto" id="foto" placeholder="Adione uma foto">
+      <div id="foto-error" class="error-message"></div>
+    </div>
 
-            let isValid = true;
+    <div class="form-group">
+      <label for="password">Senha</label>
+      <input type="password" id="password" name="senha" placeholder="Crie uma senha">
+      <div id="password-error" class="error-message"></div>
+    </div>
 
-            // Validação do Nome
-            if (name === "") {
-                showError("name", "O nome é obrigatório.");
-                isValid = false;
-            }
+    <div class="form-group">
+      <label for="confirm-password">Confirmar Senha</label>
+      <input type="password" id="confirm-password" name="confirm-password" placeholder="Confirme sua senha">
+      <div id="confirm-password-error" class="error-message"></div>
+    </div>
 
-            // Validação do E-mail
-            if (email === "") {
-                showError("email", "O e-mail é obrigatório.");
-                isValid = false;
-            } else if (!validateEmail(email)) {
-                showError("email", "E-mail inválido.");
-                isValid = false;
-            }
+    <button type="submit">Cadastrar</button>
+    <p class="auth-helper">
+      Já tem conta? <a href="/login">Entrar</a>
+    </p>
 
-            // Validação da Senha
-            if (password === "") {
-                showError("password", "A senha é obrigatória.");
-                isValid = false;
-            } else if (password.length < 6) {
-                showError("password", "A senha deve ter pelo menos 6 caracteres.");
-                isValid = false;
-            }
+    <div id="form-success" class="success-message"></div>
+  </form>
+</div>
 
-            // Validação da confirmação de senha
-            if (confirmPassword === "") {
-                showError("confirm-password", "Por favor, confirme sua senha.");
-                isValid = false;
-            } else if (confirmPassword !== password) {
-                showError("confirm-password", "As senhas não coincidem.");
-                isValid = false;
-            }
+<script>
+  document.getElementById('signup-form').addEventListener('submit', function (event) {
+    event.preventDefault();
+    clearMessages();
 
-            if (isValid) {
-                // envia o formulário para o servidor (multer espera multipart/form-data)
-                event.target.submit();
-            }
-        });
+    const name = document.getElementById('name').value;
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    const confirmPassword = document.getElementById('confirm-password').value;
 
-        function showError(field, message) {
-            document.getElementById(field).classList.add('error');
-            document.getElementById(field + '-error').innerText = message;
-        }
+    let isValid = true;
 
-        function showSuccess(message) {
-            document.getElementById('form-success').innerText = message;
-        }
+    if (name === "") {
+      showError("name", "O nome é obrigatório.");
+      isValid = false;
+    }
 
-        function clearMessages() {
-            const inputs = document.querySelectorAll('input');
-            inputs.forEach(input => {
-                input.classList.remove('error');
-            });
+    if (email === "") {
+      showError("email", "O e-mail é obrigatório.");
+      isValid = false;
+    } else if (!validateEmail(email)) {
+      showError("email", "E-mail inválido.");
+      isValid = false;
+    }
 
-            const errorMessages = document.querySelectorAll('.error-message');
-            errorMessages.forEach(error => {
-                error.innerText = '';
-            });
+    if (password === "") {
+      showError("password", "A senha é obrigatória.");
+      isValid = false;
+    } else if (password.length < 6) {
+      showError("password", "A senha deve ter pelo menos 6 caracteres.");
+      isValid = false;
+    }
 
-            document.getElementById('form-success').innerText = '';
-        }
+    if (confirmPassword === "") {
+      showError("confirm-password", "Por favor, confirme sua senha.");
+      isValid = false;
+    } else if (confirmPassword !== password) {
+      showError("confirm-password", "As senhas não coincidem.");
+      isValid = false;
+    }
 
-        function clearForm() {
-            document.getElementById('signup-form').reset();
-        }
+    if (isValid) {
+      event.target.submit();
+    }
+  });
 
-        // Função de validação de e-mail
-        function validateEmail(email) {
-            const re = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-            return re.test(email);
-        }
-    </script>
+  function showError(field, message) {
+    document.getElementById(field).classList.add('error');
+    document.getElementById(field + '-error').innerText = message;
+  }
 
-</body>
+  function clearMessages() {
+    document.querySelectorAll('input').forEach(input => {
+      input.classList.remove('error');
+    });
+    document.querySelectorAll('.error-message').forEach(error => {
+      error.innerText = '';
+    });
+    document.getElementById('form-success').innerText = '';
+  }
 
-</html>
+  function validateEmail(email) {
+    const re = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+    return re.test(email);
+  }
+</script>
+
+<%- include('public/auth-rodape') %>

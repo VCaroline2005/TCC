@@ -1,38 +1,62 @@
 <%-include('../cabecalho.ejs')%>
+
 <section class="col-12 col-md-10">
     <div class="card my-4">
         <h5 class="card-header">Editar Medicamento</h5>
-        <div class="card-body">
-            <form method="post">
-                <div class="mb-3">
-                    <label for="id" class="form-label">ID</label>
-                    <input type="text" name="id" readonly id="id" class="form-control" value="<%=Medicamento._id%>">
-                </div>
-                <div class="mb-3">
-                    <label for="principioAtivo" class="form-label">Princípio Ativo</label>
-                    <input type="text" name="principioAtivo" id="principioAtivo" required class="form-control" value="<%=Medicamento.principioAtivo || Medicamento.descricao || ''%>">
-                </div>
-                <div class="mb-3">
-                    <label for="nomeComercial" class="form-label">Nome Comercial</label>
-                    <input type="text" name="nomeComercial" id="nomeComercial" required class="form-control" value="<%=Medicamento.nomeComercial || Medicamento.nome || ''%>">
-                </div>
-                <div class="mb-3">
-                    <label for="classe" class="form-label">Classe</label>
-                    <input type="text" name="classe" id="classe" class="form-control" value="<%=Medicamento.classe || Medicamento.fabricante || ''%>">
-                </div>
-                <div class="mb-3">
-                    <label for="via" class="form-label">Via</label>
-                    <textarea name="via" id="via" class="form-control" rows="3"><%=Medicamento.via || ''%></textarea>
-                </div>
-                <div class="mb-3">
-                    <label for="diluicao" class="form-label">Diluição</label>
-                    <textarea name="diluicao" id="diluicao" class="form-control" rows="3"><%=Medicamento.diluicao || Medicamento.dosagem || ''%></textarea>
-                </div>
-                <div class="mb-3">
-                    <input type="submit" value="Salvar" class="form-control">
-                </div>
-            </form>
-        </div>
+
+```
+    <div class="card-body">
+        <form method="post">
+
+            <div class="mb-3">
+                <label for="id" class="form-label">ID</label>
+                <input type="text" name="id" readonly id="id" class="form-control" value="<%=Medicamento._id%>">
+            </div>
+
+            <div class="mb-3">
+                <label for="principioAtivo" class="form-label">Princípio Ativo</label>
+                <input type="text" name="principioAtivo" id="principioAtivo" required class="form-control" value="<%=Medicamento.principioAtivo || Medicamento.descricao || ''%>">
+            </div>
+
+            <div class="mb-3">
+                <label for="nomeComercial" class="form-label">Nome Comercial</label>
+                <input type="text" name="nomeComercial" id="nomeComercial" required class="form-control" value="<%=Medicamento.nomeComercial || Medicamento.nome || ''%>">
+            </div>
+
+            <div class="mb-3">
+                <label for="classe" class="form-label">Classe</label>
+                <input type="text" name="classe" id="classe" class="form-control" value="<%=Medicamento.classe || Medicamento.fabricante || ''%>">
+            </div>
+
+            <div class="mb-3">
+                <label for="via" class="form-label">Via</label>
+                <textarea name="via" id="via" class="form-control" rows="3"><%=Medicamento.via || ''%></textarea>
+            </div>
+
+            <div class="mb-3">
+                <label for="diluicao" class="form-label">Diluição</label>
+                <textarea name="diluicao" id="diluicao" class="form-control" rows="3"><%=Medicamento.diluicao || Medicamento.dosagem || ''%></textarea>
+            </div>
+
+            <div class="mb-3">
+                <label for="detalhes" class="form-label">Detalhes</label>
+                <textarea
+                    name="detalhes"
+                    id="detalhes"
+                    class="form-control"
+                    rows="8"
+                    placeholder="Informe indicações, contraindicações, efeitos adversos, cuidados de enfermagem e observações"><%= Medicamento.detalhes || '' %></textarea>
+            </div>
+
+            <div class="mb-3">
+                <input type="submit" value="Salvar" class="form-control">
+            </div>
+
+        </form>
     </div>
+</div>
+```
+
 </section>
+
 <%-include('../rodape.ejs')%>

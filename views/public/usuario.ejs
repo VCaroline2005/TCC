@@ -4,15 +4,20 @@
 <% const conteudosRecentesLocal = (typeof conteudosRecentes !== 'undefined' && conteudosRecentes) ? conteudosRecentes : []; %>
 <% const formatDate = (value) => { try { if (!value) return ''; const d = new Date(value); if (Number.isNaN(d.getTime())) return ''; return d.toLocaleDateString('pt-BR'); } catch (e) { return ''; } }; %>
 
-<header class="user-page-header">
+<section class="page-hero user-page-header">
   <div>
+    <p class="page-eyebrow">Área do usuário</p>
     <h2 class="user-page-title">Minha conta</h2>
     <p class="user-page-subtitle">Seus dados e seus PDFs, organizados em um só lugar.</p>
   </div>
-</header>
+  <div class="page-hero-stat">
+    <strong><%= conteudosCountLocal %></strong>
+    <span>PDF(s)</span>
+  </div>
+</section>
 
 <% if (user) { %>
-  <section class="user-hero" aria-label="Resumo do usuário">
+  <section class="app-card user-hero" aria-label="Resumo do usuário">
     <div class="user-hero-avatar">
       <% if (user.foto) { %>
         <img src="/usuarios/<%= user.foto %>" alt="Foto do usuário" class="user-hero-avatar-img">
@@ -52,7 +57,7 @@
   </section>
 
   <div class="user-layout">
-    <section class="user-panel" aria-label="Meus dados">
+    <section class="app-card user-panel" aria-label="Meus dados">
       <div class="user-panel-header">
         <h3 class="user-panel-title">Meus dados</h3>
         <a class="user-panel-link" href="/usuario/editar">Editar</a>
@@ -86,14 +91,14 @@
       </dl>
     </section>
 
-    <section class="user-panel" aria-label="Meus conteúdos em PDF">
+    <section class="app-card user-panel" aria-label="Meus conteúdos em PDF">
       <div class="user-panel-header">
         <h3 class="user-panel-title">Meus conteúdos (PDF)</h3>
         <a class="user-panel-link" href="/conteudos">Abrir</a>
       </div>
 
       <% if (!conteudosRecentesLocal.length) { %>
-        <p class="muted-text user-empty">Nenhum PDF enviado ainda. Envie seu primeiro conteúdo para começar.</p>
+        <div class="app-empty user-empty">Nenhum PDF enviado ainda. Envie seu primeiro conteúdo para começar.</div>
       <% } else { %>
         <ul class="user-pdf-list" aria-label="Últimos PDFs">
           <% conteudosRecentesLocal.slice(0, 5).forEach(function(c){ %>

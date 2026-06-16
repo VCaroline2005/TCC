@@ -5,9 +5,9 @@ import Medicamento from '../models/medicamento.js';
 import Terminologia from '../models/terminologia.js';
 import Quiz from '../models/quiz.js';
 import fs from 'node:fs/promises'
-import path from 'node:path'
 import pdfParse from 'pdf-parse'
 import { GoogleGenAI } from '@google/genai'
+import { uploadPath } from '../utils/uploadPaths.js'
 
 const geminiClient = new GoogleGenAI({})
 
@@ -421,7 +421,7 @@ export async function filtrarprocedimento(req, res) {
 export async function deletaprocedimento(req, res) {
     const proc = await Procedimento.findByIdAndDelete(req.params.id)
     if (proc?.popPdfNome) {
-        const caminho = path.join(process.cwd(), 'public', 'uploads', 'pops', proc.popPdfNome)
+        const caminho = uploadPath('uploads', 'pops', proc.popPdfNome)
         try {
             await fs.unlink(caminho)
         } catch (err) {
@@ -560,19 +560,24 @@ export async function abreaddmedicamento(req,res){
 }
 export async function addmedicamento(req,res){
     const nomeComercial = req.body.nomeComercial || req.body.nome
+
     await Medicamento.create({
-        principioAtivo:req.body.principioAtivo,
-        nomeComercial:nomeComercial,
-        classe:req.body.classe,
-        via:req.body.via,
-        diluicao:req.body.diluicao,
+        principioAtivo: req.body.principioAtivo,
+        nomeComercial: nomeComercial,
+        classe: req.body.classe,
+        via: req.body.via,
+        diluicao: req.body.diluicao,
+        detalhes: req.body.detalhes,
+
         // compatibilidade com telas antigas
-        nome:nomeComercial,
-        descricao:req.body.principioAtivo,
-        dosagem:req.body.diluicao,
-        fabricante:req.body.classe,
-        fotos: req.files ? req.files.map(f=>f.filename) : []
+        nome: nomeComercial,
+        descricao: req.body.detalhes,
+        dosagem: req.body.diluicao,
+        fabricante: req.body.classe,
+
+        fotos: req.files ? req.files.map(f => f.filename) : []
     })
+
     res.redirect('/admin/medicamento/add')
 }
 export async function listarmedicamento(req,res){

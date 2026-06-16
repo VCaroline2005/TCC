@@ -12,20 +12,12 @@
                     <label for="nome" class="form-label">Nome</label>
                     <input type="text" name="nome" required id="nome" class="form-control" value="<%=Procedimento.nome%>">
                 </div>
-                <div class="mb-3">http://localhost:3000/
+                <div class="mb-3">
                     <label for="descricao" class="form-label">Descrição</label>
                     <textarea name="descricao" required id="descricao" class="form-control"><%=Procedimento.descricao%></textarea>
                 </div>
                 <div class="mb-3">
-                    <label for="passos" class="form-label">Passos (um por linha)</label>
-                    <textarea name="passos" id="passos" class="form-control"><%=Procedimento.passos ? Procedimento.passos.join('\n') : '' %></textarea>
-                </div>
-                <div class="mb-3">
-                    <label for="categoria" class="form-label">Categoria</label>
-                    <input type="text" name="categoria" required id="categoria" class="form-control" value="<%=Procedimento.categoria%>">
-                </div>
-                <div class="mb-3">
-                    <input type="submit" value="Adicionar" class="form-control">
+                    <input type="submit" value="Atualizar" class="form-control">
                 </div>
             </form>
         </div>

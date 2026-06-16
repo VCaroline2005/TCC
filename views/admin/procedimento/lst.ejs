@@ -17,12 +17,9 @@
                     <tr>
                         <th scope="col">Id</th>
                         <th scope="col">Nome</th>
-                        <th scope="col">Categoria</th>
-                        <th scope="col">Fotos</th>
-                        <th scope="col">Passos</th>
                         <th scope="col">POP (PDF)</th>
                         <th scope="col">Publicado</th>
-                        <th scope="col">Publicação</th>
+                       
                         <th scope="col">Editar</th>
                         <th scope="col">Deletar</th>
                     </tr>
@@ -33,22 +30,9 @@
                     <tr>
                         <th scope="row"> <%=procedimento._id%> </th>
                         <td> <%=procedimento.nome%> </td>
-                        <td> <%=procedimento.categoria%> </td>
+                       
                         <td>
-                            <%procedimento.fotos.forEach(function(foto){%>
-                                <img src="/fotos/<%=foto%>" height="40px" alt="Fotos">  
-                            <%})%>
-                        </td>
-                        <td>
-                            <button
-                                type="button"
-                                class="btn btn-sm btn-info js-passos-btn"
-                                data-toggle="modal"
-                                data-target="#passosModal"
-                                data-proc-nome="<%= procedimento.nome %>"
-                            >
-                                Ver passos
-                            </button>
+                           
                             <script type="application/json" class="js-passos-json"><%- JSON.stringify(procedimento.passos || []).replace(/<\/script/gi, '<\\/script') %></script>
                         </td>
                         <td>
