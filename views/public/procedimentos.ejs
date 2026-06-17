@@ -106,7 +106,7 @@
 <div class="proc-shell">
   <section class="proc-hero">
     <div>
-      <p class="proc-eyebrow">Biblioteca clínica</p>
+     
       <h2 class="proc-title">Procedimentos</h2>
       <p class="proc-subtitle">Encontre protocolos, descrições e passo a passo em um só lugar.</p>
     </div>
@@ -149,37 +149,28 @@
         </button>
         <div id="proc-<%= idx %>" class="proc-details">
           <div class="proc-details-grid">
-            <section class="proc-block" aria-label="Descrição">
-              <h3 class="proc-block-title"><span aria-hidden="true">≡</span>Descrição</h3>
-              <div class="proc-doc">
-                <%- formatProcedimento(p.descricao) %>
-              </div>
-              <% if (p.fotos && p.fotos.length) { %>
-                <div class="proc-photos">
-                  <% p.fotos.forEach(function(foto){ %>
-                    <img src="/fotos/<%= foto %>" alt="Foto do procedimento">
-                  <% }) %>
-                </div>
-              <% } %>
-            </section>
+            
 
             <aside class="proc-block proc-side" aria-label="Pontos importantes">
-              <h3 class="proc-block-title"><span aria-hidden="true">🛡</span>Pontos importantes</h3>
+              <h3 class="proc-block-title"><span aria-hidden="true"></span>Protocolo de Segurança</h3>
               <ul>
-                <li>Confirme identificação do paciente e técnica correta.</li>
-                <li>Observe alergias, contraindicações e intercorrências.</li>
-                <li>Registre o procedimento e acompanhe possíveis reações.</li>
+              
+                <li>Confirmar a identificação correta do paciente.</li>
+                <li>Explicar o procedimento ao paciente e esclarecer dúvidas.</li>
+                <li>Verificar indicações, contraindicações e riscos.</li>
+                <li>Realizar higienização das mãos antes e após o procedimento.</li>
+                <li>Utilizar EPIs conforme necessidade.</li>
+                <li>Garantir ambiente, materiais e equipamentos adequados.</li>
+                <li>Manter técnica asséptica quando indicada.</li>
+                <li>Monitorar o paciente durante e após o procedimento.</li>
+                <li>Registrar o procedimento e possíveis intercorrências no prontuário.</li>
+                <li>Seguir os protocolos institucionais e normas de segurança do paciente.</li>
               </ul>
-              <% if (p.popPdfNome) { %>
-                <a class="proc-side-btn" href="/uploads/pops/<%= p.popPdfNome %>" target="_blank" rel="noopener">
-                  <span aria-hidden="true">📄</span>
-                  Ver protocolo completo
-                </a>
-              <% } %>
+              
             </aside>
 
             <section class="proc-block" style="grid-column: 1 / -1;" aria-label="Passo a passo">
-              <h3 class="proc-block-title"><span aria-hidden="true">①</span>Passo a passo</h3>
+              <h3 class="proc-block-title"><span aria-hidden="true"></span>Passo a passo</h3>
               <% if (p.passos && p.passos.length) { %>
                 <ol class="proc-steps-list">
                   <% p.passos.forEach(function(passo, passoIdx){ %>
@@ -187,7 +178,7 @@
                   <% }) %>
                 </ol>
               <% } else { %>
-                <p class="proc-paragraph">Clique no protocolo acima para ver a descrição completa. Alguns procedimentos não possuem passo a passo separado.</p>
+                <p class="proc-paragraph">Clique no POP abaixo para Download.</p>
               <% } %>
               <% if (p.popPdfNome) { %>
                 <div class="proc-pdf">
@@ -204,13 +195,6 @@
     <% }) %>
   </ul>
 
-  <div class="proc-tip" role="note" aria-label="Dica">
-    <div class="proc-tip-ic" aria-hidden="true">💡</div>
-    <div>
-      <strong>Dica</strong><br>
-      Clique sobre um procedimento para visualizar o passo a passo completo e materiais complementares.
-    </div>
-  </div>
 </div>
 <script>
   document.querySelectorAll('.proc-toggle').forEach(function(btn){

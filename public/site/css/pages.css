@@ -5937,3 +5937,15 @@ body.public-page.page-terminologias {
   background: var(--primary-light);
   border-color: var(--primary-line);
 }
+.public-page.page-terminologias main {
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 20px 30px; /* 30px esquerda e direita */
+}
+
+.public-page.page-terminologias .term-shell {
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+}

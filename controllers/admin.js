@@ -613,21 +613,27 @@ export async function despublicarmedicamento(req,res){
 export async function abreedtmedicamento(req,res){
     const med = await Medicamento.findById(req.params.id)
     res.render('admin/medicamento/edt',{Medicamento:med})
+
 }
 export async function edtmedicamento(req,res){
     const nomeComercial = req.body.nomeComercial || req.body.nome
+
+    console.log('DETALHES RECEBIDOS:', req.body.detalhes)
+
     await Medicamento.findByIdAndUpdate(req.params.id, {
-        principioAtivo:req.body.principioAtivo,
-        nomeComercial:nomeComercial,
-        classe:req.body.classe,
-        via:req.body.via,
-        diluicao:req.body.diluicao,
-        // compatibilidade com estrutura antiga
-        nome:nomeComercial,
-        descricao:req.body.principioAtivo,
-        dosagem:req.body.diluicao,
-        fabricante:req.body.classe
+        principioAtivo: req.body.principioAtivo,
+        nomeComercial: nomeComercial,
+        classe: req.body.classe,
+        via: req.body.via,
+        diluicao: req.body.diluicao,
+        detalhes: req.body.detalhes,
+
+        nome: nomeComercial,
+        descricao: req.body.detalhes,
+        dosagem: req.body.diluicao,
+        fabricante: req.body.classe
     })
+
     res.redirect('/admin/medicamento/lst')
 }
 

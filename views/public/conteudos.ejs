@@ -12,7 +12,6 @@
 
 <section class="page-hero">
   <div>
-    <p class="page-eyebrow">Biblioteca pessoal</p>
     <h2>Conteúdos</h2>
     <p>Organize PDFs, apostilas e materiais de estudo em um só lugar.</p>
   </div>
@@ -22,20 +21,6 @@
   </div>
 </section>
 
-<section class="conteudo-summary" aria-label="Resumo">
-  <div class="sum-item">
-    <div class="sum-ic" aria-hidden="true">📚</div>
-    <div><strong><%= conteudosLocal.length %></strong><br><span>PDFs enviados</span></div>
-  </div>
-  <div class="sum-item">
-    <div class="sum-ic" aria-hidden="true">📁</div>
-    <div><strong><%= categoriasLocal.length %></strong><br><span>Categorias</span></div>
-  </div>
-  <div class="sum-item">
-    <div class="sum-ic" aria-hidden="true">📄</div>
-    <div><strong>Organizados</strong><br><span>em um só lugar</span></div>
-  </div>
-</section>
 
 <% if (erroLocal === 'arquivo') { %>
   <p class="form-error">Envie um arquivo PDF válido (até 25MB).</p>
