@@ -829,7 +829,7 @@ export async function receberQuizPdf(req, res) {
     }
 
     const caminho = req.file.path
-    try {
+
         const buffer = await fs.readFile(caminho)
         const pdfData = await pdfParse(buffer)
         const textoCru = String(pdfData?.text || '')
@@ -843,38 +843,45 @@ export async function receberQuizPdf(req, res) {
             ? textoLimpo.slice(0, MAX_PDF_CHARS)
             : textoLimpo
 
-        const perguntas = mockMode
-            ? gerarQuizMock(textoBase)
-            : await gerarQuizComGemini(textoBase)
-        const agora = new Date()
-        const documentos = perguntas.map((p) => ({
-            usuario: usuarioId,
-            pergunta: p.pergunta,
-            opcoes: p.opcoes,
-            correta: p.correta,
-            categoria: p.categoria,
-            tipo: 'ia',
-            publicado: true,
-            publicadoEm: agora
-        }))
+       let perguntas = [];
 
-        await Quiz.insertMany(documentos)
-        return res.redirect(`/quiz?upload=ok&novas=${documentos.length}`)
-    } catch (err) {
-        console.error(err)
-        if (err?.code === 'parse') {
-            return res.redirect('/quiz?upload=gerar')
-        }
-        if (err?.code === 'api') {
-            const altaDemanda = err?.apiHttpCode === 503 || err?.apiStatus === 'UNAVAILABLE' || isErroAltaDemandaGemini(err)
-            return res.redirect(altaDemanda ? '/quiz?upload=indisponivel' : '/quiz?upload=api')
-        }
-        return res.redirect('/quiz?upload=erro')
-    } finally {
-        try {
-            await fs.unlink(caminho)
-        } catch (err) {
-            // ignore
-        }
+try {
+    if (mockMode) {
+        perguntas = gerarQuizMock(textoBase);
+    } else {
+        perguntas = await gerarQuizComGemini(textoBase);
     }
+} catch (err) {
+    console.error('Erro ao gerar quiz (Gemini):', err);
+
+    // fallback automático (NÃO quebra sistema)
+    perguntas = gerarQuizMock(textoBase);
 }
+
+// validação de segurança
+if (!Array.isArray(perguntas) || perguntas.length === 0) {
+    return res.redirect('/quiz?upload=sem-questoes');
+}
+
+const agora = new Date();
+
+const documentos = perguntas
+    .filter(p => p?.pergunta && Array.isArray(p?.opcoes) && p.opcoes.length >= 2)
+    .map((p) => ({
+        usuario: usuarioId,
+        pergunta: p.pergunta,
+        opcoes: p.opcoes,
+        correta: Number.isInteger(p.correta) ? p.correta : 0,
+        categoria: p.categoria || 'Gerado por PDF',
+        tipo: 'ia',
+        publicado: true,
+        publicadoEm: agora
+    }));
+
+if (documentos.length === 0) {
+    return res.redirect('/quiz?upload=sem-dados');
+}
+
+await Quiz.insertMany(documentos);
+
+return res.redirect(`/quiz?upload=ok&novas=${documentos.length}`);}

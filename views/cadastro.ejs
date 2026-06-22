@@ -1,13 +1,13 @@
 <%- include('public/auth-cabecalho', {
-  pageClass: 'signup-page',
-  title: 'Cadastro - Portal Enfermagem',
-  extraCss: [],
-  extraJs: ['/site/js/telefone.js'],
-  navLink: { href: '/login', label: 'Login' },
-  subtitle: 'Preencha os dados e crie sua conta'
+  pageClass: 'login-page',
+  title: 'Login - Portal Enfermagem',
+  extraCss: ['/site/css/login.css'],
+  extraJs: ['/site/js/login.js'],
+  navLink: { href: '/cadastro', label: 'Cadastre-se' },
+  subtitle: 'Faça seu cadastro para acessar conteúdos exclusivos e organizar seus estudos'
 }) %>
 
-<div class="signup-container">
+<div class="signup-container">  
   <h2>Preencha os dados abaixo para se cadastrar</h2>
   <% if (typeof error !== 'undefined' && error) { %>
     <div class="error-message spaced"><%= error %></div>
@@ -128,4 +128,3 @@
   }
 </script>
 
-<%- include('public/auth-rodape') %>
