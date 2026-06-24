@@ -57,11 +57,25 @@
       <button class="btn">Aplicar filtros</button>
     </form>
 
-    <% if (perguntasAdminLocal.length) { %>
+    <% if (perguntasAdminLocal.length || perguntasIALocal.length) { %>
       <form method="post" action="/quiz/responder" class="quiz-form">
         <% perguntasAdminLocal.forEach(function(p, index){ %>
           <div class="app-card quiz-card">
             <p class="quiz-question"><%= index + 1 %>. <%= p.pergunta %></p>
+            <div class="options-grid">
+              <% p.opcoes.forEach(function(opt, optIndex){ %>
+                <label class="quiz-option">
+                  <input type="radio" name="respostas[<%= p._id %>]" value="<%= optIndex %>">
+                  <span><%= opt %></span>
+                </label>
+              <% }) %>
+            </div>
+          </div>
+        <% }) %>
+
+        <% perguntasIALocal.forEach(function(p, index){ %>
+          <div class="app-card quiz-card quiz-card-ia">
+            <p class="quiz-question"><%= perguntasAdminLocal.length + index + 1 %>. <%= p.pergunta %></p>
             <div class="options-grid">
               <% p.opcoes.forEach(function(opt, optIndex){ %>
                 <label class="quiz-option">
@@ -90,21 +104,10 @@
       </div>
     </div>
 
-    <% if (perguntasIALocal.length) { %>
-      <% perguntasIALocal.forEach(function(p, index){ %>
-        <div class="app-card quiz-card quiz-card-ia">
-          <p class="quiz-question"><%= index + 1 %>. <%= p.pergunta %></p>
-          <div class="options-grid">
-            <% p.opcoes.forEach(function(opt){ %>
-              <div class="quiz-option disabled">
-                <span><%= opt %></span>
-              </div>
-            <% }) %>
-          </div>
-        </div>
-      <% }) %>
-    <% } else { %>
+    <% if (!perguntasIALocal.length) { %>
       <div class="app-empty">Nenhum quiz gerado ainda.</div>
+    <% } else { %>
+      <div class="app-empty">Os quizzes gerados por PDF agora aparecem acima, junto com as respostas.</div>
     <% } %>
   </section>
 </div>

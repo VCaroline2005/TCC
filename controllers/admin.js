@@ -71,6 +71,35 @@ function parseListaModelosGemini() {
     return parts.length ? parts : ['gemini-2.5-flash']
 }
 
+export async function abreadmin(req, res) {
+    const [
+        usuarios,
+        categorias,
+        procedimentos,
+        medicamentos,
+        terminologias,
+        quizzes
+    ] = await Promise.all([
+        Usuario.countDocuments({}),
+        Categoria.countDocuments({}),
+        Procedimento.countDocuments({}),
+        Medicamento.countDocuments({}),
+        Terminologia.countDocuments({}),
+        Quiz.countDocuments({})
+    ])
+
+    res.render('admin/index', {
+        totais: {
+            usuarios,
+            categorias,
+            procedimentos,
+            medicamentos,
+            terminologias,
+            quizzes
+        }
+    })
+}
+
 async function gerarConteudoGeminiComRetry({ model, contents }) {
     // Alta demanda (503) e quota (429) são temporários; tenta novamente com backoff.
     const maxTentativas = Math.max(1, Math.min(8, parseInt(process.env.GEMINI_MAX_RETRIES || '5', 10) || 5))

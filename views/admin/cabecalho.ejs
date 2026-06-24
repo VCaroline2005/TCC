@@ -13,43 +13,89 @@
 </head>
 
 <body class="admin-page">
+    <% const currentPathLocal = (typeof currentPath !== 'undefined' && currentPath) ? currentPath : ''; %>
+    <% const isActiveAdmin = (href) => currentPathLocal === href || currentPathLocal.startsWith(href + '/'); %>
+
     <nav class="navbar navbar-expand-lg navbar-dark admin-topbar">
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01"
             aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Alterna navegação">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
-            <a class="navbar-brand" href="/admin/usuarios/lst">
+            <a class="navbar-brand" href="/admin">
                 <img src="/site/img/logo.png" height="46" alt="Portal Enfermagem">
+                <span class="admin-brand-copy">
+                    <strong>Painel administrativo</strong>
+                    <small>Gestao de conteudo e acesso</small>
+                </span>
             </a>
             <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-                <li class="nav-item"><a class="nav-link" href="/admin/usuarios/lst">Usuários</a></li>
-                <li class="nav-item"><a class="nav-link" href="/admin/terminologia/lst">Terminologias</a></li>
-                <li class="nav-item"><a class="nav-link" href="/admin/procedimento/lst">Procedimentos</a></li>
-                <li class="nav-item"><a class="nav-link" href="/admin/medicamento/lst">Medicamentos</a></li>
-                <li class="nav-item"><a class="nav-link" href="/admin/quiz/lst">Quiz</a></li>
+                <li class="nav-item"><a class="nav-link <%= isActiveAdmin('/admin') ? 'is-active' : '' %>" href="/admin">Painel</a></li>
+                <li class="nav-item"><a class="nav-link <%= isActiveAdmin('/admin/usuarios') ? 'is-active' : '' %>" href="/admin/usuarios/lst">Usuarios</a></li>
+                <li class="nav-item"><a class="nav-link <%= isActiveAdmin('/admin/terminologia') ? 'is-active' : '' %>" href="/admin/terminologia/lst">Terminologias</a></li>
+                <li class="nav-item"><a class="nav-link <%= isActiveAdmin('/admin/procedimento') ? 'is-active' : '' %>" href="/admin/procedimento/lst">Procedimentos</a></li>
+                <li class="nav-item"><a class="nav-link <%= isActiveAdmin('/admin/medicamento') ? 'is-active' : '' %>" href="/admin/medicamento/lst">Medicamentos</a></li>
+                <li class="nav-item"><a class="nav-link <%= isActiveAdmin('/admin/quiz') ? 'is-active' : '' %>" href="/admin/quiz/lst">Quiz</a></li>
             </ul>
             <div class="admin-controls">
+                <a class="nav-btn ghost" href="/admin">Atualizar painel</a>
                 <button type="button" class="nav-btn" onclick="history.back()">Voltar</button>
-                <a class="nav-btn" href="/sair">Sair</a>
+                <a class="nav-btn danger" href="/sair">Sair</a>
             </div>
         </div>
     </nav>
 
-    <div class="row admin-layout">
-        <aside class="col-12 col-md-2 admin-sidebar">
-            <ul class="nav flex-column">
-                <li class="nav-item"><a class="nav-link" href="/admin/usuarios/lst">Listar usuários</a></li>
-                <li class="nav-item"><a class="nav-link" href="/admin/categoria/lst">Categorias</a></li>
-                <li class="nav-item"><a class="nav-link" href="/admin/categoria/add">Adicionar categoria</a></li>
-                <li class="nav-item"><a class="nav-link" href="/admin/terminologia/lst">Listar terminologias</a></li>
-                <li class="nav-item"><a class="nav-link" href="/admin/terminologia/add">Adicionar terminologia</a></li>
-                <li class="nav-item"><a class="nav-link" href="/admin/procedimento/lst">Listar procedimentos</a></li>
-                <li class="nav-item"><a class="nav-link" href="/admin/procedimento/import-pop">Importar POPs (PDF)</a></li>
-                <li class="nav-item"><a class="nav-link" href="/admin/medicamento/lst">Listar medicamentos</a></li>
-                <li class="nav-item"><a class="nav-link" href="/admin/medicamento/add">Adicionar medicamento</a></li>
-                <li class="nav-item"><a class="nav-link" href="/admin/medicamento/import">Importar medicamentos (PDF)</a></li>
-                <li class="nav-item"><a class="nav-link" href="/admin/quiz/lst">Questões do quiz</a></li>
-                <li class="nav-item"><a class="nav-link" href="/admin/quiz/add">Adicionar questão do quiz</a></li>
-            </ul>
-        </aside>
+    <div class="admin-shell">
+        <section class="admin-hero">
+            <div class="admin-hero-copy">
+                <p class="admin-hero-kicker">Portal Enfermagem</p>
+                <h2>Area administrativa</h2>
+                <p>Cadastre conteudos, revise importacoes e acompanhe o fluxo de trabalho em um painel unico.</p>
+            </div>
+            <div class="admin-hero-actions">
+                <a class="admin-chip is-primary" href="/admin">Visao geral</a>
+                <a class="admin-chip" href="/admin/categoria/add">Nova categoria</a>
+                <a class="admin-chip" href="/admin/quiz/add">Novo quiz</a>
+            </div>
+        </section>
+
+        <div class="row admin-layout">
+            <aside class="col-12 col-lg-2 admin-sidebar">
+                <div class="admin-sidebar-group">
+                    <span class="admin-sidebar-label">Painel</span>
+                    <ul class="nav flex-column">
+                        <li class="nav-item"><a class="nav-link <%= isActiveAdmin('/admin') ? 'is-active' : '' %>" href="/admin">Visao geral</a></li>
+                        <li class="nav-item"><a class="nav-link <%= isActiveAdmin('/admin/usuarios') ? 'is-active' : '' %>" href="/admin/usuarios/lst">Usuarios</a></li>
+                    </ul>
+                </div>
+
+                <div class="admin-sidebar-group">
+                    <span class="admin-sidebar-label">Cadastros</span>
+                    <ul class="nav flex-column">
+                        <li class="nav-item"><a class="nav-link <%= isActiveAdmin('/admin/categoria') ? 'is-active' : '' %>" href="/admin/categoria/lst">Categorias</a></li>
+                        <li class="nav-item"><a class="nav-link <%= currentPathLocal === '/admin/categoria/add' ? 'is-active' : '' %>" href="/admin/categoria/add">Adicionar categoria</a></li>
+                        <li class="nav-item"><a class="nav-link <%= isActiveAdmin('/admin/terminologia') ? 'is-active' : '' %>" href="/admin/terminologia/lst">Terminologias</a></li>
+                        <li class="nav-item"><a class="nav-link <%= currentPathLocal === '/admin/terminologia/add' ? 'is-active' : '' %>" href="/admin/terminologia/add">Adicionar terminologia</a></li>
+                    </ul>
+                </div>
+
+                <div class="admin-sidebar-group">
+                    <span class="admin-sidebar-label">Conteudos</span>
+                    <ul class="nav flex-column">
+                        <li class="nav-item"><a class="nav-link <%= isActiveAdmin('/admin/procedimento') ? 'is-active' : '' %>" href="/admin/procedimento/lst">Procedimentos</a></li>
+                        <li class="nav-item"><a class="nav-link <%= currentPathLocal === '/admin/procedimento/add' ? 'is-active' : '' %>" href="/admin/procedimento/add">Adicionar procedimento</a></li>
+                        <li class="nav-item"><a class="nav-link <%= currentPathLocal === '/admin/procedimento/import-pop' ? 'is-active' : '' %>" href="/admin/procedimento/import-pop">Importar POPs</a></li>
+                        <li class="nav-item"><a class="nav-link <%= isActiveAdmin('/admin/medicamento') ? 'is-active' : '' %>" href="/admin/medicamento/lst">Medicamentos</a></li>
+                        <li class="nav-item"><a class="nav-link <%= currentPathLocal === '/admin/medicamento/add' ? 'is-active' : '' %>" href="/admin/medicamento/add">Adicionar medicamento</a></li>
+                        <li class="nav-item"><a class="nav-link <%= currentPathLocal === '/admin/medicamento/import' ? 'is-active' : '' %>" href="/admin/medicamento/import">Importar medicamentos</a></li>
+                    </ul>
+                </div>
+
+                <div class="admin-sidebar-group">
+                    <span class="admin-sidebar-label">Quiz</span>
+                    <ul class="nav flex-column">
+                        <li class="nav-item"><a class="nav-link <%= isActiveAdmin('/admin/quiz') ? 'is-active' : '' %>" href="/admin/quiz/lst">Questoes</a></li>
+                        <li class="nav-item"><a class="nav-link <%= currentPathLocal === '/admin/quiz/add' ? 'is-active' : '' %>" href="/admin/quiz/add">Adicionar questao</a></li>
+                    </ul>
+                </div>
+            </aside>

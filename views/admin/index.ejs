@@ -1,0 +1,78 @@
+<%-include('cabecalho.ejs')%>
+<section class="col-12 col-lg-10 admin-main">
+    <div class="admin-dashboard">
+        <div class="admin-panel">
+            <div class="admin-panel-head">
+                <div>
+                    <h3>Resumo rapido</h3>
+                    <p>Visao geral dos principais cadastros do sistema.</p>
+                </div>
+                <a class="btn btn-primary" href="/admin/usuarios/lst">Abrir usuarios</a>
+            </div>
+
+            <div class="admin-kpi-grid">
+                <article class="admin-kpi">
+                    <span>Usuarios</span>
+                    <strong><%= totais.usuarios %></strong>
+                </article>
+                <article class="admin-kpi">
+                    <span>Categorias</span>
+                    <strong><%= totais.categorias %></strong>
+                </article>
+                <article class="admin-kpi">
+                    <span>Procedimentos</span>
+                    <strong><%= totais.procedimentos %></strong>
+                </article>
+                <article class="admin-kpi">
+                    <span>Medicamentos</span>
+                    <strong><%= totais.medicamentos %></strong>
+                </article>
+                <article class="admin-kpi">
+                    <span>Terminologias</span>
+                    <strong><%= totais.terminologias %></strong>
+                </article>
+                <article class="admin-kpi">
+                    <span>Quiz</span>
+                    <strong><%= totais.quizzes %></strong>
+                </article>
+            </div>
+        </div>
+
+        <div class="admin-grid">
+            <article class="admin-panel admin-action">
+                <h4>Cadastros rapidos</h4>
+                <p>Abra os fluxos mais usados sem procurar nas listas.</p>
+                <div class="admin-action-links">
+                    <a href="/admin/categoria/add">Categoria</a>
+                    <a href="/admin/terminologia/add">Terminologia</a>
+                    <a href="/admin/procedimento/add">Procedimento</a>
+                    <a href="/admin/medicamento/add">Medicamento</a>
+                    <a href="/admin/quiz/add">Quiz</a>
+                </div>
+            </article>
+
+            <article class="admin-panel admin-action">
+                <h4>Importacoes</h4>
+                <p>Atalhos para importar arquivos e revisar conteudos recebidos.</p>
+                <div class="admin-action-links">
+                    <a href="/admin/procedimento/import-pop">Importar POPs</a>
+                    <a href="/admin/medicamento/import">Importar medicamentos</a>
+                    <a href="/admin/quiz/lst">Revisar quiz</a>
+                </div>
+            </article>
+
+            <article class="admin-panel admin-action">
+                <h4>Gestao</h4>
+                <p>Volte para as telas de acompanhamento e edicao com um clique.</p>
+                <div class="admin-action-links">
+                    <a href="/admin/usuarios/lst">Usuarios</a>
+                    <a href="/admin/categoria/lst">Categorias</a>
+                    <a href="/admin/procedimento/lst">Procedimentos</a>
+                    <a href="/admin/medicamento/lst">Medicamentos</a>
+                    <a href="/admin/quiz/lst">Quiz</a>
+                </div>
+            </article>
+        </div>
+    </div>
+</section>
+<%-include('rodape.ejs')%>
