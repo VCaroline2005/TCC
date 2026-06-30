@@ -11,6 +11,36 @@ import { uploadPath } from '../utils/uploadPaths.js'
 
 const geminiClient = new GoogleGenAI({})
 
+function normalizarAdmin(valor) {
+    return valor === true || valor === 'true' || valor === 'on' || valor === 1 || valor === '1'
+}
+
+function emailAdminConfigurado() {
+    return String(process.env.ADMIN_EMAIL || 'vividias@portal.com').trim().toLowerCase()
+}
+
+function chaveAdminConfigurada() {
+    return String(process.env.ADMIN_ACCESS_KEY || process.env.CHAVE_ACESSO_ADMIN || '').trim()
+}
+
+function destinoAdminSeguro(valor) {
+    const destino = String(valor || '').trim()
+    if (!destino || !destino.startsWith('/admin') || destino.startsWith('//') || destino.startsWith('/admin/login')) {
+        return '/admin'
+    }
+    return destino
+}
+
+function renderLoginAdmin(res, { next, error = null, aviso = null, email = '' }) {
+    return res.render('admin/login', {
+        next,
+        error,
+        aviso,
+        email,
+        adminEmail: emailAdminConfigurado()
+    })
+}
+
 function isMockMode() {
     const raw = String(process.env.AI_MOCK || process.env.OPENAI_MOCK || '').toLowerCase()
     return raw === '1' || raw === 'true' || raw === 'on' || raw === 'yes'
@@ -69,6 +99,91 @@ function parseListaModelosGemini() {
     const raw = String(process.env.GEMINI_MODEL || 'gemini-2.5-flash').trim()
     const parts = raw.split(',').map((s) => s.trim()).filter(Boolean)
     return parts.length ? parts : ['gemini-2.5-flash']
+}
+
+export async function abreloginadmin(req, res) {
+    const next = destinoAdminSeguro(req.query.next)
+
+    if (req.session?.usuario?.admin) {
+        return res.redirect(next)
+    }
+
+    return renderLoginAdmin(res, {
+        next,
+        aviso: req.query.admin ? 'Use o login administrativo para acessar o painel.' : null
+    })
+}
+
+export async function loginadmin(req, res) {
+    const next = destinoAdminSeguro(req.body.next || req.query.next)
+
+    try {
+        const email = (req.body.email || req.body.username || '').trim()
+        const senha = req.body.password || req.body.senha
+        const chave = String(req.body.chave || req.body.accessKey || '').trim()
+        const adminEmail = emailAdminConfigurado()
+        const adminKey = chaveAdminConfigurada()
+
+        if (!email || !senha || !chave) {
+            return renderLoginAdmin(res, {
+                next,
+                email,
+                error: 'Preencha e-mail, senha e chave de acesso.'
+            })
+        }
+
+        if (email.toLowerCase() !== adminEmail) {
+            return renderLoginAdmin(res, {
+                next,
+                email,
+                error: 'Use o e-mail administrativo autorizado.'
+            })
+        }
+
+        if (!adminKey) {
+            return renderLoginAdmin(res, {
+                next,
+                email,
+                error: 'Chave de acesso administrativo não configurada no servidor.'
+            })
+        }
+
+        if (chave !== adminKey) {
+            return renderLoginAdmin(res, {
+                next,
+                email,
+                error: 'Chave de acesso inválida.'
+            })
+        }
+
+        const user = await Usuario.findOne({ email: adminEmail })
+        if (!user || user.senha !== senha) {
+            return renderLoginAdmin(res, {
+                next,
+                email,
+                error: 'E-mail ou senha incorretos.'
+            })
+        }
+
+        if (!normalizarAdmin(user.admin)) {
+            await Usuario.findByIdAndUpdate(user._id, { admin: true })
+        }
+
+        req.session.usuario = {
+            id: user._id.toString(),
+            nome: user.nome,
+            email: user.email,
+            admin: true
+        }
+
+        return res.redirect(next)
+    } catch (err) {
+        console.error(err)
+        return renderLoginAdmin(res, {
+            next,
+            error: 'Erro no servidor.'
+        })
+    }
 }
 
 export async function abreadmin(req, res) {

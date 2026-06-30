@@ -51,6 +51,12 @@ export async function cadastro(req, res){
 }
 
 export async function abrelogin(req, res){
+    if (req.session?.usuario?.admin) {
+        return res.redirect('/admin')
+    }
+    if (req.session?.usuario) {
+        return res.redirect('/home')
+    }
     res.render('login', { cadastro: req.query.cadastro, senha: req.query.senha })
 }
 
@@ -81,15 +87,15 @@ export async function login(req, res){
             await usuario.findByIdAndUpdate(user._id, { admin: isAdmin })
         }
 
-        // Autenticação concluída; direciona por perfil
+        if (isAdmin) {
+            return res.redirect('/admin/login?admin=1')
+        }
+
         req.session.usuario = {
             id: user._id.toString(),
             nome: user.nome,
             email: user.email,
-            admin: isAdmin
-        }
-        if (isAdmin) {
-            return res.redirect('/admin/usuarios/lst')
+            admin: false
         }
         return res.redirect('/home')
     }catch(err){
@@ -102,8 +108,9 @@ export async function sair(req, res){
     if (!req.session) {
         return res.redirect('/login')
     }
+    const destino = req.session.usuario?.admin ? '/admin/login' : '/login'
     req.session.destroy(() => {
-        res.redirect('/login')
+        res.redirect(destino)
     })
 }
 

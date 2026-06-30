@@ -30,8 +30,18 @@ app.use(session({
 // deixa o usuário disponível nas views
 app.use((req, res, next) => {
     res.locals.usuario = req.session?.usuario || null
+    res.locals.currentPath = req.path
     next()
 })
+
+function requireAdminRoute(req, res, next) {
+    if (req.session?.usuario?.admin === true) {
+        return next()
+    }
+
+    const nextUrl = encodeURIComponent(req.originalUrl || '/admin')
+    return res.redirect(`/admin/login?next=${nextUrl}`)
+}
 
 //importa os arquivos de rotas (os endereços são cadastrados neles)
 import publicroutes from '../routes/public.js';
@@ -42,8 +52,8 @@ import { abreedtquiz, edtquiz } from '../controllers/admin.js';
 app.use(publicroutes);
 app.use(adminroutes);
 // rota direta de edição de quiz (garante acesso mesmo se o router admin não recarregar)
-app.get('/admin/quiz/edt/:id', abreedtquiz);
-app.post('/admin/quiz/edt/:id', edtquiz);
+app.get('/admin/quiz/edt/:id', requireAdminRoute, abreedtquiz);
+app.post('/admin/quiz/edt/:id', requireAdminRoute, edtquiz);
 
 //faz a aplicação ficar escurando a porta cadastrada
 const server = app.listen(port, () => {

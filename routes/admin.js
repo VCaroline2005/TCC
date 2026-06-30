@@ -39,6 +39,8 @@ const popsPdfUpload = multer({
 //importação das funções de controllers
 import {    
         abreadmin,
+        abreloginadmin,
+        loginadmin,
         abreedtcategoria, 
         edtcategoria, 
         listarusuarios, 
@@ -92,7 +94,21 @@ import {
         despublicarquiz
     } from '../controllers/admin.js';
 
+function requireAdmin(req, res, next) {
+    if (req.session?.usuario?.admin === true) {
+        return next()
+    }
+
+    const nextUrl = encodeURIComponent(req.originalUrl || '/admin')
+    return res.redirect(`/admin/login?next=${nextUrl}`)
+}
+
 //configuração de rotas que apontam para controllers que serão executados
+router.get('/admin/login', abreloginadmin)
+router.post('/admin/login', loginadmin)
+
+router.use('/admin', requireAdmin)
+
 router.get('/admin', abreadmin)
 router.get("/admin/usuarios/lst", listarusuarios)
 router.get("/admin/usuarios/detalhe/:id", detalhe)

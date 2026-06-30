@@ -1,0 +1,102 @@
+<%- include('../public/auth-cabecalho', {
+  pageClass: 'login-page admin-login-page',
+  title: 'Login administrativo - Portal Enfermagem',
+  extraCss: ['/site/css/login.css'],
+  extraJs: ['/site/js/login.js'],
+  navLink: { href: '/login', label: 'Login usuário' },
+  subtitle: 'Acesso restrito à área administrativa'
+}) %>
+
+<div class="login-container">
+  <div class="login-badge" aria-hidden="true">
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+      <path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </div>
+  <h2 class="login-title">Área <span class="accent">Administrativa</span></h2>
+  <p class="login-lead">Entre com o e-mail administrativo e a chave de acesso para gerenciar usuários, conteúdos, medicamentos, procedimentos e quizzes.</p>
+
+  <% if (typeof error !== 'undefined' && error) { %>
+    <div class="auth-alert error"><%= error %></div>
+  <% } %>
+  <% if (typeof aviso !== 'undefined' && aviso) { %>
+    <div class="auth-alert warn"><%= aviso %></div>
+  <% } %>
+
+  <form action="/admin/login" method="POST">
+    <input type="hidden" name="next" value="<%= typeof next !== 'undefined' ? next : '/admin' %>">
+
+    <div class="field">
+      <label for="email">E-mail do administrador</label>
+      <div class="field-row">
+        <span class="field-icon" aria-hidden="true">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M4 6h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2Z" stroke="currentColor" stroke-width="2"/>
+            <path d="m22 8-10 7L2 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+        <input class="field-input" type="email" id="email" name="email" placeholder="<%= typeof adminEmail !== 'undefined' ? adminEmail : 'vividias@portal.com' %>" value="<%= typeof email !== 'undefined' ? email : '' %>" required>
+        <span aria-hidden="true"></span>
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="password">Senha</label>
+      <div class="field-row">
+        <span class="field-icon" aria-hidden="true">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M7 11V8a5 5 0 0 1 10 0v3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <path d="M6 11h12a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2Z" stroke="currentColor" stroke-width="2"/>
+          </svg>
+        </span>
+        <input class="field-input" type="password" id="password" name="password" placeholder="••••••••" required>
+        <button class="field-action" type="button" data-toggle-password="#password" aria-label="Mostrar senha">
+          <svg class="eye-open" width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+            <path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" stroke="currentColor" stroke-width="2"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="access-key">Chave de acesso</label>
+      <div class="field-row">
+        <span class="field-icon" aria-hidden="true">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M21 2l-2 2m-7.6 7.6a5 5 0 1 1-2.8-2.8L21 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="m15 7 2 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </span>
+        <input class="field-input" type="password" id="access-key" name="chave" placeholder="Digite a chave" required>
+        <button class="field-action" type="button" data-toggle-password="#access-key" aria-label="Mostrar chave">
+          <svg class="eye-open" width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+            <path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" stroke="currentColor" stroke-width="2"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="login-meta">
+      <a class="forgot" href="/recuperar-senha">Esqueceu a senha?</a>
+      <a class="forgot" href="/login">Entrar como usuário</a>
+    </div>
+
+    <button type="submit" class="btn-submit">Entrar no painel</button>
+
+    <div class="secure-note" aria-label="Acesso restrito">
+      <span aria-hidden="true">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z" stroke="#e31b1b" stroke-width="2" stroke-linejoin="round"/>
+          <path d="M9 12l2 2 4-4" stroke="#e31b1b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </span>
+      <div><strong>Acesso restrito</strong><br><span>Somente para quem tiver a chave administrativa.</span></div>
+    </div>
+  </form>
+</div>
+</main>
+</body>
+</html>

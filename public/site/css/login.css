@@ -263,6 +263,14 @@ body.auth-page.login-page::after {
   text-decoration: underline;
 }
 
+.auth-page.login-page .signup-box.admin-access {
+  margin-top: 10px;
+}
+
+.auth-page.login-page .signup-container .auth-helper {
+  margin-top: 14px;
+}
+
 .auth-page.login-page .secure-note {
   margin-top: 18px;
   display: flex;
